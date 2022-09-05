@@ -1,1 +1,134 @@
 @import "./base.css";
+
+/* Text */
+
+.title {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 0px;
+}
+
+.subtitle {
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.secondary-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 0px;
+  color: var(--tertiary);
+}
+
+/* Form fields */
+
+label {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+select {
+  font-size: 18px;
+  padding: 8px;
+  border-radius: 8px;
+  color: var(--on-surface);
+  background-color: none;
+  border: 1px solid var(--outline);
+}
+
+input {
+  font-size: 18px;
+  padding: 8px;
+  border-radius: 8px;
+  color: var(--on-surface);
+  background-color: none;
+  border: 1px solid var(--outline);
+}
+
+textarea {
+  font-size: 18px;
+  padding: 8px;
+  border-radius: 8px;
+  color: var(--on-surface);
+  background-color: none;
+  outline: none;
+  border: 1px solid var(--outline);
+}
+
+select:focus {
+  outline: none;
+  border: solid 1px var(--primary);
+}
+
+input:focus {
+  outline: none;
+  border: solid 1px var(--primary);
+}
+
+textarea:focus {
+  outline: none;
+  border: solid 1px var(--primary);
+}
+
+/* Buttons */
+
+.button {
+  font-size: 16px;
+  padding: 8px 16px;
+  border-radius: 24px;
+  color: var(--on-primary);
+  border: none;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.button:hover {
+  background-color: var(--secondary);
+}
+
+.button:active {
+  background-color: var(--tertiary);
+}
+
+.button:focus {
+  outline: none;
+}
+
+.button--primary {
+  color: var(--on-primary);
+  background-color: var(--primary);
+}
+
+.button--primary:hover {
+  background-color: var(--secondary);
+}
+
+.button--primary:active {
+  background-color: var(--tertiary);
+}
+
+.button--secondary {
+  color: var(--secondary);
+  background-color: var(--on-secondary);
+  border: 1px solid var(--secondary);
+}
+
+.button--secondary:hover {
+  background-color: var(--tertiary);
+  color: var(--on-tertiary);
+}
+
+.button--secondary:active {
+  background-color: var(--secondary);
+}
+
+/* Links */
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

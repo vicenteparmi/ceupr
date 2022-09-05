@@ -1,5 +1,5 @@
 <script setup>
-  import ActionCard from '../components/ActionCard.vue';
+import ActionCard from "../components/ActionCard.vue";
 </script>
 
 <template>
@@ -24,14 +24,13 @@
         title="Enviar relatório"
         subtitle="Realizar envio de horas e atividades realizadas por colaboradores."
         icon="summarize"
-        link="/manage/departments"
+        link="/send-report"
       />
     </div>
   </main>
 </template>
 
 <style scoped>
-
 .head-display-card {
   display: flex;
   flex-direction: column;
@@ -44,24 +43,6 @@
   padding: 48px;
 }
 
-.title {
-  font-size: 48px;
-  font-weight: 700;
-  margin-bottom: 0px;
-}
-
-.subtitle {
-  font-size: 24px;
-  font-weight: 400;
-}
-
-.secondary-title {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 0px;
-  color: var(--tertiary);
-}
-
 .action-cards {
   display: flex;
   flex-wrap: wrap;
@@ -69,5 +50,4 @@
   justify-content: space-between;
   margin-top: 24px;
 }
-
 </style>

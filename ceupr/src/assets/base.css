@@ -64,6 +64,21 @@
     --surface-variant: #404943;
     --on-surface-variant: #bfc9c2;
   }
+
+  input {
+    background-color: var(--surface-variant);
+    color: var(--on-surface-variant);
+  }
+
+  textarea {
+    background-color: var(--surface-variant);
+    color: var(--on-surface-variant);
+  }
+
+  select {
+    background-color: var(--surface-variant);
+    color: var(--on-surface-variant);
+  }
 }
 
 *,

@@ -1,25 +1,23 @@
-<script>
-
-</script>
+<script></script>
 
 <template>
   <div class="nav-bar">
-    <div class="nav-bar__logo">
-      CEU PR
-    </div>
+    <div class="nav-bar__logo">CEU PR</div>
     <div class="nav-bar__links">
       <router-link activeClass="selected" to="/"
         ><span class="material-symbols-rounded icon"> home </span>
         Início</router-link
       >
-      <router-link to="/about"
+      <router-link to="/send-report"
         ><span class="material-symbols-rounded icon"> remember_me </span>
         Gerenciar</router-link
       >
     </div>
     <div class="nav-bar__options">
       <div class="account">
-        <span class="material-symbols-rounded icon account__icon"> account_circle </span>
+        <span class="material-symbols-rounded icon account__icon">
+          account_circle
+        </span>
         <span class="account__name">Nome do usuário</span>
         <span class="account__email">email@ceupr.org.br</span>
       </div>
@@ -60,20 +58,16 @@
   text-decoration: none;
   padding: 4px 8px;
   width: 100%;
-  font-size: 18px;
+  font-size: 16px;
   border-radius: 24px;
   transition: background-color 0.2s;
   display: flex;
   align-items: center;
 }
-.nav-bar__links > a:hover {
-
-}
 
 a.router-link-exact-active {
   background-color: var(--on-surface-variant);
   color: var(--on-secondary);
-  font-weight: 600;
 }
 
 .icon {
@@ -115,5 +109,4 @@ a.router-link-exact-active {
   font-weight: 400;
   margin-bottom: 0px;
 }
-
 </style>
