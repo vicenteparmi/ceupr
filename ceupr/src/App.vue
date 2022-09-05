@@ -1,0 +1,31 @@
+<script setup>
+import { RouterLink, RouterView } from "vue-router";
+import NavBar from "./components/NavBar.vue";
+</script>
+
+<template>
+  <div class="main-container">
+    <NavBar />
+    <div class="main">
+      <RouterView v-slot="{ Component, route }">
+        <transition :name="route.meta.transition || 'fade'">
+          <component :is="Component" />
+        </transition>
+      </RouterView>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.main-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
+.main {
+  width: 100%;
+  padding: 48px;
+  overflow-y: auto;
+}
+</style>

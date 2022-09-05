@@ -1,0 +1,97 @@
+:root {
+  /* Material theme light */
+  --primary: #006c4c;
+  --secondary: #4d6357;
+  --tertiary: #3d6373;
+
+  --on-primary: #ffffff;
+  --on-secondary: #ffffff;
+  --on-tertiary: #ffffff;
+
+  --primary-container: #88f8c7;
+  --secondary-container: #cfe9d9;
+  --tertiary-container: #c1e8fc;
+
+  --on-primary-container: #002115;
+  --on-secondary-container: #092016;
+  --on-tertiary-container: #001f29;
+
+  --error: #ba1a1a;
+  --on-error: #ffffff;
+  --error-container: #ffdad6;
+  --on-error-container: #410002;
+
+  --background: #fbfdf9;
+  --on-background: #191c1a;
+  --surface: #fbfdf9;
+  --on-surface: #191c1a;
+
+  --outline: #707973;
+  --surface-variant: #dbe5dd;
+  --on-surface-variant: #404943;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Material theme dark */
+    --primary: #6bdbac;
+    --secondary: #b3ccbe;
+    --tertiary: #a5ccdf;
+
+    --on-primary: #003826;
+    --on-secondary: #1f352b;
+    --on-tertiary: #083544;
+
+    --primary-container: #005139;
+    --secondary-container: #354b40;
+    --tertiary-container: #244b5b;
+
+    --on-primary-container: #88f8c7;
+    --on-secondary-container: #cfe9d9;
+    --on-tertiary-container: #c1e8fc;
+
+    --error: #ffb4ab;
+    --on-error: #690005;
+    --error-container: #93000a;
+    --on-error-container: #ffdad6;
+
+    --background: #191c1a;
+    --on-background: #e1e3df;
+    --surface: #191c1a;
+    --on-surface: #e1e3df;
+
+    --outline: #8a938c;
+    --surface-variant: #404943;
+    --on-surface-variant: #bfc9c2;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--on-background);
+  background: var(--background);
+  transition: color 0.5s, background-color 0.5s;
+  line-height: 1.6;
+  font-family: Inter, sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.material-symbols-rounded {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
+}
