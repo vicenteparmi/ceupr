@@ -3,31 +3,33 @@ import ActionCard from "../components/ActionCard.vue";
 </script>
 
 <template>
-  <main>
-    <div class="head-display-card">
-      <div>
-        <h1 class="title">Departamentos</h1>
-        <p class="subtitle">Gerencie as horas dos colaboradores.</p>
+  <div>
+    <main>
+      <div class="head-display-card">
+        <div>
+          <h1 class="title">Departamentos</h1>
+          <p class="subtitle">Gerencie as horas dos colaboradores.</p>
+        </div>
       </div>
-    </div>
 
-    <h1 class="secondary-title">Selecione o que deseja fazer</h1>
+      <h1 class="secondary-title">Selecione o que deseja fazer</h1>
 
-    <div class="action-cards">
-      <ActionCard
-        title="Colaboradores"
-        subtitle="Visão geral dos colaboradores do departamento, com informações de horas e atividades."
-        icon="groups"
-        link="/manage/employees"
-      />
-      <ActionCard
-        title="Enviar relatório"
-        subtitle="Realizar envio de horas e atividades realizadas por colaboradores."
-        icon="summarize"
-        link="/send-report"
-      />
-    </div>
-  </main>
+      <div class="action-cards">
+        <ActionCard
+          title="Colaboradores"
+          subtitle="Visão geral dos colaboradores do departamento, com informações de horas e atividades."
+          icon="groups"
+          link="/colaboradores"
+        />
+        <ActionCard
+          title="Enviar relatório"
+          subtitle="Realizar envio de horas e atividades realizadas por colaboradores."
+          icon="summarize"
+          link="/relatorio"
+        />
+      </div>
+    </main>
+  </div>
 </template>
 
 <style scoped>

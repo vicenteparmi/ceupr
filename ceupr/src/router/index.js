@@ -7,16 +7,24 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "home",
+      name: "inicio",
       component: HomeView,
       meta: {
         transition: "fade",
       },
     },
     {
-      path: "/send-report",
+      path: "/relatorio",
       name: "send-report",
       component: ReportView,
+      meta: {
+        transition: "fade",
+      },
+    },
+    {
+      path: "/colaboradores",
+      name: "colaboradores",
+      component: () => import("../views/MembersView.vue"),
       meta: {
         transition: "fade",
       },

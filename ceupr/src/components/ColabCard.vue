@@ -1,0 +1,107 @@
+<script>
+export default {
+  name: "ColabCard",
+  props: {
+    name: {
+      type: String,
+      required: true,
+    },
+    hours: {
+      type: String,
+      required: true,
+    },
+    changes: {
+      type: String,
+      required: true,
+    },
+    id: {
+      type: String,
+      required: true,
+    },
+  },
+};
+</script>
+
+<template>
+  <div class="colab-card">
+    <div class="colab-card__content">
+      <p class="colab-card__name">{{ name }}</p>
+      <div class="colab-card__subinfo">
+        <p class="colab-card__hours">
+          <span class="material-symbols-rounded icon">hourglass_empty</span>
+          {{ hours }} horas
+        </p>
+        <p class="colab-card__changes">
+          <span class="material-symbols-rounded icon">update</span>
+          {{ changes }}
+        </p>
+      </div>
+    </div>
+    <div class="colab-card__options">
+      <div class="colab-card__option">
+        <span class="material-symbols-rounded icon">query_stats</span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.colab-card {
+  display: flex;
+  width: auto;
+  background-color: var(--surface-variant);
+  color: var(--on-surface-variant);
+  border-radius: 24px;
+  margin-bottom: 12px;
+  padding: 24px;
+  text-decoration: none;
+  transition: 0.2s;
+  flex-direction: row;
+  margin-right: 12px;
+  align-items: center;
+}
+
+.colab-card:hover {
+  opacity: 0.8;
+  border-radius: 16px;
+}
+
+.colab-card__name {
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+}
+
+.colab-card__hours {
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 0px;
+  display: flex;
+}
+
+.colab-card__changes {
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 0px;
+  display: flex;
+  margin-left: 8px;
+}
+
+.icon {
+  margin-right: 4px;
+}
+
+.colab-card__subinfo {
+  display: flex;
+  flex-direction: row;
+}
+
+.colab-card__options {
+  display: flex;
+  flex-direction: column;
+  margin-left: 32px;
+  user-select: none;
+  cursor: pointer;
+}
+</style>

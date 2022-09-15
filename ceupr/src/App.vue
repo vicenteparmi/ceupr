@@ -1,5 +1,5 @@
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
+import { RouterView } from "vue-router";
 import NavBar from "./components/NavBar.vue";
 </script>
 
@@ -7,8 +7,8 @@ import NavBar from "./components/NavBar.vue";
   <div class="main-container">
     <NavBar />
     <div class="main">
-      <RouterView v-slot="{ Component, route }">
-        <transition :name="route.meta.transition || 'fade'">
+      <RouterView v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
           <component :is="Component" />
         </transition>
       </RouterView>

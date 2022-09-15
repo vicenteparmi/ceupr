@@ -1,30 +1,32 @@
-<script></script>
+<script setup>
+import LoginPopup from "./Login.vue";
+</script>
 
 <template>
   <div class="nav-bar">
     <div class="nav-bar__logo">CEU PR</div>
     <div class="nav-bar__links">
       <router-link activeClass="selected" to="/"
-        ><span class="material-symbols-rounded icon"> home </span>
+        ><span class="material-symbols-rounded icon">home</span>
         Início</router-link
       >
-      <router-link to="/send-report"
-        ><span class="material-symbols-rounded icon"> remember_me </span>
-        Gerenciar</router-link
+      <router-link to="/colaboradores"
+        ><span class="material-symbols-rounded icon">remember_me</span>
+        Colaboradores</router-link
       >
     </div>
     <div class="nav-bar__options">
-      <div class="account">
+      <div class="account" @click="$emit('togglePopup')">
         <span class="material-symbols-rounded icon account__icon">
           account_circle
         </span>
-        <span class="account__name">Nome do usuário</span>
-        <span class="account__email">email@ceupr.org.br</span>
+        <span class="account__name">Login</span>
+        <span class="account__email">Acessar conta</span>
       </div>
     </div>
+    <LoginPopup :show="false" />
   </div>
 </template>
-
 <style scoped>
 .nav-bar {
   display: flex;
@@ -56,7 +58,7 @@
   margin-bottom: 8px;
   color: var(--on-secondary-container);
   text-decoration: none;
-  padding: 4px 8px;
+  padding: 8px 16px;
   width: 100%;
   font-size: 16px;
   border-radius: 24px;
@@ -92,10 +94,18 @@ a.router-link-exact-active {
   border-radius: 24px;
   width: 100%;
   text-align: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.account:hover {
+  background-color: var(--on-surface-variant);
+  color: var(--on-secondary);
 }
 
 .account__icon {
   font-size: xx-large;
+  margin: 0;
 }
 
 .account__name {
