@@ -1,5 +1,25 @@
 <script setup>
-import LoginPopup from "./Login.vue";
+import LoginPopup from "./LoginPopup.vue";
+</script>
+
+<script>
+
+export default {
+  name: "NavBar",
+  components: {
+    LoginPopup,
+  },
+  data() {
+    return {
+      show: false,
+    };
+  },
+  methods: {
+    close() {
+      this.show = false;
+    },
+  },
+};
 </script>
 
 <template>
@@ -16,7 +36,7 @@ import LoginPopup from "./Login.vue";
       >
     </div>
     <div class="nav-bar__options">
-      <div class="account" @click="$emit('togglePopup')">
+      <div class="account" @click="show = true">
         <span class="material-symbols-rounded icon account__icon">
           account_circle
         </span>
@@ -24,9 +44,12 @@ import LoginPopup from "./Login.vue";
         <span class="account__email">Acessar conta</span>
       </div>
     </div>
-    <LoginPopup :show="false" />
+    <transition name="fade">
+      <LoginPopup v-if="show" @close="show = false" />
+    </transition>
   </div>
 </template>
+
 <style scoped>
 .nav-bar {
   display: flex;

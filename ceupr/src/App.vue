@@ -8,7 +8,7 @@ import NavBar from "./components/NavBar.vue";
     <NavBar />
     <div class="main">
       <RouterView v-slot="{ Component }">
-        <transition name="fade" mode="out-in">
+        <transition name="slide-fade" mode="out-in">
           <component :is="Component" />
         </transition>
       </RouterView>

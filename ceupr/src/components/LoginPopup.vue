@@ -1,24 +1,18 @@
+<script setup></script>
+
 <script>
 export default {
   name: "LoginPopup",
-  props: {
-    show: {
-      type: Boolean,
-    },
-  },
   methods: {
-    togglePopup() {
-      this.$emit("togglePopup");
+    close() {
+      this.$emit("close");
     },
   },
 };
 </script>
 
 <template>
-  <div
-    id="loginCard"
-    class="login__background {{ if(show) { return 'display'; } else { return 'hide';}}}"
-  >
+  <div id="loginCard" class="login__background">
     <div class="login__card">
       <div class="login__card__content">
         <h1 class="login__card__title">Login</h1>
@@ -29,18 +23,18 @@ export default {
         <button class="login__card__form__input__button">
           Acessar com o Google
         </button>
+        <button
+          class="login__card__form__input__button secondary"
+          @click="this.close"
+        >
+          Cancelar
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-#loginCard.hide {
-  display: none;
-}
-#loginCard.display {
-  display: flex;
-}
 .login__background {
   position: fixed;
   top: 0;
@@ -82,18 +76,30 @@ export default {
 
 .login__card__form__input__button {
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 100px;
   border: none;
   outline: none;
   background-color: var(--on-secondary-container);
   color: var(--on-secondary);
   font-size: 16px;
-  font-weight: 500;
+  font-weight: normal;
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
 .login__card__form__input__button:hover {
   background-color: var(--on-surface-variant);
+}
+
+.secondary {
+  background-color: var(--secondary-container);
+  color: var(--on-secondary-container);
+  margin-top: 8px;
+  border: solid 1px var(--on-secondary-container);
+}
+
+.secondary:hover {
+  opacity: 0.8;
+  background-color: var(--secondary-container);
 }
 </style>
