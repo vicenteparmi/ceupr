@@ -1,11 +1,99 @@
-<script setup></script>
+<script setup>
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+</script>
 
 <script>
+function updateUI(user) {
+  if (user) {
+    // Signed in
+    const displayName = user.displayName;
+    const email = user.email;
+    // const emailVerified = user.emailVerified;
+    // const photoURL = user.photoURL;
+    // const uid = user.uid;
+
+    // Set info
+    document.getElementById("login__title").innerHTML = displayName;
+    document.getElementById("login__subtitle").innerHTML = email;
+  } else {
+    // Signed out
+    // ...
+  }
+}
+
 export default {
   name: "LoginPopup",
+  props: {
+    title: {
+      type: String,
+      required: true,
+      default: "Login",
+    },
+    subtitle: {
+      type: String,
+      default: "Entre com suas credenciais para acessar o sistema",
+    },
+    loginState: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      loggedIn: this.loginState,
+    };
+  },
   methods: {
+    show() {
+      updateUI(getAuth().currentUser);
+    },
     close() {
       this.$emit("close");
+    },
+    signIn() {
+      const provider = new GoogleAuthProvider();
+      const auth = getAuth();
+      auth.useDeviceLanguage();
+
+      var user;
+
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          //const credential = GoogleAuthProvider.credentialFromResult(result);
+          //const token = credential.accessToken;
+          // The signed-in user info.
+          user = result.user;
+          this.loggedIn = true;
+        })
+        .catch((error) => {
+          // Handle Errors.
+          const errorCode = error.code;
+          console.log(errorCode);
+          const errorMessage = error.message;
+          console.log(errorMessage);
+          // The email of the user's account used.
+          // const email = error.customData.email;
+          // The AuthCredential type that was used.
+          // const credential = GoogleAuthProvider.credentialFromError(error);
+          // ...
+        })
+        .then(() => {
+          console.log(user);
+          updateUI(user);
+        });
+    },
+    logOut() {
+      const auth = getAuth();
+      auth.signOut().then(() => {
+        // Sign-out successful.
+        this.loggedIn = false;
+
+        // Show alert toast
+        this.$emit("alert", {
+          type: "success",
+          message: "Você saiu do sistema com sucesso!",
+        });
+      });
     },
   },
 };
@@ -15,20 +103,33 @@ export default {
   <div id="loginCard" class="login__background">
     <div class="login__card">
       <div class="login__card__content">
-        <h1 class="login__card__title">Login</h1>
-        <p class="login__card__subtitle">
-          Entre com suas credenciais para acessar o sistema.
+        <h1 id="login__title" class="login__card__title">{{ title }}</h1>
+        <p id="login__subtitle" class="login__card__subtitle">
+          {{ subtitle }}
         </p>
         <br />
-        <button class="login__card__form__input__button">
-          Acessar com o Google
-        </button>
-        <button
-          class="login__card__form__input__button secondary"
-          @click="this.close"
-        >
-          Cancelar
-        </button>
+        <div class="login__card__actionbuttons" v-if="!loggedIn">
+          <button class="login__card__form__input__button" @click="this.signIn">
+            Acessar com o Google
+          </button>
+          <button
+            class="login__card__form__input__button secondary"
+            @click="this.close"
+          >
+            Cancelar
+          </button>
+        </div>
+        <div class="login__card__actionbuttons" v-if="loggedIn">
+          <button class="login__card__form__input__button" @click="this.logOut">
+            Desconectar
+          </button>
+          <button
+            class="login__card__form__input__button secondary"
+            @click="this.close"
+          >
+            Fechar
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -72,6 +173,11 @@ export default {
 .login__card__subtitle {
   font-size: 16px;
   color: var(--on-secondary-container);
+}
+
+.login__card__actionbuttons {
+  display: flex;
+  flex-direction: column;
 }
 
 .login__card__form__input__button {

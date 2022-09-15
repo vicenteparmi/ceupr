@@ -1,7 +1,10 @@
 <script setup>
 import { RouterView } from "vue-router";
 import NavBar from "./components/NavBar.vue";
+import AlertsSpace from "./components/AlertsSpace.vue";
 </script>
+
+<script></script>
 
 <template>
   <div class="main-container">
@@ -13,6 +16,7 @@ import NavBar from "./components/NavBar.vue";
         </transition>
       </RouterView>
     </div>
+    <AlertsSpace :alerts="alerts" />
   </div>
 </template>
 

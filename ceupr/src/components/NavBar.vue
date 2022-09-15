@@ -1,22 +1,51 @@
 <script setup>
+import { getAuth } from "firebase/auth";
 import LoginPopup from "./LoginPopup.vue";
 </script>
 
 <script>
-
 export default {
   name: "NavBar",
   components: {
     LoginPopup,
   },
+  mounted() {
+    setTimeout(() => {
+      const auth = getAuth();
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          document.getElementById("account__name").innerHTML = user.displayName;
+          document.getElementById("account__email").innerHTML = user.email;
+          document.getElementById("account__image").innerHTML =
+            "<img src='" +
+            user.photoURL +
+            "' alt='Imagem de perfil' style='border-radius: 100%; width: 48px; margin-bottom: 8px'>";
+
+          this.userName = user.displayName;
+          this.userEmail = user.email;
+          this.loggedIn = true;
+        } else {
+          // User is signed out
+          // ...
+        }
+      });
+    });
+  },
   data() {
     return {
       show: false,
+      userName: "Login",
+      userEmail: "Entre com suas credenciais para acessar o sistema",
+      loggedIn: false,
+      alerts: [],
     };
   },
   methods: {
     close() {
       this.show = false;
+    },
+    showLogin() {
+      this.show = true;
     },
   },
 };
@@ -36,16 +65,26 @@ export default {
       >
     </div>
     <div class="nav-bar__options">
-      <div class="account" @click="show = true">
-        <span class="material-symbols-rounded icon account__icon">
+      <div class="account" @click="showLogin()">
+        <span
+          id="account__image"
+          class="material-symbols-rounded icon account__icon"
+        >
           account_circle
         </span>
-        <span class="account__name">Login</span>
-        <span class="account__email">Acessar conta</span>
+        <span id="account__name" class="account__name">Login</span>
+        <span id="account__email" class="account__email">Acessar conta</span>
       </div>
     </div>
     <transition name="fade">
-      <LoginPopup v-if="show" @close="show = false" />
+      <LoginPopup
+        :title="userName"
+        :subtitle="userEmail"
+        :loginState="loggedIn"
+        ref="loginPopupCard"
+        v-if="show"
+        @close="show = false"
+      />
     </transition>
   </div>
 </template>
@@ -141,5 +180,11 @@ a.router-link-exact-active {
   font-size: 12px;
   font-weight: 400;
   margin-bottom: 0px;
+}
+
+.dsaccount__image {
+  width: 40px;
+  border-radius: 100%;
+  margin-bottom: 8px;
 }
 </style>
