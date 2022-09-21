@@ -3,20 +3,40 @@ import { getDatabase, ref, get } from "firebase/database";
 </script>
 
 <script>
-// Get all residents from the database
-
-// Assign department to resident
-
-// Inflate the resident list with the department names
-
-// Export data
-
 export default {
   name: "ResidentsView",
   mounted() {
-    const db = getDatabase();
-
-    async function getResidents() {
+    this.getDepartments()
+      .then((departments) => {
+        this.departments = departments;
+      })
+      .then(() => {
+        this.getResidents().then((residents) => {
+          this.residents = residents;
+        });
+      });
+    // Buggy code, fix it later
+    const interval = setInterval(() => {
+      this.residents_temp = [...this.residents];
+      this.residents = [];
+      this.$nextTick(() => {
+        this.residents = [...this.residents_temp];
+      });
+    }, 1000);
+    setTimeout(() => {
+      clearInterval(interval);
+    }, 10000);
+  },
+  data() {
+    return {
+      residents: [],
+      residents_temp: [],
+      departments: [],
+    };
+  },
+  methods: {
+    async getResidents() {
+      const db = getDatabase();
       const residents = [];
       const residentsRef = ref(db, "residents");
       get(residentsRef).then((snapshot) => {
@@ -25,9 +45,10 @@ export default {
           for (const resident in data) {
             residents.push({
               name: data[resident].name,
-              department: data[resident].department,
+              department: this.getDepartmentName(data[resident].department),
               id: resident,
               hours: data[resident].hours,
+              exempt: data[resident].exempt,
             });
           }
         } else {
@@ -35,17 +56,33 @@ export default {
         }
       });
       return residents;
-    }
-
-    getResidents().then((residents) => {
-      this.residents = residents;
-      console.log(residents);
-    });
-  },
-  data() {
-    return {
-      residents: [],
-    };
+    },
+    async getDepartments() {
+      const db = getDatabase();
+      const departments = [];
+      const departmentsRef = ref(db, "departments");
+      get(departmentsRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          for (const department in data) {
+            departments.push({
+              name: data[department].name,
+              id: department,
+            });
+          }
+        } else {
+          console.log("No data available");
+        }
+      });
+      return departments;
+    },
+    getDepartmentName(id) {
+      for (const department of this.departments) {
+        if (department.id == id) {
+          return department.name;
+        }
+      }
+    },
   },
 };
 </script>
@@ -63,7 +100,6 @@ export default {
             <input
               type="text"
               placeholder="Digite o nome do morador para pesquisar"
-              v-model="search"
             />
             <span class="material-symbols-rounded icon">close</span>
           </div>
@@ -89,19 +125,33 @@ export default {
         <span class="material-symbols-rounded icon">person_add</span>
         <span>Adicionar<br />morador</span>
       </div>
-      <table style="grid-area: content" class="filter__content">
+      <table style="grid-area: content" class="filter__content" cellspacing="0">
         <thead>
           <tr>
             <th>Nome</th>
             <th>Departamento</th>
             <th>Horas</th>
+            <th>Isento</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="resident in residents" :key="resident.id" class="resident">
             <td>{{ resident.name }}</td>
             <td>{{ resident.department }}</td>
-            <td>{{ resident.hours }}</td>
+            <td
+              style="text-align: center"
+              :class="{
+                negative: resident.hours < 0,
+                positive: resident.hours > 0,
+              }"
+            >
+              {{ resident.hours }}
+            </td>
+            <td style="text-align: center">
+              <span class="material-symbols-rounded icon" v-if="resident.exempt"
+                >done_outline</span
+              >
+            </td>
           </tr>
         </tbody>
       </table>
@@ -228,8 +278,8 @@ export default {
   width: 100%;
   border-radius: 24px;
   overflow: hidden;
+  border-collapse: separate;
   border: solid 1px var(--secondary-container);
-  border-collapse: collapse;
 }
 
 .filter__content > thead > tr > th {
@@ -237,8 +287,7 @@ export default {
   font-size: 16px;
   font-weight: bold;
   color: var(--on-primary-container);
-  text-align: left;
-  border-bottom: solid 1px var(--secondary-container);
+  text-align: center;
   background-color: var(--primary-container);
 }
 
@@ -246,6 +295,23 @@ export default {
   padding: 12px 24px;
   font-size: 16px;
   color: var(--secondary);
-  border-bottom: solid 1px var(--secondary-container);
+  border-top: solid 1px var(--secondary-container);
+  cursor: pointer;
+}
+
+.filter__content > tbody > tr:hover {
+  background-color: var(--secondary-container);
+  color: var(--secondary);
+  box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.28);
+}
+
+.filter__content > tbody > tr > td.negative {
+  color: var(--error);
+  font-weight: bold;
+}
+
+.filter__content > tbody > tr > td.positive {
+  color: #00c853;
+  font-weight: bold;
 }
 </style>

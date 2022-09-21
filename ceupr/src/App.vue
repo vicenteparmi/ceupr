@@ -15,7 +15,6 @@ import NavBar from "./components/NavBar.vue";
         </transition>
       </RouterView>
     </div>
-    <AlertsSpace :alerts="alerts" />
   </div>
 </template>
 

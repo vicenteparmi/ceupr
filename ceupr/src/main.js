@@ -33,8 +33,3 @@ app.use(createPinia());
 app.use(router);
 
 app.mount("#app");
-
-// Export firebase variable
-export {
-  fb,
-};
