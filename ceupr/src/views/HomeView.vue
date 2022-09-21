@@ -33,18 +33,6 @@ import ActionCard from "../components/ActionCard.vue";
 </template>
 
 <style scoped>
-.head-display-card {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 300px;
-  background-color: var(--primary-container);
-  color: var(--on-primary-container);
-  border-radius: 48px;
-  margin-bottom: 48px;
-  padding: 48px;
-}
-
 .action-cards {
   display: flex;
   flex-wrap: wrap;

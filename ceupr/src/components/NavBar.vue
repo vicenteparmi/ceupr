@@ -14,8 +14,17 @@ export default {
       const auth = getAuth();
       auth.onAuthStateChanged((user) => {
         if (user) {
+          // Truncate email
+          const email = user.email;
+          let truncatedEmail;
+          if (email.length > 20) {
+            truncatedEmail = email.substring(0, 20) + "...";
+          } else {
+            truncatedEmail = email;
+          }
+
           document.getElementById("account__name").innerHTML = user.displayName;
-          document.getElementById("account__email").innerHTML = user.email;
+          document.getElementById("account__email").innerHTML = truncatedEmail;
           document.getElementById("account__image").innerHTML =
             "<img src='" +
             user.photoURL +
@@ -23,10 +32,19 @@ export default {
 
           this.userName = user.displayName;
           this.userEmail = user.email;
+          this.userImage = user.photoURL;
           this.loggedIn = true;
         } else {
           // User is signed out
-          // ...
+          this.loggedIn = false;
+          this.userName = "Login";
+          this.userEmail = "Entre com suas credenciais para acessar o sistema";
+          this.userImage = "account_circle";
+
+          document.getElementById("account__name").innerHTML = "Login";
+          document.getElementById("account__email").innerHTML = "Acessar conta";
+          document.getElementById("account__image").innerHTML =
+            "account_circle";
         }
       });
     });
@@ -36,6 +54,7 @@ export default {
       show: false,
       userName: "Login",
       userEmail: "Entre com suas credenciais para acessar o sistema",
+      userImage: "account_circle",
       loggedIn: false,
       alerts: [],
     };
@@ -57,12 +76,16 @@ export default {
     <div class="nav-bar__links">
       <router-link activeClass="selected" to="/"
         ><span class="material-symbols-rounded icon">home</span>
-        Início</router-link
-      >
+        Início
+      </router-link>
       <router-link to="/colaboradores"
         ><span class="material-symbols-rounded icon">remember_me</span>
-        Colaboradores</router-link
-      >
+        Colaboradores
+      </router-link>
+      <router-link to="/gerenciamento"
+        ><span class="material-symbols-rounded icon">settings</span>
+        Gerenciamento
+      </router-link>
     </div>
     <div class="nav-bar__options">
       <div class="account" @click="showLogin()">
@@ -80,6 +103,7 @@ export default {
       <LoginPopup
         :title="userName"
         :subtitle="userEmail"
+        :image="userImage"
         :loginState="loggedIn"
         ref="loginPopupCard"
         v-if="show"
@@ -174,6 +198,7 @@ a.router-link-exact-active {
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 0px;
+  line-height: normal;
 }
 
 .account__email {

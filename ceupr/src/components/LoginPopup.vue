@@ -9,7 +9,6 @@ function updateUI(user) {
     const displayName = user.displayName;
     const email = user.email;
     // const emailVerified = user.emailVerified;
-    // const photoURL = user.photoURL;
     // const uid = user.uid;
 
     // Set info
@@ -17,7 +16,9 @@ function updateUI(user) {
     document.getElementById("login__subtitle").innerHTML = email;
   } else {
     // Signed out
-    // ...
+    document.getElementById("login__title").innerHTML = "Login";
+    document.getElementById("login__subtitle").innerHTML =
+      "Entre com suas credenciais para acessar o sistema";
   }
 }
 
@@ -32,6 +33,10 @@ export default {
     subtitle: {
       type: String,
       default: "Entre com suas credenciais para acessar o sistema",
+    },
+    image: {
+      type: String,
+      default: "account_circle",
     },
     loginState: {
       type: Boolean,
@@ -80,19 +85,15 @@ export default {
         .then(() => {
           console.log(user);
           updateUI(user);
+          this.$emit("close");
         });
     },
     logOut() {
       const auth = getAuth();
       auth.signOut().then(() => {
-        // Sign-out successful.
         this.loggedIn = false;
-
-        // Show alert toast
-        this.$emit("alert", {
-          type: "success",
-          message: "Você saiu do sistema com sucesso!",
-        });
+        updateUI(null);
+        this.$emit("close");
       });
     },
   },
@@ -103,10 +104,31 @@ export default {
   <div id="loginCard" class="login__background">
     <div class="login__card">
       <div class="login__card__content">
-        <h1 id="login__title" class="login__card__title">{{ title }}</h1>
-        <p id="login__subtitle" class="login__card__subtitle">
-          {{ subtitle }}
-        </p>
+        <div class="login__card__header">
+          <div id="login__image">
+            <span v-if="loginState" class="login__span__img">
+              <img
+                :src="image"
+                alt="Imagem de perfil"
+                style="border-radius: 100%; width: 58px"
+              />
+            </span>
+            <span v-else class="login__span__img">
+              <i
+                class="material-symbols-rounded icon account__icon"
+                style="color: var(--on-secondary-container); font-size: 48px"
+                >{{ image }}</i
+              >
+            </span>
+          </div>
+          <div>
+            <h1 id="login__title" class="login__card__title">{{ title }}</h1>
+            <p id="login__subtitle" class="login__card__subtitle">
+              {{ subtitle }}
+            </p>
+          </div>
+        </div>
+
         <br />
         <div class="login__card__actionbuttons" v-if="!loggedIn">
           <button class="login__card__form__input__button" @click="this.signIn">
@@ -151,33 +173,55 @@ export default {
 
 .login__card {
   max-width: 500px;
-  padding: 48px;
   background-color: var(--secondary-container);
-  border-radius: 48px;
+  border-radius: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.28);
+  user-select: none;
 }
 
 .login__card__content {
   display: flex;
   flex-direction: column;
+  min-width: 400px;
+}
+
+.login__card__header {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  background-color: var(--on-secondary-container);
+  border-radius: 24px 24px 0 0;
+  padding: 24px;
+  color: var(--secondary-container);
 }
 
 .login__card__title {
   font-size: 24px;
-  font-weight: 500;
-  color: var(--on-secondary-container);
+  font-weight: 800;
 }
 
 .login__card__subtitle {
   font-size: 16px;
-  color: var(--on-secondary-container);
+}
+
+#login__image {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: var(--secondary-container);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 16px;
 }
 
 .login__card__actionbuttons {
   display: flex;
   flex-direction: column;
+  padding: 0 24px 24px 24px;
 }
 
 .login__card__form__input__button {
@@ -207,5 +251,11 @@ export default {
 .secondary:hover {
   opacity: 0.8;
   background-color: var(--secondary-container);
+}
+
+.login__span__img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

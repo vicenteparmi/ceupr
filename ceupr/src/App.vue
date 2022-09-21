@@ -1,7 +1,6 @@
 <script setup>
 import { RouterView } from "vue-router";
 import NavBar from "./components/NavBar.vue";
-import AlertsSpace from "./components/AlertsSpace.vue";
 </script>
 
 <script></script>

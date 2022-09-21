@@ -22,6 +22,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const fb = initializeApp(firebaseConfig);
+// eslint-disable-next-line no-unused-vars
 const analytics = getAnalytics(fb);
 
 // App
@@ -32,3 +33,8 @@ app.use(createPinia());
 app.use(router);
 
 app.mount("#app");
+
+// Export firebase variable
+export {
+  fb,
+};
