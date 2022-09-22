@@ -1,37 +1,20 @@
 <script setup>
 import { getDatabase, ref, get } from "firebase/database";
+import AddResident from "../components/AddResident.vue";
 </script>
 
 <script>
 export default {
   name: "ResidentsView",
   mounted() {
-    this.getDepartments()
-      .then((departments) => {
-        this.departments = departments;
-      })
-      .then(() => {
-        this.getResidents().then((residents) => {
-          this.residents = residents;
-        });
-      });
-    // Buggy code, fix it later
-    const interval = setInterval(() => {
-      this.residents_temp = [...this.residents];
-      this.residents = [];
-      this.$nextTick(() => {
-        this.residents = [...this.residents_temp];
-      });
-    }, 1000);
-    setTimeout(() => {
-      clearInterval(interval);
-    }, 10000);
+    this.updateList();
   },
   data() {
     return {
       residents: [],
       residents_temp: [],
       departments: [],
+      addResidentOpen: false,
     };
   },
   methods: {
@@ -76,12 +59,37 @@ export default {
       });
       return departments;
     },
+    updateList() {
+      this.getDepartments()
+        .then((departments) => {
+          this.departments = departments;
+        })
+        .then(() => {
+          this.getResidents().then((residents) => {
+            this.residents = residents;
+          });
+        });
+      // Buggy code, fix it later
+      const interval = setInterval(() => {
+        this.residents_temp = [...this.residents];
+        this.residents = [];
+        this.$nextTick(() => {
+          this.residents = [...this.residents_temp];
+        });
+      }, 1000);
+      setTimeout(() => {
+        clearInterval(interval);
+      }, 10000);
+    },
     getDepartmentName(id) {
       for (const department of this.departments) {
         if (department.id == id) {
           return department.name;
         }
       }
+    },
+    closeAddResident() {
+      this.addResidentOpen = false;
     },
   },
 };
@@ -121,7 +129,11 @@ export default {
           </div>
         </div>
       </div>
-      <div style="grid-area: new" class="filter__add__person">
+      <div
+        style="grid-area: new"
+        class="filter__add__person"
+        v-on:click="addResidentOpen = true"
+      >
         <span class="material-symbols-rounded icon">person_add</span>
         <span>Adicionar<br />morador</span>
       </div>
@@ -156,6 +168,14 @@ export default {
         </tbody>
       </table>
     </div>
+    <transition name="fade">
+      <AddResident
+        v-if="addResidentOpen"
+        v-on:close="closeAddResident"
+        v-on:update="updateList"
+        :departmentsArray="departments"
+      />
+    </transition>
   </div>
 </template>
 
