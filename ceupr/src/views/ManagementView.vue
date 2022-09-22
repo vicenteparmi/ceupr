@@ -31,7 +31,7 @@ import ActionCard from "../components/ActionCard.vue";
         title="Departamentos"
         subtitle="Adicionar ou remover departamentos, bem como alterar o nome e a descrição de cada um."
         icon="atr"
-        link="/moradores"
+        link="/departamentos"
       />
     </div>
   </div>

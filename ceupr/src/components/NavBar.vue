@@ -1,5 +1,6 @@
 <script setup>
 import { getAuth } from "firebase/auth";
+import { getDatabase, ref, get, set } from "firebase/database";
 import LoginPopup from "./LoginPopup.vue";
 </script>
 
@@ -34,12 +35,54 @@ export default {
           this.userEmail = user.email;
           this.userImage = user.photoURL;
           this.loggedIn = true;
+
+          // Check if user is in the database
+          const db = getDatabase();
+          const userRef = ref(db, "users/" + user.uid);
+          get(userRef)
+            .then((snapshot) => {
+              if (snapshot.exists()) {
+                console.log("User data collected");
+
+                // Check if user has the adm role
+                const admRef = ref(db, "users/" + user.uid);
+                get(admRef)
+                  .then((snapshot) => {
+                    if (snapshot.exists() && snapshot.val().adm) {
+                      console.log("User is an administrator");
+                      this.isAdm = true;
+                    } else {
+                      console.log("User is not an administrator");
+                    }
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                  });
+              } else {
+                console.log("User does not exist in database");
+                // Add user to database
+                const userRef = ref(db, "users/" + user.uid);
+                set(userRef, {
+                  name: user.displayName,
+                  email: user.email,
+                  photoURL: user.photoURL,
+                  department: "",
+                  adm: false,
+                }).then(() => {
+                  console.log("User added to database");
+                });
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
         } else {
           // User is signed out
           this.loggedIn = false;
           this.userName = "Login";
           this.userEmail = "Entre com suas credenciais para acessar o sistema";
           this.userImage = "account_circle";
+          this.isAdm = false;
 
           document.getElementById("account__name").innerHTML = "Login";
           document.getElementById("account__email").innerHTML = "Acessar conta";
@@ -57,6 +100,7 @@ export default {
       userImage: "account_circle",
       loggedIn: false,
       alerts: [],
+      isAdm: false,
     };
   },
   methods: {
@@ -78,11 +122,11 @@ export default {
         ><span class="material-symbols-rounded icon">home</span>
         Início
       </router-link>
-      <router-link to="/colaboradores"
+      <router-link to="/colaboradores" v-if="!isAdm"
         ><span class="material-symbols-rounded icon">remember_me</span>
         Colaboradores
       </router-link>
-      <router-link to="/gerenciamento"
+      <router-link to="/gerenciamento" v-if="isAdm"
         ><span class="material-symbols-rounded icon">settings</span>
         Gerenciamento
       </router-link>

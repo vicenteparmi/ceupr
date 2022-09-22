@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue";
 import ReportView from "../views/ReportView.vue";
 import ManagementView from "../views/ManagementView.vue";
 import ResidentsView from "../views/ResidentsView.vue";
+import DepartmentManageView from "../views/DepartmentManageView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -43,6 +44,14 @@ const router = createRouter({
       path: "/moradores",
       name: "moradores",
       component: ResidentsView,
+      meta: {
+        transition: "fade",
+      },
+    },
+    {
+      path: "/departamentos",
+      name: "departamentos",
+      component: DepartmentManageView,
       meta: {
         transition: "fade",
       },

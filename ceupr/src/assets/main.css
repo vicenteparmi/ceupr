@@ -6,6 +6,18 @@
   font-size: 48px;
   font-weight: 700;
   margin-bottom: 0px;
+  display: flex;
+  align-items: center;
+}
+
+.title span {
+  margin-right: 16px;
+  cursor: pointer;
+  transition-duration: 0.2s;
+}
+
+.title span:hover {
+  padding-left: 16px;
 }
 
 .subtitle {

@@ -162,7 +162,10 @@ export default {
 
 <template>
   <div>
-    <h2 class="title" style="color: var(--tertiary)">Moradores</h2>
+    <h2 class="title" style="color: var(--tertiary)">
+      <span class="material-symbols-rounded icon" v-on:click="$router.go(-1)">arrow_back_ios_new</span>
+      Moradores
+    </h2>
     <h4 class="subtitle" style="color: var(--tertiary)">
       Gerenciamento dos moradores da CEU
     </h4>
@@ -226,6 +229,11 @@ export default {
               <span>Isento</span>
             </div>
           </div>
+          <p class="filter__result__count">
+            Sua pesquisa retornou
+            {{ this.searchStorage.length }}
+            {{ this.searchStorage.length == 1 ? "resultado" : "resultados" }}.
+          </p>
         </div>
       </div>
       <div
@@ -467,5 +475,13 @@ option {
 .filter__content > tbody > tr > td.positive {
   color: #00c853;
   font-weight: bold;
+}
+
+.filter__result__count {
+  font-size: 12px;
+  font-weight: 200;
+  color: var(--secondary);
+  margin: 12px 0 0 0;
+  font-style: italic;
 }
 </style>
