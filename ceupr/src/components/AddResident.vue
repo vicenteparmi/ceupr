@@ -61,6 +61,10 @@ export default {
       <div class="addResident__card">
         <div class="addResident__card__content">
           <div class="addResident__card__title">Adicionar morador</div>
+          <p style="color: var(--on-secondary-container)">
+            Adiciona um novo morador ao quadro de moradores.
+          </p>
+          <br />
           <div class="addResident__card__input">
             <div class="addResident__card__input__label">Nome completo</div>
             <input
@@ -93,7 +97,9 @@ export default {
             />
           </div>
           <div class="addResident__card__input">
-            <div class="addResident__card__input__label">É isento?</div>
+            <div class="addResident__card__input__label">
+              É isento de cumprir horas?
+            </div>
             <input
               type="checkbox"
               v-model="exempt"
@@ -155,8 +161,8 @@ export default {
 
 .addResident__card__title {
   font-size: 24px;
-  font-weight: 500;
-  color: var(--on-secondary-container);
+  font-weight: 800;
+  color: var(--tertiary);
 }
 
 .addResident__card__input {

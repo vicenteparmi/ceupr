@@ -15,6 +15,10 @@ export default {
       residents_temp: [],
       departments: [],
       addResidentOpen: false,
+      search: "",
+      searchStorage: "",
+      chips: [],
+      selectedDepartment: "",
     };
   },
   methods: {
@@ -75,6 +79,9 @@ export default {
         this.residents = [];
         this.$nextTick(() => {
           this.residents = [...this.residents_temp];
+          if (this.searchStorage == []) {
+            this.searchStorage = [...this.residents_temp];
+          }
         });
       }, 1000);
       setTimeout(() => {
@@ -87,6 +94,64 @@ export default {
           return department.name;
         }
       }
+    },
+    filterSearch() {
+      // Filter residents by search
+      this.searchStorage = this.residents.filter((resident) => {
+        return resident.name.toLowerCase().includes(this.search.toLowerCase());
+      });
+
+      // Filter residents by department
+      this.searchStorage = this.searchStorage.filter((resident) => {
+        if (
+          resident.department == this.selectedDepartment ||
+          this.selectedDepartment == "" ||
+          this.selectedDepartment == "all"
+        ) {
+          return true;
+        }
+      });
+
+      // Filter residents by chips
+      this.searchStorage = this.searchStorage.filter((resident) => {
+        let returnStorage = [];
+        if (this.chips.includes("debt")) {
+          if (resident.hours < 0) {
+            returnStorage.push(false);
+          }
+        }
+
+        // TODO: Fix the no department chip
+        if (this.chips.includes("no-dep")) {
+          if (resident.department == null) {
+            returnStorage.push(false);
+          }
+        }
+        if (this.chips.includes("exempt")) {
+          if (resident.exempt) {
+            returnStorage.push(false);
+          }
+        }
+
+        if (
+          (returnStorage.includes(false) &&
+            returnStorage.length == this.chips.length) ||
+          this.chips.length == 0
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    },
+    toggleChip(chip) {
+      // Toggle chip
+      if (this.chips.includes(chip)) {
+        this.chips.splice(this.chips.indexOf(chip), 1);
+      } else {
+        this.chips.push(chip);
+      }
+      this.filterSearch();
     },
     closeAddResident() {
       this.addResidentOpen = false;
@@ -108,21 +173,55 @@ export default {
             <input
               type="text"
               placeholder="Digite o nome do morador para pesquisar"
+              v-model="search"
+              v-on:keyup="filterSearch"
             />
-            <span class="material-symbols-rounded icon">close</span>
+            <span
+              class="material-symbols-rounded icon"
+              v-on:click="(search = ''), filterSearch()"
+            >
+              close</span
+            >
           </div>
           <div class="filter__chips">
-            <div class="filter__chip">
+            <!-- Select department -->
+            <select
+              v-model="selectedDepartment"
+              v-on:change="filterSearch()"
+              style="margin-right: 10px"
+            >
+              <option value="all">Todos os departamentos</option>
+              <option
+                v-for="department in departments"
+                :key="department.id"
+                :value="department.name"
+              >
+                {{ department.name }}
+              </option>
+            </select>
+            <div
+              class="filter__chip"
+              :class="{ select: chips.includes('no-dep') }"
+              v-on:click="toggleChip('no-dep')"
+            >
               <span class="material-symbols-rounded icon">live_help</span>
               <span>Sem departamento</span>
             </div>
-            <div class="filter__chip select">
+            <div
+              class="filter__chip"
+              :class="{ select: chips.includes('debt') }"
+              v-on:click="toggleChip('debt')"
+            >
               <span class="material-symbols-rounded icon"
                 >history_toggle_off
               </span>
               <span>Devendo horas</span>
             </div>
-            <div class="filter__chip">
+            <div
+              class="filter__chip"
+              :class="{ select: chips.includes('exempt') }"
+              v-on:click="toggleChip('exempt')"
+            >
               <span class="material-symbols-rounded icon">hourglass_empty</span>
               <span>Isento</span>
             </div>
@@ -147,7 +246,11 @@ export default {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="resident in residents" :key="resident.id" class="resident">
+          <tr
+            v-for="resident in searchStorage"
+            :key="resident.id"
+            class="resident"
+          >
             <td>{{ resident.name }}</td>
             <td>{{ resident.department }}</td>
             <td
@@ -217,6 +320,10 @@ export default {
   background-color: var(--background);
 }
 
+.filter__input > input:focus {
+  border: solid 1px var(--tertiary);
+}
+
 .filter__input > input::placeholder {
   color: var(--secondary);
   opacity: 0.5;
@@ -227,6 +334,31 @@ export default {
   color: var(--secondary);
   font-size: 24px;
   cursor: pointer;
+}
+
+select {
+  width: auto;
+  font-size: 14px;
+  padding: 4px 8px;
+  margin-right: 2%;
+  border-radius: 24px;
+  border: solid 1px var(--secondary-container);
+  background-color: var(--background);
+  color: var(--secondary);
+  font-weight: 500;
+}
+
+select:focus {
+  border: solid 1px var(--tertiary);
+}
+
+option {
+  font-size: 16px;
+  padding: 12px 24px;
+  margin-right: 2%;
+  border-radius: 24px;
+  border: solid 1px var(--secondary-container);
+  background-color: var(--background);
 }
 
 .filter__chips {
@@ -248,6 +380,8 @@ export default {
   color: var(--secondary);
   cursor: pointer;
   font-size: 14px;
+  font-weight: 500;
+  transition-duration: 0.1s;
 }
 
 .filter__chip.select {
