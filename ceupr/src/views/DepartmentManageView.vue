@@ -6,6 +6,7 @@ import { getDatabase, ref, get, push, remove, set } from "firebase/database";
 export default {
   name: "DepartmentManageView",
   mounted() {
+    this.getDirectors();
     this.getDepartments();
   },
   data() {
@@ -24,10 +25,22 @@ export default {
         description: "",
         director: "",
         id: "",
+        allowDelete: true,
+        disabled: false,
       },
     };
   },
   methods: {
+    async getDirectors() {
+      const db = getDatabase();
+      const directorsRef = ref(db, "users");
+      const snapshot = await get(directorsRef);
+      if (snapshot.exists()) {
+        this.directors = snapshot.val();
+      } else {
+        console.log("No data available");
+      }
+    },
     async getDepartments() {
       const db = getDatabase();
       const departmentRef = ref(db, "departments");
@@ -40,7 +53,14 @@ export default {
               this.departments.push({
                 id: childKey,
                 name: childData.name,
+                director: childData.director ? childData.director : "",
                 description: childData.description,
+                allowDelete:
+                  childData.allowDelete == undefined
+                    ? true
+                    : childData.allowDelete,
+                disabled:
+                  childData.disabled == undefined ? false : childData.disabled,
               });
             });
           } else {
@@ -95,6 +115,7 @@ export default {
           this.editDep.description = department.description;
           this.editDep.director = department.director;
           this.editDep.id = id;
+          this.editDep.disabled = department.disabled;
         }
       });
     },
@@ -104,6 +125,8 @@ export default {
       set(departmentRef, {
         name: this.editDep.name,
         description: this.editDep.description,
+        director: this.editDep.director,
+        disabled: this.editDep.disabled,
       })
         .then(() => {
           console.log("Data saved successfully!");
@@ -138,6 +161,7 @@ export default {
         v-for="department in departments"
         :key="department.id"
         class="departments__list__item"
+        :class="{ disabled: department.disabled }"
       >
         <div class="departments__list__item__name">
           {{ department.name }}
@@ -149,7 +173,10 @@ export default {
               : department.description
           }}
         </div>
-        <div class="departments__list__item__actions">
+        <div
+          class="departments__list__item__actions"
+          :class="{ hidden: !department.allowDelete }"
+        >
           <span
             class="material-symbols-rounded icon"
             v-on:click="showEditDialog(department.id)"
@@ -183,15 +210,16 @@ export default {
             </div>
             <div class="departments__create__new__dialog__content__input">
               <label for="director">Diretor</label>
-              <select
-                name="director"
-                id="director"
-                v-for="director in directors"
-                :key="director.id"
-                v-model="newDep.director"
-              >
+              <select name="director" id="director" v-model="newDep.director">
                 <option value="null">Nenhum</option>
-                <option :value="director.id">{{ director.name }}</option>
+                <option
+                  v-for="director in directors"
+                  :key="director.id"
+                  :value="director.name"
+                  :select="director.id == newDep.director"
+                >
+                  {{ director.name }} ({{ director.email }})
+                </option>
               </select>
             </div>
           </div>
@@ -235,16 +263,26 @@ export default {
             </div>
             <div class="departments__create__new__dialog__content__input">
               <label for="director">Diretor</label>
-              <select
-                name="director"
-                id="director"
-                v-for="director in directors"
-                :key="director.id"
-                v-model="editDep.director"
-              >
+              <select name="director" id="director" v-model="editDep.director">
                 <option value="null">Nenhum</option>
-                <option :value="director.id">{{ director.name }}</option>
+                <option
+                  :value="director.name"
+                  v-for="director in directors"
+                  :key="director.id"
+                >
+                  {{ director.name }} ( {{ director.email }} )
+                </option>
               </select>
+            </div>
+            <!-- Disabled -->
+            <div class="departments__create__new__dialog__content__input">
+              <label for="disabled">Desativar departamento</label>
+              <input
+                type="checkbox"
+                id="disabled"
+                v-model="editDep.disabled"
+                class="switch"
+              />
             </div>
           </div>
           <div class="departments__create__new__dialog__actions">
@@ -436,7 +474,6 @@ export default {
 .departments__create__new__dialog__content__input {
   display: flex;
   flex-direction: column;
-  width: 100%;
   margin-bottom: 16px;
 }
 
@@ -448,10 +485,6 @@ export default {
 }
 
 .departments__create__new__dialog__content__input input {
-  width: 100%;
-  height: 48px;
-  background-color: var(--surface-variant);
-  border-radius: 16px;
   color: var(--on-surface-variant);
   font-size: 16px;
   font-weight: 600;
@@ -459,11 +492,18 @@ export default {
   transition-duration: 100ms;
   user-select: none;
 }
+
+.departments__create__new__dialog__content__input input[type="text"] {
+  width: 100%;
+  height: 48px;
+  background-color: var(--surface-variant);
+}
+
 .departments__create__new__dialog__content__input textarea {
   width: 100%;
   height: 100%;
   background-color: var(--surface-variant);
-  border-radius: 16px;
+  border-radius: 8px;
   color: var(--on-surface-variant);
   font-size: 16px;
   font-weight: 600;
@@ -498,5 +538,11 @@ export default {
   transform: scale(0.8);
 }
 
-/* Edit department dialog */
+.hidden {
+  display: none;
+}
+
+.disabled {
+  opacity: 0.5;
+}
 </style>

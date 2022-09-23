@@ -42,24 +42,19 @@ export default {
           get(userRef)
             .then((snapshot) => {
               if (snapshot.exists()) {
-                console.log("User data collected");
 
                 // Check if user has the adm role
                 const admRef = ref(db, "users/" + user.uid);
                 get(admRef)
                   .then((snapshot) => {
                     if (snapshot.exists() && snapshot.val().adm) {
-                      console.log("User is an administrator");
                       this.isAdm = true;
-                    } else {
-                      console.log("User is not an administrator");
                     }
                   })
                   .catch((error) => {
                     console.error(error);
                   });
               } else {
-                console.log("User does not exist in database");
                 // Add user to database
                 const userRef = ref(db, "users/" + user.uid);
                 set(userRef, {
@@ -117,7 +112,11 @@ export default {
 <template>
   <div class="nav-bar">
     <div class="nav-bar__logo">
-      <svg fill="var(--on-secondary-container)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 345.54 365.9">
+      <svg
+        fill="var(--on-secondary-container)"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 345.54 365.9"
+      >
         <g id="Camada_2" data-name="Camada 2">
           <g id="Camada_1-2" data-name="Camada 1">
             <path
@@ -145,7 +144,7 @@ export default {
         ><span class="material-symbols-rounded icon">remember_me</span>
         Colaboradores
       </router-link>
-      <router-link to="/gerenciamento" v-if="isAdm"
+      <router-link class="adm" to="/gerenciamento" v-if="isAdm"
         ><span class="material-symbols-rounded icon">settings</span>
         Gerenciamento
       </router-link>
@@ -155,6 +154,7 @@ export default {
         <span
           id="account__image"
           class="material-symbols-rounded icon account__icon"
+          :class="(this.isAdm = 'admin')"
         >
           account_circle
         </span>
@@ -265,6 +265,18 @@ a.router-link-exact-active {
 .account__icon {
   font-size: xx-large;
   margin: 0;
+}
+
+.account__icon.admin::after {
+  content: "verified_user";
+  font-size: 16px;
+  color: var(--on-secondary-container);
+  bottom: 4px;
+  right: -2px;
+  position: absolute;
+  background-color: var(--secondary-container);
+  padding: 2px;
+  border-radius: 50%;
 }
 
 .account__name {

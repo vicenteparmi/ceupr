@@ -131,7 +131,7 @@ export default {
 
         <br />
         <div class="login__card__actionbuttons" v-if="!loggedIn">
-          <button class="login__card__form__input__button" @click="this.signIn">
+          <button class="login__card__form__input__button" @click="signIn">
             Acessar com o Google
           </button>
           <button
@@ -142,12 +142,12 @@ export default {
           </button>
         </div>
         <div class="login__card__actionbuttons" v-if="loggedIn">
-          <button class="login__card__form__input__button" @click="this.logOut">
+          <button class="login__card__form__input__button" @click="logOut">
             Desconectar
           </button>
           <button
             class="login__card__form__input__button secondary"
-            @click="this.close"
+            @click="close"
           >
             Fechar
           </button>

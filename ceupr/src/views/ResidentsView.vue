@@ -19,6 +19,7 @@ export default {
       searchStorage: "",
       chips: [],
       selectedDepartment: "",
+      editResidentFields: {},
     };
   },
   methods: {
@@ -32,7 +33,7 @@ export default {
           for (const resident in data) {
             residents.push({
               name: data[resident].name,
-              department: this.getDepartmentName(data[resident].department),
+              department: data[resident].department,
               id: resident,
               hours: data[resident].hours,
               exempt: data[resident].exempt,
@@ -64,15 +65,18 @@ export default {
       return departments;
     },
     updateList() {
-      this.getDepartments()
-        .then((departments) => {
+      console.log("Updating list");
+      if (this.departments.length == 0) {
+        this.getDepartments().then((departments) => {
           this.departments = departments;
-        })
-        .then(() => {
-          this.getResidents().then((residents) => {
-            this.residents = residents;
-          });
         });
+      }
+      this.getResidents().then((residents) => {
+        this.residents = residents;
+        console.log("Residents updated");
+        console.log(this.residents);
+      });
+
       // Buggy code, fix it later
       const interval = setInterval(() => {
         this.residents_temp = [...this.residents];
@@ -121,12 +125,6 @@ export default {
           }
         }
 
-        // TODO: Fix the no department chip
-        if (this.chips.includes("no-dep")) {
-          if (resident.department == null) {
-            returnStorage.push(false);
-          }
-        }
         if (this.chips.includes("exempt")) {
           if (resident.exempt) {
             returnStorage.push(false);
@@ -156,6 +154,21 @@ export default {
     closeAddResident() {
       this.addResidentOpen = false;
     },
+    openResident(residentId) {
+      const resident = this.residents.find((res) => {
+        return res.id == residentId;
+      });
+
+      this.editResidentFields = {
+        name: resident.name ? resident.name : "",
+        department: resident.department ? resident.department : "",
+        hours: resident.hours ? resident.hours : 0,
+        exempt: resident.exempt ? resident.exempt : false,
+        id: resident.id,
+      };
+
+      this.addResidentOpen = true;
+    },
   },
 };
 </script>
@@ -163,7 +176,9 @@ export default {
 <template>
   <div>
     <h2 class="title" style="color: var(--tertiary)">
-      <span class="material-symbols-rounded icon" v-on:click="$router.go(-1)">arrow_back_ios_new</span>
+      <span class="material-symbols-rounded icon" v-on:click="$router.go(-1)"
+        >arrow_back_ios_new</span
+      >
       Moradores
     </h2>
     <h4 class="subtitle" style="color: var(--tertiary)">
@@ -197,19 +212,11 @@ export default {
               <option
                 v-for="department in departments"
                 :key="department.id"
-                :value="department.name"
+                :value="department.id"
               >
                 {{ department.name }}
               </option>
             </select>
-            <div
-              class="filter__chip"
-              :class="{ select: chips.includes('no-dep') }"
-              v-on:click="toggleChip('no-dep')"
-            >
-              <span class="material-symbols-rounded icon">live_help</span>
-              <span>Sem departamento</span>
-            </div>
             <div
               class="filter__chip"
               :class="{ select: chips.includes('debt') }"
@@ -231,8 +238,8 @@ export default {
           </div>
           <p class="filter__result__count">
             Sua pesquisa retornou
-            {{ this.searchStorage.length }}
-            {{ this.searchStorage.length == 1 ? "resultado" : "resultados" }}.
+            {{ searchStorage.length }}
+            {{ searchStorage.length == 1 ? "resultado" : "resultados" }}.
           </p>
         </div>
       </div>
@@ -258,9 +265,10 @@ export default {
             v-for="resident in searchStorage"
             :key="resident.id"
             class="resident"
+            v-on:click="openResident(resident.id)"
           >
             <td>{{ resident.name }}</td>
-            <td>{{ resident.department }}</td>
+            <td>{{ getDepartmentName(resident.department) }}</td>
             <td
               style="text-align: center"
               :class="{
@@ -285,6 +293,7 @@ export default {
         v-on:close="closeAddResident"
         v-on:update="updateList"
         :departmentsArray="departments"
+        :fieldsArray="editResidentFields"
       />
     </transition>
   </div>

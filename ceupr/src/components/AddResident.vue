@@ -1,5 +1,5 @@
 <script setup>
-import { getDatabase, ref, push, set } from "@firebase/database";
+import { getDatabase, ref, push, set, remove } from "@firebase/database";
 </script>
 
 <script>
@@ -10,46 +10,86 @@ export default {
       type: Array,
       required: true,
     },
+    fieldsArray: {
+      type: Object,
+      required: true,
+      default: () => {
+        return {
+          name: "",
+          department: "",
+          hours: 0,
+          exempt: false,
+          id: "",
+        };
+      },
+    },
   },
   data() {
     return {
-      name: "",
-      department: "",
-      hours: 0,
-      exempt: false,
+      name: this.fieldsArray.name,
+      currentDepartment: this.fieldsArray.department,
+      hours: this.fieldsArray.hours,
+      exempt: this.fieldsArray.exempt,
       departments: this.departmentsArray,
+      fields: this.fieldsArray,
     };
   },
   methods: {
     async addResident() {
       const db = getDatabase();
       const residentsRef = ref(db, "residents");
-      const newResidentRef = push(residentsRef);
+      let newResidentRef;
+      if (this.fields == undefined) {
+        newResidentRef = push(residentsRef);
+      } else {
+        newResidentRef = ref(db, "residents/" + this.fields.id);
+      }
       // Field validation
       if (this.name == "") {
         alert("O nome do morador não pode estar vazio");
         return;
-      } else if (this.department == "") {
+      } else if (this.currentDepartment == "") {
         alert("Selecione o departamento do morador");
         return;
       } else if (this.hours == "" && this.hours != 0) {
         alert("O número de horas do morador não pode estar vazio");
+        return;
       }
 
       set(newResidentRef, {
         name: this.name,
-        department: this.department,
+        department: this.currentDepartment,
         hours: this.hours,
         exempt: this.exempt,
-      }).then(() => {
-        alert("Morador adicionado com sucesso");
-        this.$emit("close");
-        this.$emit("update");
-      });
+      })
+        .then(() => {
+          if (this.fields == undefined) {
+            alert("Morador adicionado com sucesso!");
+          } else {
+            alert("Morador atualizado com sucesso!");
+          }
+          this.$emit("close");
+          this.$router.go();
+        })
+        .catch((error) => {
+          alert("Erro ao adicionar morador: " + error);
+        });
     },
     closeAddResident() {
-      alert("The add resident window has been closed");
       this.addResidentOpen = false;
+    },
+    removeResident() {
+      const db = getDatabase();
+      const residentRef = ref(db, "residents/" + this.fields.id);
+      remove(residentRef)
+        .then(() => {
+          alert("Morador removido com sucesso!");
+          this.$emit("close");
+          this.$router.go();
+        })
+        .catch((error) => {
+          alert("Erro ao remover morador: " + error);
+        });
     },
   },
 };
@@ -60,7 +100,9 @@ export default {
     <div id="addResidentCard" class="login__background">
       <div class="addResident__card">
         <div class="addResident__card__content">
-          <div class="addResident__card__title">Adicionar morador</div>
+          <div class="addResident__card__title">
+            Adicionar ou editar morador
+          </div>
           <p style="color: var(--on-secondary-container)">
             Adiciona um novo morador ao quadro de moradores.
           </p>
@@ -76,13 +118,18 @@ export default {
           <div class="addResident__card__input">
             <div class="addResident__card__input__label">Departamento</div>
             <select
-              v-model="department"
+              v-model="currentDepartment"
               class="addResident__card__input__field"
             >
               <option
                 v-for="department in departments"
                 :key="department.id"
                 :value="department.id"
+                :selected="
+                  department.id != ''
+                    ? department.id == currentDepartment
+                    : '-1'
+                "
               >
                 {{ department.name }}
               </option>
@@ -103,12 +150,18 @@ export default {
             <input
               type="checkbox"
               v-model="exempt"
-              class="addResident__card__input__field"
+              class="addResident__card__input__field switch"
             />
           </div>
           <div class="addResident__card__buttons">
             <div class="addResident__card__button" @click="addResident">
-              Adicionar morador
+              Salvar
+            </div>
+            <div
+              class="addResident__card__button secondary alert"
+              @click="removeResident"
+            >
+              Excluir
             </div>
             <div
               class="addResident__card__button secondary"
@@ -228,44 +281,6 @@ export default {
   background-color: var(--primary-disabled);
   color: var(--primary-disabled-text);
   cursor: not-allowed;
-}
-
-/* Checkbox as toggle */
-.addResident__card__input__field[type="checkbox"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  width: 40px;
-  height: 20px;
-  background: var(--on-secondary-container);
-  outline: none;
-  border-radius: 100px;
-  position: relative;
-  cursor: pointer;
-  padding: 0;
-  border: none;
-}
-
-.addResident__card__input__field[type="checkbox"]:checked {
-  background: var(--primary);
-}
-
-.addResident__card__input__field[type="checkbox"]:before {
-  content: "";
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  top: 0;
-  left: 0;
-  background: #fff;
-  transform: scale(1.1);
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
-  transition: 0.2s;
-}
-
-.addResident__card__input__field[type="checkbox"]:checked:before {
-  left: 20px;
 }
 
 .secondary {
