@@ -1,0 +1,21 @@
+/* Mobile layout */
+
+@media only screen and (max-width: 600px) {
+  .table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .main {
+    padding: 24px;
+  }
+
+  .container {
+    padding: 24px;
+  }
+
+  .subtitle {
+    margin-left: 40px;
+    line-height: normal;
+  }
+}

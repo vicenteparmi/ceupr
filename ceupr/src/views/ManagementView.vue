@@ -24,7 +24,7 @@ import ActionCard from "../components/ActionCard.vue";
       <ActionCard
         title="Moradores"
         subtitle="Modificar departamentos dos moradores da Fundação e acompanhar situação com atividades realizadas."
-        icon="manage_accounts"
+        icon="location_away"
         link="/moradores"
       />
       <ActionCard
@@ -32,6 +32,12 @@ import ActionCard from "../components/ActionCard.vue";
         subtitle="Adicionar ou remover departamentos, bem como alterar o nome e a descrição de cada um."
         icon="atr"
         link="/departamentos"
+      />
+      <ActionCard
+        title="Contas"
+        subtitle="Definir cargos e permissões de acesso para usuários da plataforma."
+        icon="manage_accounts"
+        link="/contas"
       />
     </div>
   </div>

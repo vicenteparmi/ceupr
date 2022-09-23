@@ -1,0 +1,521 @@
+/* Text */
+
+.title {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 0px;
+    display: flex;
+    align-items: center;
+}
+
+.title span {
+    margin-right: 16px;
+    cursor: pointer;
+    transition-duration: 0.2s;
+}
+
+.title span:hover {
+    padding-left: 16px;
+}
+
+.subtitle {
+    font-size: 24px;
+    font-weight: 400;
+    max-width: 650px;
+}
+
+.secondary-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 0px;
+    color: var(--tertiary);
+}
+
+/* Form fields */
+
+label {
+    font-size: 18px;
+}
+
+select {
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 8px;
+    color: var(--on-surface);
+    background-color: none;
+    border: 1px solid var(--outline);
+}
+
+input {
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 8px;
+    color: var(--on-surface);
+    background-color: none;
+    border: 1px solid var(--outline);
+}
+
+textarea {
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 8px;
+    color: var(--on-surface);
+    background-color: none;
+    outline: none;
+    border: 1px solid var(--outline);
+}
+
+select:focus {
+    outline: none;
+    border: solid 1px var(--primary);
+}
+
+input:focus {
+    outline: none;
+    border: solid 1px var(--primary);
+}
+
+textarea:focus {
+    outline: none;
+    border: solid 1px var(--primary);
+}
+
+/* Buttons */
+
+.button {
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 24px;
+    color: var(--on-primary);
+    border: none;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.button:hover {
+    background-color: var(--secondary);
+}
+
+.button:active {
+    background-color: var(--tertiary);
+}
+
+.button:focus {
+    outline: none;
+}
+
+.button--primary {
+    color: var(--on-primary);
+    background-color: var(--primary);
+}
+
+.button--primary:hover {
+    background-color: var(--secondary);
+}
+
+.button--primary:active {
+    background-color: var(--tertiary);
+}
+
+.button--secondary {
+    color: var(--secondary);
+    background-color: var(--on-secondary);
+    border: 1px solid var(--secondary);
+}
+
+.button--secondary:hover {
+    background-color: var(--tertiary);
+    color: var(--on-tertiary);
+}
+
+.button--secondary:active {
+    background-color: var(--secondary);
+}
+
+/* Links */
+
+a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Checkbox as toggle */
+.switch[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 40px;
+    height: 20px;
+    background: var(--on-secondary-container);
+    outline: none;
+    border-radius: 100px;
+    position: relative;
+    cursor: pointer;
+    padding: 0;
+    border: none;
+}
+
+.switch[type="checkbox"]:checked {
+    background: var(--primary);
+}
+
+.switch[type="checkbox"]:before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    top: 0;
+    left: 0;
+    background: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
+    transition: 0.2s;
+}
+
+.switch[type="checkbox"]:checked:before {
+    left: 20px;
+}
+
+/* Transition */
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.15s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
+.slide-fade-enter-active {
+    transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+    transition: all 0.15s cubic-bezier(0.23, 1, 0.32, 1);
+    ;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+    transform: translateY(20px);
+    opacity: 0;
+}
+
+/* Tables */
+.table {
+    width: 100%;
+    border-radius: 24px;
+    overflow: hidden;
+    border-collapse: separate;
+    border: solid 1px var(--secondary-container);
+}
+
+.table>thead>tr>th {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--on-primary-container);
+    text-align: center;
+    background-color: var(--primary-container);
+}
+
+.table>tbody>tr>td {
+    padding: 12px 24px;
+    font-size: 16px;
+    color: var(--secondary);
+    border-top: solid 1px var(--secondary-container);
+    cursor: pointer;
+}
+
+.table>tbody>tr:hover {
+    background-color: var(--secondary-container);
+    color: var(--secondary);
+    box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.28);
+}
+
+.table>tbody>tr>td.negative {
+    color: var(--error);
+    font-weight: bold;
+}
+
+.table>tbody>tr>td.positive {
+    color: #00c853;
+    font-weight: bold;
+}
+
+/* Popup */
+
+.popup-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.popup-card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 600px;
+    background-color: var(--secondary-container);
+    border-radius: 48px;
+    padding: 48px;
+    z-index: 999;
+}
+
+.popup-header {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    color: var(--tertiary);
+}
+
+.popup-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-body>div {
+    margin-bottom: 16px;
+}
+
+.popup-body>div>label {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--on-secondary-container);
+    margin-bottom: 8px;
+}
+
+.popup-body>div>input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid var(--secondary);
+    background-color: var(--secondary-container);
+    font-family: inherit;
+}
+
+.popup-body>div>input:focus {
+    outline: none;
+    border: 1px solid var(--primary);
+}
+
+.button-popup {
+    width: 100%;
+    padding: 8px;
+    border-radius: 100px;
+    background-color: var(--on-secondary-container);
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--secondary-container);
+    border: solid 1px var(--secondary);
+    cursor: pointer;
+    transition-duration: 0.1s;
+    margin: 0 4px;
+}
+
+.button-popup:hover {
+    background-color: var(--secondary);
+    color: var(--on-secondary);
+}
+
+.button-popup:focus {
+    outline: none;
+}
+
+.button-popup:active {
+    background-color: var(--secondary-container);
+    color: var(--on-secondary-container);
+}
+
+.popup-button-holder {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 24px;
+}
+
+.secondary {
+    background-color: var(--secondary-container);
+    color: var(--on-secondary-container);
+    border: solid 1px var(--secondary);
+}
+
+/* Checkbox */
+
+.pure-material-checkbox {
+    z-index: 0;
+    position: relative;
+    display: inline-block;
+    color: var(--on-secondary-container);
+    font-size: 16px;
+}
+
+/* Input */
+.pure-material-checkbox>input {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    z-index: -1;
+    position: absolute;
+    left: -10px;
+    top: -8px;
+    display: block;
+    margin: 0;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    background-color: var(--secondary-container);
+    box-shadow: none;
+    outline: none;
+    opacity: 0;
+    transform: scale(1);
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.2s;
+}
+
+/* Span */
+.pure-material-checkbox>span {
+    display: inline-block;
+    width: 100%;
+    cursor: pointer;
+}
+
+/* Box */
+.pure-material-checkbox>span::before {
+    content: "";
+    display: inline-block;
+    box-sizing: border-box;
+    margin: 3px 11px 3px 1px;
+    border: solid 2px;
+    /* Safari */
+    border-color: var(--secondary);
+    border-radius: 2px;
+    width: 18px;
+    height: 18px;
+    vertical-align: top;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+/* Checkmark */
+.pure-material-checkbox>span::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 3px;
+    left: 1px;
+    width: 10px;
+    height: 5px;
+    border: solid 2px transparent;
+    border-right: none;
+    border-top: none;
+    transform: translate(3px, 4px) rotate(-45deg);
+}
+
+/* Checked, Indeterminate */
+.pure-material-checkbox>input:checked,
+.pure-material-checkbox>input:indeterminate {
+    background-color: var(--primary);
+}
+
+.pure-material-checkbox>input:checked+span::before,
+.pure-material-checkbox>input:indeterminate+span::before {
+    border-color: var(--primary);
+    background-color: var(--primary);
+}
+
+.pure-material-checkbox>input:checked+span::after,
+.pure-material-checkbox>input:indeterminate+span::after {
+    border-color: var(--on-primary);
+}
+
+.pure-material-checkbox>input:indeterminate+span::after {
+    border-left: none;
+    transform: translate(4px, 3px);
+}
+
+/* Hover, Focus */
+.pure-material-checkbox:hover>input {
+    opacity: 0.04;
+}
+
+.pure-material-checkbox>input:focus {
+    opacity: 0.12;
+}
+
+.pure-material-checkbox:hover>input:focus {
+    opacity: 0.16;
+}
+
+/* Active */
+.pure-material-checkbox>input:active {
+    opacity: 1;
+    transform: scale(0);
+    transition: transform 0s, opacity 0s;
+}
+
+.pure-material-checkbox>input:active+span::before {
+    border-color: var(--primary);
+}
+
+.pure-material-checkbox>input:checked:active+span::before {
+    border-color: transparent;
+    background-color: var(--primary);
+}
+
+/* Disabled */
+.pure-material-checkbox>input:disabled {
+    opacity: 0;
+}
+
+.pure-material-checkbox>input:disabled+span {
+    color: var(--secondary);
+    cursor: initial;
+}
+
+.pure-material-checkbox>input:disabled+span::before {
+    border-color: currentColor;
+}
+
+.pure-material-checkbox>input:checked:disabled+span::before,
+.pure-material-checkbox>input:indeterminate:disabled+span::before {
+    border-color: transparent;
+    background-color: currentColor;
+}
+
+/* Components */
+
+.head-display-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 300px;
+    background-color: var(--primary-container);
+    color: var(--on-primary-container);
+    border-radius: 48px;
+    margin-bottom: 48px;
+    padding: 48px;
+}
+
+.container {
+    padding: 48px;
+    border-radius: 24px;
+    border: solid 1px var(--secondary-container);
+}
+
+
+.main {
+    width: 100%;
+    padding: 48px;
+    overflow-y: auto;
+}

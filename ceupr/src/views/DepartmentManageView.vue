@@ -81,6 +81,12 @@ export default {
       })
         .then(() => {
           console.log("Data saved successfully!");
+
+          // Set director department
+          const userRef = ref(db, "users/" + this.newDep.director);
+          set(userRef, {
+            department: this.newDep.id,
+          });
         })
         .catch((error) => {
           console.error("Failed to save data: ", error);
@@ -130,6 +136,12 @@ export default {
       })
         .then(() => {
           console.log("Data saved successfully!");
+
+          // Set director department
+          const userRef = ref(db, "users/" + this.editDep.director);
+          set(userRef, {
+            department: this.editDep.id,
+          });
 
           // Refresh departments
           this.departments = [];

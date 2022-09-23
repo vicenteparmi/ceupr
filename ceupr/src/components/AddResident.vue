@@ -81,15 +81,22 @@ export default {
     removeResident() {
       const db = getDatabase();
       const residentRef = ref(db, "residents/" + this.fields.id);
-      remove(residentRef)
-        .then(() => {
-          alert("Morador removido com sucesso!");
-          this.$emit("close");
-          this.$router.go();
-        })
-        .catch((error) => {
-          alert("Erro ao remover morador: " + error);
-        });
+      const confirmDel = confirm(
+        "Tem certeza que deseja remover o morador " +
+          this.name +
+          "?\nTodos os registros de horas e atividades realizadas serão perdidos."
+      );
+      if (confirmDel) {
+        remove(residentRef)
+          .then(() => {
+            alert("Morador removido com sucesso!");
+            this.$emit("close");
+            this.$router.go();
+          })
+          .catch((error) => {
+            alert("Erro ao remover morador: " + error);
+          });
+      }
     },
   },
 };
@@ -301,5 +308,15 @@ export default {
   flex-direction: row-reverse;
   align-items: center;
   width: 100%;
+}
+
+.alert {
+  background-color: var(--error-container);
+  color: var(--error);
+  border: solid 1px var(--on-error);
+}
+
+.alert:hover {
+  background-color: var(--on-error);
 }
 </style>

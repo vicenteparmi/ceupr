@@ -24,10 +24,4 @@ import NavBar from "./components/NavBar.vue";
   width: 100%;
   height: 100vh;
 }
-
-.main {
-  width: 100%;
-  padding: 48px;
-  overflow-y: auto;
-}
 </style>

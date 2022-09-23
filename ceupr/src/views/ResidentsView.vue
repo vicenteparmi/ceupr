@@ -251,13 +251,13 @@ export default {
         <span class="material-symbols-rounded icon">person_add</span>
         <span>Adicionar<br />morador</span>
       </div>
-      <table style="grid-area: content" class="filter__content" cellspacing="0">
+      <table style="grid-area: content" class="table" cellspacing="0">
         <thead>
           <tr>
-            <th>Nome</th>
-            <th>Departamento</th>
-            <th>Horas</th>
-            <th>Isento</th>
+            <th style="width: 45%">Nome</th>
+            <th style="width: 35%">Departamento</th>
+            <th style="width: 10%">Horas</th>
+            <th style="width: 10%">Isento</th>
           </tr>
         </thead>
         <tbody>
@@ -441,49 +441,6 @@ option {
 
 #residents__content > .filter__add__person > .material-symbols-rounded {
   margin-bottom: 8px;
-}
-
-/* Table with all residents */
-
-.filter__content {
-  width: 100%;
-  border-radius: 24px;
-  overflow: hidden;
-  border-collapse: separate;
-  border: solid 1px var(--secondary-container);
-}
-
-.filter__content > thead > tr > th {
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: bold;
-  color: var(--on-primary-container);
-  text-align: center;
-  background-color: var(--primary-container);
-}
-
-.filter__content > tbody > tr > td {
-  padding: 12px 24px;
-  font-size: 16px;
-  color: var(--secondary);
-  border-top: solid 1px var(--secondary-container);
-  cursor: pointer;
-}
-
-.filter__content > tbody > tr:hover {
-  background-color: var(--secondary-container);
-  color: var(--secondary);
-  box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.28);
-}
-
-.filter__content > tbody > tr > td.negative {
-  color: var(--error);
-  font-weight: bold;
-}
-
-.filter__content > tbody > tr > td.positive {
-  color: #00c853;
-  font-weight: bold;
 }
 
 .filter__result__count {

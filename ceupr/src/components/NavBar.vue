@@ -42,7 +42,6 @@ export default {
           get(userRef)
             .then((snapshot) => {
               if (snapshot.exists()) {
-
                 // Check if user has the adm role
                 const admRef = ref(db, "users/" + user.uid);
                 get(admRef)
@@ -85,7 +84,7 @@ export default {
             "account_circle";
         }
       });
-    });
+    }, 1000);
   },
   data() {
     return {
@@ -154,7 +153,7 @@ export default {
         <span
           id="account__image"
           class="material-symbols-rounded icon account__icon"
-          :class="(this.isAdm = 'admin')"
+          :class="{ admin: isAdm }"
         >
           account_circle
         </span>
