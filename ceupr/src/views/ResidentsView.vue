@@ -246,7 +246,10 @@ export default {
       <div
         style="grid-area: new"
         class="filter__add__person"
-        v-on:click="addResidentOpen = true"
+        v-on:click="
+          addResidentOpen = true;
+          editResidentFields = {};
+        "
       >
         <span class="material-symbols-rounded icon">person_add</span>
         <span>Adicionar<br />morador</span>

@@ -29,7 +29,7 @@ export default {
       name: this.fieldsArray.name,
       currentDepartment: this.fieldsArray.department,
       hours: this.fieldsArray.hours,
-      exempt: this.fieldsArray.exempt,
+      exempt: this.fieldsArray.exempt ? this.fieldsArray.exempt : false,
       departments: this.departmentsArray,
       fields: this.fieldsArray,
     };
@@ -39,7 +39,7 @@ export default {
       const db = getDatabase();
       const residentsRef = ref(db, "residents");
       let newResidentRef;
-      if (this.fields == undefined) {
+      if (this.fields.id == undefined) {
         newResidentRef = push(residentsRef);
       } else {
         newResidentRef = ref(db, "residents/" + this.fields.id);

@@ -1,5 +1,13 @@
 <script setup>
-import { getDatabase, ref, get, push, remove, set } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  get,
+  push,
+  remove,
+  set,
+  update,
+} from "firebase/database";
 </script>
 
 <script>
@@ -36,7 +44,13 @@ export default {
       const directorsRef = ref(db, "users");
       const snapshot = await get(directorsRef);
       if (snapshot.exists()) {
-        this.directors = snapshot.val();
+        snapshot.forEach((user) => {
+          this.directors.push({
+            id: user.key,
+            name: user.val().name,
+            email: user.val().email,
+          });
+        });
       } else {
         console.log("No data available");
       }
@@ -128,7 +142,8 @@ export default {
     saveEditDepartment(id) {
       const db = getDatabase();
       const departmentRef = ref(db, "departments/" + id);
-      set(departmentRef, {
+      console.log(this.editDep);
+      update(departmentRef, {
         name: this.editDep.name,
         description: this.editDep.description,
         director: this.editDep.director,
@@ -136,10 +151,9 @@ export default {
       })
         .then(() => {
           console.log("Data saved successfully!");
-
           // Set director department
           const userRef = ref(db, "users/" + this.editDep.director);
-          set(userRef, {
+          update(userRef, {
             department: this.editDep.id,
           });
 
@@ -278,7 +292,7 @@ export default {
               <select name="director" id="director" v-model="editDep.director">
                 <option value="null">Nenhum</option>
                 <option
-                  :value="director.name"
+                  :value="director.id"
                   v-for="director in directors"
                   :key="director.id"
                 >
