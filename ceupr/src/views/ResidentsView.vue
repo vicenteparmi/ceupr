@@ -430,6 +430,7 @@ option {
   line-height: normal;
   transition-duration: 0.2s;
   font-weight: bold;
+  user-select: none;
 }
 
 #residents__content > .filter__add__person:hover {
@@ -449,5 +450,11 @@ option {
   color: var(--secondary);
   margin: 12px 0 0 0;
   font-style: italic;
+}
+
+@media only screen and (max-width: 600px) {
+  #residents__content {
+    grid-template-areas: "filter" "new" "content";
+  }
 }
 </style>

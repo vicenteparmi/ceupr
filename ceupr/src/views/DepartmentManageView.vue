@@ -557,4 +557,20 @@ export default {
 .disabled {
   opacity: 0.5;
 }
+
+@media only screen and (max-width: 600px) {
+  .departments__list {
+    flex-direction: column;
+  }
+
+  .departments__list__item {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .departments__create__new__dialog {
+    width: 90%;
+    margin: 0;
+  }
+}
 </style>

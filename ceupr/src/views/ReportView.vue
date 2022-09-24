@@ -2,8 +2,12 @@
 
 <template>
   <div>
-    <div class="report-data-card">
-      <h2 class="title" style="margin-bottom: 0">Relatório individual</h2>
+    <div class="container">
+      <h2 class="title">
+        <span class="material-symbols-rounded icon" v-on:click="$router.go(-1)"
+          >arrow_back_ios_new</span
+        >Relatório individual
+      </h2>
       <h4 class="subtitle">Departamento de <span>manutenção</span></h4>
       <!-- TODO: Fix subtitle according to department -->
       <p style="color: var(--on-surface); margin-top: 12px; max-width: 800px">
@@ -129,5 +133,11 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+}
+
+@media only screen and (max-width: 600px) {
+  .form-item {
+    width: 100%;
+  }
 }
 </style>

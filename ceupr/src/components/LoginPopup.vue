@@ -258,4 +258,25 @@ export default {
   justify-content: center;
   align-items: center;
 }
+
+@media only screen and (max-width: 600px) {
+  .login__card {
+    max-width: 90%;
+    width: 90%;
+  }
+
+  .login__background {
+    position: fixed;
+  }
+
+  .login__card__header {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .login__card__content {
+    min-width: 100%;
+  }
+}
+
 </style>

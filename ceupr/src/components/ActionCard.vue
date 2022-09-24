@@ -79,4 +79,18 @@ export default {
 .icon {
   font-size: 36px;
 }
+
+@media only screen and (max-width: 600px) {
+  .action-card {
+    width: 100%;
+    margin-bottom: 24px;
+    border-radius: 24px;
+    padding: 24px;
+  }
+
+  .action-card:active {
+    border-radius: 12px;
+  }
+}
+
 </style>

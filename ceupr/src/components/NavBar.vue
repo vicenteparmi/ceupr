@@ -26,10 +26,6 @@ export default {
 
           document.getElementById("account__name").innerHTML = user.displayName;
           document.getElementById("account__email").innerHTML = truncatedEmail;
-          document.getElementById("account__image").innerHTML =
-            "<img src='" +
-            user.photoURL +
-            "' alt='Imagem de perfil' style='border-radius: 100%; width: 48px; margin-bottom: 8px'>";
 
           this.userName = user.displayName;
           this.userEmail = user.email;
@@ -80,8 +76,6 @@ export default {
 
           document.getElementById("account__name").innerHTML = "Login";
           document.getElementById("account__email").innerHTML = "Acessar conta";
-          document.getElementById("account__image").innerHTML =
-            "account_circle";
         }
       });
     }, 1000);
@@ -154,9 +148,11 @@ export default {
           id="account__image"
           class="material-symbols-rounded icon account__icon"
           :class="{ admin: isAdm }"
+          v-if="!loggedIn"
         >
           account_circle
         </span>
+        <img :src="userImage" alt="Imagem de perfil" id="pif" v-if="loggedIn" />
         <span id="account__name" class="account__name">Login</span>
         <span id="account__email" class="account__email">Acessar conta</span>
       </div>
@@ -295,5 +291,114 @@ a.router-link-exact-active {
   width: 40px;
   border-radius: 100%;
   margin-bottom: 8px;
+}
+
+#pif {
+  border-radius: 100%;
+  width: 48px;
+  margin-bottom: 8px;
+  height: 48px;
+}
+
+@media only screen and (max-width: 600px) {
+  .nav-bar {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    position: fixed;
+    z-index: 10000;
+    height: 80px;
+    bottom: 0;
+    width: 100%;
+    max-width: none;
+    border-radius: 8px 8px 0 0;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .nav-bar__logo {
+    display: none;
+  }
+
+  .nav-bar__links {
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin: 0;
+    position: absolute;
+    width: auto;
+    position: relative;
+  }
+  .nav-bar__links > a {
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    margin-bottom: 0;
+  }
+
+  .nav-bar__options {
+    margin-bottom: 8px;
+  }
+
+  a.router-link-exact-active {
+    background-color: transparent;
+    color: var(--on-secondary-container);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  a.router-link-exact-active > .icon {
+    color: var(--on-secondary);
+    background-color: var(--on-secondary-container);
+  }
+
+  .selected {
+    background-color: inherit;
+    color: var(--on-secondary);
+  }
+
+  .icon {
+    padding: 4px 8px;
+    border-radius: 500px;
+    margin: 0;
+    margin-bottom: 2px;
+    min-width: 50px;
+    text-align: center;
+    transition-duration: 0.1s;
+    font-size: 32px;
+  }
+
+  .nav-bar__options {
+    width: auto;
+    margin: 0;
+  }
+  .account {
+    display: flex;
+    width: auto;
+    padding: 0;
+    border: none;
+    margin: 0;
+  }
+
+  #pif {
+    border-radius: 100%;
+    width: 36px;
+    height: 36px;
+    margin-bottom: 8px;
+  }
+
+  #account__email {
+    display: none;
+  }
+
+  #account__name {
+    font-size: 14px;
+  }
+
+  .account:hover {
+    background-color: transparent;
+    color: var(--on-secondary-container);
+  }
 }
 </style>

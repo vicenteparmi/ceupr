@@ -319,4 +319,12 @@ export default {
 .alert:hover {
   background-color: var(--on-error);
 }
+
+@media only screen and (max-width: 600px) {
+  .addResident__card {
+    max-width: 90%;
+    min-width: 90%;
+    padding: 0;
+  }
+}
 </style>

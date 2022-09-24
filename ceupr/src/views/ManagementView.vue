@@ -1,9 +1,11 @@
 <script setup>
 import ActionCard from "../components/ActionCard.vue";
+import MobileTopLogo from "../components/MobileTopLogo.vue";
 </script>
 
 <template>
   <div>
+    <MobileTopLogo />
     <div class="head-display-card">
       <div>
         <h1 class="title">Gerenciamento</h1>
@@ -51,4 +53,13 @@ import ActionCard from "../components/ActionCard.vue";
   justify-content: space-between;
   margin-top: 24px;
 }
+
+@media only screen and (max-width: 600px) {
+  .action-cards {
+    justify-content: center;
+    flex-wrap: nowrap;
+    flex-direction: column;
+  }
+}
+
 </style>

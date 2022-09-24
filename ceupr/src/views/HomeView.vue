@@ -1,10 +1,12 @@
 <script setup>
 import ActionCard from "../components/ActionCard.vue";
+import MobileTopLogo from "../components/MobileTopLogo.vue";
 </script>
 
 <template>
   <div>
     <main>
+      <MobileTopLogo />
       <div class="head-display-card">
         <div>
           <h1 class="title">Departamentos</h1>
