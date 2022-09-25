@@ -23,12 +23,6 @@ import MobileTopLogo from "../components/MobileTopLogo.vue";
           icon="groups"
           link="/colaboradores"
         />
-        <ActionCard
-          title="Enviar relatório"
-          subtitle="Realizar envio de horas e atividades realizadas por colaboradores."
-          icon="summarize"
-          link="/relatorio"
-        />
       </div>
     </main>
   </div>

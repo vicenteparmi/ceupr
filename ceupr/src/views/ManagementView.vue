@@ -15,7 +15,7 @@ import MobileTopLogo from "../components/MobileTopLogo.vue";
         </p>
       </div>
     </div>
-    <h1 class="secondary-title">Opções para Gerenciamento</h1>
+    <h3 class="secondary-title">Relatórios</h3>
     <div class="action-cards">
       <ActionCard
         title="Ver relatórios"
@@ -23,6 +23,9 @@ import MobileTopLogo from "../components/MobileTopLogo.vue";
         icon="fact_check"
         link="/relatorio"
       />
+    </div>
+    <h3 class="secondary-title">Controle de departamentos e pessoas</h3>
+    <div class="action-cards">
       <ActionCard
         title="Moradores"
         subtitle="Modificar departamentos dos moradores da Fundação e acompanhar situação com atividades realizadas."

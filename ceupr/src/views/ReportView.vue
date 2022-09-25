@@ -1,95 +1,146 @@
-<script></script>
+<script>
+import { getDatabase, ref, get } from "@firebase/database";
+
+export default {
+  name: "ReportView",
+  data() {
+    return {
+      memberInfo: {},
+      reportData: {
+        hours: 0,
+        activities: "",
+      },
+    };
+  },
+  mounted() {
+    this.getMemberInfo();
+  },
+  methods: {
+    async getMemberInfo() {
+      const db = getDatabase();
+      const memberRef = ref(db, "residents/" + this.$route.params.id);
+      get(memberRef)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            this.memberInfo = {
+              name: snapshot.val().name,
+              department: snapshot.val().department,
+              hours: snapshot.val().hours,
+              changes: snapshot.val().changes,
+            };
+          } else {
+            console.log("No data available");
+          }
+        })
+        .then(() => {
+          const departmentRef = ref(
+            db,
+            "departments/" + this.memberInfo.department
+          );
+          get(departmentRef).then((snapshot) => {
+            if (snapshot.exists()) {
+              this.memberInfo.departmentName = snapshot.val().name;
+            } else {
+              console.log("No data available");
+            }
+          });
+        });
+    },
+    gotoSend() {
+      this.$router.push({
+        name: "report",
+        params: { id: this.$route.params.id },
+      });
+    },
+  },
+};
+</script>
 
 <template>
   <div>
     <div class="container">
-      <h2 class="title">
+      <h2 class="title" style="color: var(--tertiary)">
         <span class="material-symbols-rounded icon" v-on:click="$router.go(-1)"
           >arrow_back_ios_new</span
         >Relatório individual
       </h2>
-      <h4 class="subtitle">Departamento de <span>manutenção</span></h4>
+      <h4 class="subtitle" style="color: var(--tertiary)">
+        {{ memberInfo.name }} | {{ memberInfo.departmentName }}
+      </h4>
       <!-- TODO: Fix subtitle according to department -->
       <p style="color: var(--on-surface); margin-top: 12px; max-width: 800px">
-        Envie o relatório individual de cada colaborador do departamento. Caso
-        não encontre o nome de algum colaborador, entre em contato com o
-        Conselho Administrativo.
+        Realize o envio do relatório do período atual para este morador. Após
+        envio os dados serão verificados e o saldo de horas será atualizado
+        automaticamente.
       </p>
       <div class="form">
-        <!-- Nome do colaborador -->
-        <div class="form-item">
-          <label for="colab">
-            <span class="form-item-number">1.</span> Colaborador
-          </label>
-          <select name="colab" id="colab">
-            <option value="1">João da Silva</option>
-            <option value="2">Maria da Silva</option>
-            <option value="3">José da Silva</option>
-          </select>
-        </div>
         <!-- Quantidade de horas cumpridas -->
         <div class="form-item">
           <label for="horas">
-            <span class="form-item-number">2.</span> Horas cumpridas
+            <span class="form-item-number">1.</span> Horas cumpridas
+            <p>
+              Quantidade de horas cumpridas por este morador no departamento
+              durante o período atual.
+            </p>
           </label>
-          <input type="time" name="horas" id="horas" />
+          <input
+            type="number"
+            name="horas"
+            id="horas"
+            v-model="reportData.hours"
+            min="0"
+          />
         </div>
         <!-- Atividades realizadas -->
         <div class="form-item" style="width: 100%">
           <label for="atividades">
-            <span class="form-item-number">3.</span> Atividades realizadas
+            <span class="form-item-number">2.</span> Atividades realizadas
+            <p>
+              Liste Abaixoas atividades realizadas pelo morador no período de
+              forma detalhada.
+            </p>
           </label>
-          <textarea name="atividades" id="atividades" rows="10"></textarea>
+          <textarea
+            v-model="reportData.activities"
+            name="atividades"
+            id="atividades"
+            rows="10"
+          ></textarea>
         </div>
-        <!-- Preíodo -->
+        <!-- Informações sobre o período -->
         <div class="form-item">
-          <label for="periodo">
-            <span class="form-item-number">4.</span> Mês de referência
+          <label for="horas">
+            <span class="form-item-number">3.</span> Período atual
+            <p>As informações enviadas serão referentes ao período de {{}}</p>
           </label>
-          <select name="periodo" id="periodo">
-            <!-- Months -->
-            <option value="1">Janeiro</option>
-            <option value="2">Fevereiro</option>
-            <option value="3">Março</option>
-            <option value="4">Abril</option>
-            <option value="5">Maio</option>
-            <option value="6">Junho</option>
-            <option value="7">Julho</option>
-            <option value="8">Agosto</option>
-            <option value="9">Setembro</option>
-            <option value="10">Outubro</option>
-            <option value="11">Novembro</option>
-            <option value="12">Dezembro</option>
-          </select>
-        </div>
-        <!-- Ano -->
-        <div class="form-item">
-          <label for="ano">
-            <span class="form-item-number">5.</span> Ano
-          </label>
-          <select name="ano" id="ano">
-            <!-- Years -->
-            <option value="2021">2021</option>
-            <option value="2022" selected>2022</option>
-            <option value="2023">2023</option>
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
-            <option value="2026">2026</option>
-            <option value="2027">2027</option>
-            <option value="2028">2028</option>
-            <option value="2029">2029</option>
-            <option value="2030">2030</option>
-          </select>
-        </div>
-        <!-- Buttons -->
-        <div class="form-buttons">
-          <button class="button button--primary">Enviar</button
-          ><button class="button button--secondary">Cancelar</button>
         </div>
       </div>
     </div>
-    <h1 class="secondary-title">Últimos envios</h1>
-    <div id="latest-reports">Não foram encontrados envios recentes.</div>
+    <div class="container summary" style="margin-top: 24px">
+      <h3 class="secondary-title">Resumo</h3>
+      <p><span>Colaborador: </span> {{ memberInfo.name }}</p>
+      <p><span>Departamento: </span> {{ memberInfo.departmentName }}</p>
+      <p>
+        <span>Saldo de horas anterior: </span> {{ memberInfo.hours }}
+        {{ memberInfo.hours == 1 ? "hora" : "horas" }}
+      </p>
+      <p>
+        <span>Horas do período: </span> {{ reportData.hours }}
+        {{ reportData.hours == 1 ? "hora" : "horas" }}
+      </p>
+      <p><span>Período atual: </span> {{}}</p>
+      <p><span>Atividades realizadas: </span> {{ reportData.activities }}</p>
+      <!-- Buttons -->
+      <div class="form-buttons">
+        <button class="button button--primary">Enviar</button
+        ><button class="button button--secondary">Cancelar</button>
+      </div>
+      <p>
+        Ao clicar enviar você confirma que as informações aqui inseridas estão
+        corretas. O status do envio poderá ser acompanhado na aba de cada
+        morador de seu departamento.
+      </p>
+    </div>
   </div>
 </template>
 
@@ -121,7 +172,17 @@
   flex-direction: column;
   margin-bottom: 24px;
   color: var(--on-surface);
-  width: 48%;
+  width: 100%;
+}
+
+.form-item > label > p {
+  font-weight: normal;
+  font-size: 14px;
+  color: var(--on-surface);
+  margin-top: 0px;
+  margin-bottom: 12px;
+  opacity: 0.8;
+  margin-left: 18px;
 }
 
 .form-item-number {
@@ -133,6 +194,12 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  margin-bottom: 24px;
+  margin-top: 24px;
+}
+
+.summary > p > span {
+  font-weight: bold;
 }
 
 @media only screen and (max-width: 600px) {

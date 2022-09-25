@@ -7,7 +7,7 @@ export default {
       required: true,
     },
     hours: {
-      type: String,
+      type: Number,
       required: true,
     },
     changes: {
@@ -35,11 +35,6 @@ export default {
           <span class="material-symbols-rounded icon">update</span>
           {{ changes }}
         </p>
-      </div>
-    </div>
-    <div class="colab-card__options">
-      <div class="colab-card__option">
-        <span class="material-symbols-rounded icon">query_stats</span>
       </div>
     </div>
   </div>

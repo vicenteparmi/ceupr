@@ -18,8 +18,8 @@ const router = createRouter({
       },
     },
     {
-      path: "/relatorio",
-      name: "send-report",
+      path: "/relatorio/:id",
+      name: "report",
       component: ReportView,
       meta: {
         transition: "fade",
@@ -65,7 +65,19 @@ const router = createRouter({
         transition: "fade",
       },
     },
+    {
+      name: "member",
+      path: "/colaboradores/:id",
+      component: () => import("../views/MemberView.vue"),
+      meta: {
+        transition: "fade",
+      },
+    },
   ],
+  // eslint-disable-next-line no-unused-vars
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 };
+  },
 });
 
 export default router;

@@ -67,7 +67,12 @@ export default {
           if (snapshot.exists()) {
             snapshot.forEach((child) => {
               if (child.val().department == this.currentUser.department) {
-                this.members.push(child.val());
+                this.members.push({
+                  name: child.val().name,
+                  hours: child.val().hours,
+                  changes: child.val().changes,
+                  id: child.key,
+                });
               }
             });
           } else {
@@ -77,6 +82,9 @@ export default {
         .catch((error) => {
           console.error(error);
         });
+    },
+    openMember(id) {
+      this.$router.push({ name: "member", params: { id: id } });
     },
   },
 };
@@ -118,8 +126,11 @@ export default {
         :hours="member.hours"
         :changes="member.changes ? member.changes : 'Sem dados'"
         :id="member.id"
+        @click="openMember(member.id)"
       />
     </div>
+    <!-- Member edit summary -->
+
   </div>
 </template>
 
