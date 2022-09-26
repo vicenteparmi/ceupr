@@ -121,11 +121,11 @@ export default {
     <div class="info-summary">
       <div class="info-summary__item">
         <p class="info-summary__title">Colaboradores</p>
-        <p class="info-summary__value">{{ this.members.length }}</p>
+        <p class="info-summary__value">{{ members.length }}</p>
       </div>
       <div class="info-summary__item">
         <p class="info-summary__title">Período atual</p>
-        <p class="info-summary__value">{{ this.currentPeriod }}</p>
+        <p class="info-summary__value">{{ currentPeriod }}</p>
       </div>
       <div class="info-summary__item">
         <p class="info-summary__title">Envio até</p>
