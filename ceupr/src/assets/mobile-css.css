@@ -27,7 +27,6 @@
         font-size: 36px;
         line-height: normal;
         color: var(--tertiary);
-        line-break: anywhere;
     }
 
     .head-display-card>div>p {

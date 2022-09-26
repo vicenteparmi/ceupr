@@ -2,6 +2,7 @@
 import { getAuth, onAuthStateChanged } from "@firebase/auth";
 import { getDatabase, ref, get } from "@firebase/database";
 import ColabCard from "../components/ColabCard.vue";
+import MobileTopLogo from "../components/MobileTopLogo.vue";
 </script>
 
 <script>
@@ -72,7 +73,7 @@ export default {
                 this.members.push({
                   name: child.val().name,
                   hours: child.val().hours,
-                  changes: child.val().changes,
+                  changes: new Date(child.val().change).toLocaleDateString(),
                   id: child.key,
                 });
               }
@@ -106,6 +107,7 @@ export default {
 
 <template>
   <div>
+    <MobileTopLogo />
     <div>
       <h2 class="title" style="color: var(--tertiary)">Colaboradores</h2>
       <h4 class="subtitle" style="color: var(--tertiary)">

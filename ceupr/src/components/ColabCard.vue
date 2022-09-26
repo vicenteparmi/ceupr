@@ -54,6 +54,7 @@ export default {
   flex-direction: row;
   margin-right: 12px;
   align-items: center;
+  cursor: pointer;
 }
 
 .colab-card:hover {
@@ -98,5 +99,21 @@ export default {
   margin-left: 32px;
   user-select: none;
   cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+  .colab-card {
+    flex-direction: column;
+    margin-right: 0;
+    width: 100%;
+    align-items: flex-start;
+  }
+  .colab-card__subinfo {
+    margin-top: 12px;
+  }
+  .colab-card__options {
+    margin-left: 0;
+    margin-top: 0px;
+  }
 }
 </style>

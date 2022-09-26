@@ -1,5 +1,6 @@
 <script>
-import { getDatabase, ref, get } from "@firebase/database";
+import { getAuth } from "@firebase/auth";
+import { getDatabase, ref, get, set, update } from "@firebase/database";
 
 export default {
   name: "ReportView",
@@ -10,10 +11,14 @@ export default {
         hours: 0,
         activities: "",
       },
+      currentPeriod: {},
+      currentUser: "",
     };
   },
   mounted() {
     this.getMemberInfo();
+    this.getCurrentUser();
+    this.getSettings();
   },
   methods: {
     async getMemberInfo() {
@@ -46,11 +51,64 @@ export default {
           });
         });
     },
-    gotoSend() {
-      this.$router.push({
-        name: "report",
-        params: { id: this.$route.params.id },
+    async getSettings() {
+      const db = getDatabase();
+      const settingsRef = ref(db, "settings");
+      get(settingsRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          const periods = snapshot.val().periods;
+          const current = snapshot.val().currentPeriod;
+          this.currentPeriod = {
+            name: periods[current].name,
+            year: periods[current].year,
+            id: current,
+          };
+          if (!snapshot.val().allowSend) {
+            alert("O período para envio de relatório não está aberto.");
+            this.$router.push({
+              name: "member",
+              params: { id: this.$router.go(-1) },
+            });
+          }
+        }
       });
+    },
+    async getCurrentUser() {
+      const auth = getAuth();
+      this.currentUser = auth.currentUser.uid;
+    },
+    submitReport() {
+      const db = getDatabase();
+      const reportRef = ref(
+        db,
+        "residents/" +
+          this.$route.params.id +
+          "/reports/" +
+          this.currentPeriod.id
+      );
+      set(reportRef, {
+        hours: this.reportData.hours,
+        activities: this.reportData.activities,
+        date: Date.now(),
+        sentBy: this.currentUser,
+        department: this.memberInfo.department,
+        status: "Em análise",
+      })
+        .then(() => {
+          // Update member's hours
+          const memberRef = ref(db, "residents/" + this.$route.params.id);
+          update(memberRef, {
+            change: Date.now(),
+          });
+          alert("Relatório enviado com sucesso!");
+          this.$router.push({
+            name: "member",
+            params: { id: this.$route.params.id },
+          });
+        })
+        .catch((error) => {
+          alert("Erro ao enviar relatório: " + error);
+        });
     },
   },
 };
@@ -111,7 +169,10 @@ export default {
         <div class="form-item">
           <label for="horas">
             <span class="form-item-number">3.</span> Período atual
-            <p>As informações enviadas serão referentes ao período de {{}}</p>
+            <p>
+              As informações enviadas serão referentes ao período de
+              {{ currentPeriod.name }} ({{ currentPeriod.year }}).
+            </p>
           </label>
         </div>
       </div>
@@ -128,12 +189,22 @@ export default {
         <span>Horas do período: </span> {{ reportData.hours }}
         {{ reportData.hours == 1 ? "hora" : "horas" }}
       </p>
-      <p><span>Período atual: </span> {{}}</p>
-      <p><span>Atividades realizadas: </span> {{ reportData.activities }}</p>
+      <p>
+        <span>Período atual: </span> {{ currentPeriod.name }} ({{
+          currentPeriod.year
+        }})
+      </p>
+      <p>
+        <span>Atividades realizadas: </span>
+        {{ reportData.activities || "Não informado" }}
+      </p>
       <!-- Buttons -->
       <div class="form-buttons">
-        <button class="button button--primary">Enviar</button
-        ><button class="button button--secondary">Cancelar</button>
+        <button class="button button--primary" @click="submitReport">
+          Enviar</button
+        ><button class="button button--secondary" @click="$router.go(-1)">
+          Cancelar
+        </button>
       </div>
       <p>
         Ao clicar enviar você confirma que as informações aqui inseridas estão

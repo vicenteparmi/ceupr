@@ -6,6 +6,8 @@ export default {
   data() {
     return {
       memberInfo: {},
+      reports: [],
+      periods: "",
     };
   },
   mounted() {
@@ -22,8 +24,31 @@ export default {
               name: snapshot.val().name,
               department: snapshot.val().department,
               hours: snapshot.val().hours,
-              changes: snapshot.val().changes,
+              changes: new Date(snapshot.val().change).toLocaleString(),
             };
+
+            // Create array with reports
+            const reports = snapshot.val().reports;
+            for (const report in reports) {
+              this.reports.push({
+                id: report,
+                hours: reports[report].hours,
+                activities: reports[report].activities,
+                date: reports[report].date,
+                department: reports[report].department,
+                status: reports[report].status,
+                sentBy: reports[report].sentBy,
+                obs: reports[report].obs,
+              });
+            }
+
+            // Get period names
+            const settingsRef = ref(db, "settings/periods");
+            get(settingsRef).then((snapshot) => {
+              if (snapshot.exists()) {
+                this.periods = snapshot.val();
+              }
+            });
           } else {
             console.log("No data available");
           }
@@ -105,45 +130,33 @@ export default {
       </div>
     </div>
     <h3 class="secondary-title">Todos os relatórios</h3>
-    <table class="table" cellspacing="0">
+    <table class="table" cellspacing="0" v-if="periods != ''">
       <thead>
         <tr>
           <th>Período</th>
-          <th>Envio</th>
+          <th>Data de Envio</th>
           <th>Horas</th>
-          <th>Alterações</th>
+          <th>Status</th>
+          <th>Atividades</th>
+          <th>Observações</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Outubro</td>
-          <td>20/10/2021</td>
-          <td>20</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td>Setembro</td>
-          <td>20/09/2021</td>
-          <td>20</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td>Agosto</td>
-          <td>20/08/2021</td>
-          <td>20</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td>Julho</td>
-          <td>20/07/2021</td>
-          <td>20</td>
-          <td>0</td>
-        </tr>
-        <tr>
-          <td>Junho</td>
-          <td>20/06/2021</td>
-          <td>20</td>
-          <td>0</td>
+        <tr v-for="report in reports" :key="report.id">
+          <td>
+            {{ periods[report.id].name + " (" + periods[report.id].year + ")" }}
+          </td>
+          <td>{{ new Date(report.date).toLocaleDateString() }}</td>
+          <td>{{ report.hours }}</td>
+          <td>{{ report.status }}</td>
+          <td>
+            {{
+              report.activities.length > 30
+                ? report.activities.substring(0, 30) + "..."
+                : report.activities
+            }}
+          </td>
+          <td>{{ report.obs ? report.obs : "-" }}</td>
         </tr>
       </tbody>
     </table>
