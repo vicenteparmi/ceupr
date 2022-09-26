@@ -8,6 +8,7 @@ export default {
       memberInfo: {},
       reports: [],
       periods: "",
+      currentReport: {},
     };
   },
   mounted() {
@@ -43,10 +44,45 @@ export default {
             }
 
             // Get period names
-            const settingsRef = ref(db, "settings/periods");
+            const settingsRef = ref(db, "settings");
             get(settingsRef).then((snapshot) => {
               if (snapshot.exists()) {
-                this.periods = snapshot.val();
+                this.periods = snapshot.val().periods;
+                this.currentReport = snapshot.val().currentPeriod;
+
+                // Get current report
+                const currentReportRef = ref(
+                  db,
+                  "residents/" +
+                    this.$route.params.id +
+                    "/reports/" +
+                    this.currentReport
+                );
+                get(currentReportRef).then((snapshot) => {
+                  if (snapshot.exists()) {
+                    this.currentReport = {
+                      id: this.currentReport,
+                      hours: snapshot.val().hours,
+                      activities: snapshot.val().activities,
+                      date: snapshot.val().date,
+                      department: snapshot.val().department,
+                      status: snapshot.val().status || "Em análise",
+                      sentBy: snapshot.val().sentBy,
+                      obs: snapshot.val().obs,
+                    };
+                  } else {
+                    this.currentReport = {
+                      id: this.currentReport,
+                      hours: 0,
+                      activities: "",
+                      date: "",
+                      department: "",
+                      status: "Não enviado",
+                      sentBy: "",
+                      obs: "",
+                    };
+                  }
+                });
               }
             });
           } else {
@@ -72,6 +108,18 @@ export default {
         name: "report",
         params: { id: this.$route.params.id },
       });
+    },
+    switchColor(status) {
+      switch (status) {
+        case "Em análise":
+          return "#FFC107";
+        case "Aprovado":
+          return "#4CAF50";
+        case "Rejeitado":
+          return "var(--error)";
+        default:
+          return "var(--on-surface)";
+      }
     },
   },
 };
@@ -111,7 +159,7 @@ export default {
         viewBox="0 0 103.12 122.88"
         style="enable-background: new 0 0 103.12 122.88"
         xml:space="preserve"
-        fill="var(--primary)"
+        :fill="switchColor(currentReport.status)"
       >
         <g>
           <path
@@ -119,7 +167,7 @@ export default {
           />
         </g>
       </svg>
-      <div>
+      <div v-if="currentReport.status == 'Não enviado'">
         <h2>Envio não realizado</h2>
         <p>
           O relarório para o período atual não foi encontrado na base de dados.
@@ -127,6 +175,54 @@ export default {
         <button class="button button--primary" @click="gotoSend">
           Adicionar relarório
         </button>
+      </div>
+      <div v-if="currentReport.status == 'Em análise'">
+        <h2>Em análise</h2>
+        <p>
+          O relarório deste morador está em análise. Caso deseje realizar alguma
+          alteração, clique no botão abaixo.
+        </p>
+        <button class="button button--primary" @click="gotoSend">
+          Editar relarório
+        </button>
+      </div>
+      <div v-if="currentReport.status == 'Aprovado'">
+        <h2>Aprovado!</h2>
+        <p>
+          O relarório deste morador foi aprovado. Um novo envio será possível em
+          um novo período.
+        </p>
+        <div class="chips__holder">
+          <div class="chip">
+            <span class="material-symbols-rounded icon">hourglass_empty</span>
+            +{{ currentReport.hours }} horas
+          </div>
+          <div class="chip">
+            <span class="material-symbols-rounded icon"
+              >drive_folder_upload</span
+            >
+            {{ new Date(currentReport.date).toLocaleDateString() }}
+          </div>
+        </div>
+      </div>
+      <div v-if="currentReport.status == 'Rejeitado'">
+        <h2>Rejeitado</h2>
+        <p>
+          O relarório deste morador foi rejeitado. Mais informações podem ser
+          encontradas no campo de observações.
+        </p>
+        <div class="chips__holder">
+          <div class="chip bad">
+            <span class="material-symbols-rounded icon">hourglass_empty</span>
+            {{ currentReport.hours }} horas não contabilizadas
+          </div>
+          <div class="chip bad">
+            <span class="material-symbols-rounded icon"
+              >drive_folder_upload</span
+            >
+            {{ new Date(currentReport.date).toLocaleDateString() }}
+          </div>
+        </div>
       </div>
     </div>
     <h3 class="secondary-title">Todos os relatórios</h3>
@@ -226,6 +322,35 @@ export default {
 
 .table {
   margin-top: 24px;
+}
+
+.chips__holder {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.chip {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 24px;
+  color: var(--primary);
+  width: auto;
+  border: 1px solid var(--primary);
+  margin-right: 12px;
+  margin-bottom: 12px;
+}
+
+.chip span {
+  margin-right: 4px;
+}
+
+.bad {
+  border-color: var(--error);
+  color: var(--error);
 }
 
 @media screen and (max-width: 600px) {

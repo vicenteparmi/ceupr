@@ -120,10 +120,10 @@ export default {
       <h2 class="title" style="color: var(--tertiary)">
         <span class="material-symbols-rounded icon" v-on:click="$router.go(-1)"
           >arrow_back_ios_new</span
-        >Relatório individual
+        >{{ memberInfo.name }}
       </h2>
       <h4 class="subtitle" style="color: var(--tertiary)">
-        {{ memberInfo.name }} | {{ memberInfo.departmentName }}
+        Relatório de {{ currentPeriod.name }}/{{ currentPeriod.year }}
       </h4>
       <!-- TODO: Fix subtitle according to department -->
       <p style="color: var(--on-surface); margin-top: 12px; max-width: 800px">

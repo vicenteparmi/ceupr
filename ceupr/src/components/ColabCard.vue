@@ -14,6 +14,10 @@ export default {
       type: String,
       required: true,
     },
+    status: {
+      type: String,
+      required: true,
+    },
     id: {
       type: String,
       required: true,
@@ -25,6 +29,18 @@ export default {
 <template>
   <div class="colab-card">
     <div class="colab-card__content">
+      <div class="status">
+        <div
+          class="status__indicator"
+          :class="{
+            ana: status == 'Em análise',
+            apr: status == 'Aprovado',
+            rec: status == 'Rejeitado',
+            nsent: status == 'Não enviado',
+          }"
+        ></div>
+        {{ status }}
+      </div>
       <p class="colab-card__name">{{ name }}</p>
       <div class="colab-card__subinfo">
         <p class="colab-card__hours">
@@ -32,7 +48,7 @@ export default {
           {{ hours }} horas
         </p>
         <p class="colab-card__changes">
-          <span class="material-symbols-rounded icon">update</span>
+          <span class="material-symbols-rounded icon">track_changes</span>
           {{ changes }}
         </p>
       </div>
@@ -99,6 +115,56 @@ export default {
   margin-left: 32px;
   user-select: none;
   cursor: pointer;
+}
+
+/* Status options */
+.status {
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 800px;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.status__indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 800px;
+  margin-right: 8px;
+  animation: pulse 3s infinite;
+}
+.ana {
+  background-color: #f9a825;
+}
+
+.apr {
+  background-color: #4caf50;
+}
+
+.rec {
+  background-color: #f44336;
+}
+
+.nsent {
+  background-color: #bdbdbd;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  }
+  20% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
 }
 
 @media screen and (max-width: 600px) {

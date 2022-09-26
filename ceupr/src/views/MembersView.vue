@@ -14,16 +14,17 @@ export default {
   data() {
     return {
       currentPeriod: "...",
+      currentPeriodId: "",
       currentUser: {},
       members: [],
       currentDepartment: "",
     };
   },
   mounted() {
+    this.getSettings();
     this.getCurrentUser().then(() => {
       this.getMembers();
     });
-    this.getSettings();
   },
   methods: {
     async getCurrentUser() {
@@ -75,6 +76,9 @@ export default {
                   hours: child.val().hours,
                   changes: new Date(child.val().change).toLocaleDateString(),
                   id: child.key,
+                  status:
+                    child.val().reports[this.currentPeriodId].status ||
+                    "Não enviado",
                 });
               }
             });
@@ -95,6 +99,7 @@ export default {
           const current = snapshot.val().currentPeriod;
           this.currentPeriod =
             periods[current].name + " (" + periods[current].year + ")";
+          this.currentPeriodId = current;
         }
       });
     },
@@ -142,6 +147,7 @@ export default {
         :hours="member.hours"
         :changes="member.changes ? member.changes : 'Sem dados'"
         :id="member.id"
+        :status="member.status"
         @click="openMember(member.id)"
       />
     </div>
