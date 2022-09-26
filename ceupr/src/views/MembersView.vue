@@ -18,6 +18,7 @@ export default {
       currentUser: {},
       members: [],
       currentDepartment: "",
+      sendLimit: "",
     };
   },
   mounted() {
@@ -100,6 +101,9 @@ export default {
           this.currentPeriod =
             periods[current].name + " (" + periods[current].year + ")";
           this.currentPeriodId = current;
+          this.sendLimit = new Date(
+            snapshot.val().sendLimit + "T00:00:00"
+          ).toLocaleDateString();
         }
       });
     },
@@ -136,7 +140,7 @@ export default {
       </div>
       <div class="info-summary__item">
         <p class="info-summary__title">Envio até</p>
-        <p class="info-summary__value">20/10/2022</p>
+        <p class="info-summary__value">{{ sendLimit }}</p>
       </div>
     </div>
     <div id="colabList">

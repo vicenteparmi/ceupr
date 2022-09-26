@@ -12,6 +12,7 @@ export default {
         newPeriodYear: "",
         periods: [],
       },
+      sendLimit: "",
       currentPeriod: {
         name: "",
         year: "",
@@ -24,6 +25,11 @@ export default {
   },
   mounted() {
     this.getSettings();
+  },
+  watch: {
+    sendLimit: function () {
+      this.saveInfo();
+    },
   },
   methods: {
     toggleNewPeriod(status) {
@@ -46,6 +52,7 @@ export default {
               monthHours: snapshot.val().monthHours,
               periods: snapshot.val().periods,
             };
+            this.sendLimit = snapshot.val().sendLimit;
             this.currentPeriod = {
               id: snapshot.val().currentPeriod,
             };
@@ -76,6 +83,7 @@ export default {
         allowSend: this.settings.allowSend,
         monthHours: this.settings.monthHours,
         currentPeriod: this.currentPeriod.id,
+        sendLimit: this.sendLimit,
       };
       update(settingsRef, newSettings);
     },
@@ -125,6 +133,12 @@ export default {
               {{ period.name }} ({{ period.year }})
             </option>
           </select>
+        </span>
+      </div>
+      <div class="setting__toggle">
+        <h4>Envio até</h4>
+        <span>
+          <input type="date" style="width: 200px" v-model="sendLimit" />
         </span>
       </div>
     </div>
