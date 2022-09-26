@@ -6,6 +6,7 @@
     margin-bottom: 0px;
     display: flex;
     align-items: center;
+    user-select: none;
 }
 
 .title span {
@@ -22,6 +23,7 @@
     font-size: 24px;
     font-weight: 400;
     max-width: 650px;
+    user-select: none;
 }
 
 .secondary-title {

@@ -136,7 +136,7 @@ export default {
           </button>
           <button
             class="login__card__form__input__button secondary"
-            @click="this.close"
+            @click="close"
           >
             Cancelar
           </button>

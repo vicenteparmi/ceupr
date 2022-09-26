@@ -8,6 +8,13 @@ import AccountsView from "../views/AccountsView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  beforeEach(to, from, next) {
+    window.document.title =
+      to.meta && to.meta.title
+        ? to.meta.title
+        : "Casa do Estudante Universitário";
+    next();
+  },
   routes: [
     {
       path: "/",
@@ -23,6 +30,7 @@ const router = createRouter({
       component: ReportView,
       meta: {
         transition: "fade",
+        title: "Relatório - CEU",
       },
     },
     {
@@ -31,6 +39,7 @@ const router = createRouter({
       component: () => import("../views/MembersView.vue"),
       meta: {
         transition: "fade",
+        title: "Colaboradores - CEU",
       },
     },
     {
@@ -39,6 +48,7 @@ const router = createRouter({
       component: ManagementView,
       meta: {
         transition: "fade",
+        title: "Gerenciamento - CEU",
       },
     },
     {
@@ -47,6 +57,7 @@ const router = createRouter({
       component: ResidentsView,
       meta: {
         transition: "fade",
+        title: "Moradores - CEU",
       },
     },
     {
@@ -55,6 +66,7 @@ const router = createRouter({
       component: DepartmentManageView,
       meta: {
         transition: "fade",
+        title: "Departamentos - CEU",
       },
     },
     {
@@ -63,6 +75,7 @@ const router = createRouter({
       component: AccountsView,
       meta: {
         transition: "fade",
+        title: "Contas - CEU",
       },
     },
     {
@@ -71,6 +84,7 @@ const router = createRouter({
       component: () => import("../views/MemberView.vue"),
       meta: {
         transition: "fade",
+        title: ":id - CEU",
       },
     },
     {
@@ -79,6 +93,7 @@ const router = createRouter({
       component: () => import("../views/SettingsView.vue"),
       meta: {
         transition: "fade",
+        title: "Configurações - CEU",
       },
     },
   ],
