@@ -127,6 +127,7 @@ export default {
           </g>
         </g>
       </svg>
+      <h1>CEU</h1>
     </div>
     <div class="nav-bar__links">
       <router-link activeClass="selected" to="/"
@@ -188,10 +189,12 @@ export default {
   align-items: center;
   width: 100%;
   height: 125px;
-  margin-bottom: 36px;
+  margin-bottom: 24px;
   margin-top: 12px;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  user-select: none;
 }
 
 .nav-bar__logo svg {

@@ -45,7 +45,12 @@ export default {
       <div class="colab-card__subinfo">
         <p class="colab-card__hours">
           <span class="material-symbols-rounded icon">hourglass_empty</span>
-          {{ hours }} horas
+          <span
+            class="space"
+            :class="{ positive: hours > 0, negative: hours < 0 }"
+            >{{ hours }}
+          </span>
+          horas
         </p>
         <p class="colab-card__changes">
           <span class="material-symbols-rounded icon">track_changes</span>
@@ -150,6 +155,17 @@ export default {
 
 .nsent {
   background-color: #bdbdbd;
+}
+
+.positive {
+  color: var(--positive);
+}
+
+.negative {
+  color: var(--negative);
+}
+.space {
+  margin-right: 4px;
 }
 
 @keyframes pulse {

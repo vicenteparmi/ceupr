@@ -13,7 +13,7 @@ export default {
   },
   data() {
     return {
-      currentPeriod: "...",
+      currentPeriod: "",
       currentPeriodId: "",
       currentUser: {},
       members: [],
@@ -72,14 +72,22 @@ export default {
           if (snapshot.exists()) {
             snapshot.forEach((child) => {
               if (child.val().department == this.currentUser.department) {
+                // Try to ser status
+                let status = "Não enviado";
+                try {
+                  status = child.val().reports[this.currentPeriodId].status;
+                } catch (error) {
+                  console.log("No status found");
+                }
+
                 this.members.push({
                   name: child.val().name,
                   hours: child.val().hours,
-                  changes: new Date(child.val().change).toLocaleDateString(),
+                  changes: child.val().change
+                    ? new Date(child.val().change).toLocaleDateString()
+                    : "Sem dados",
                   id: child.key,
-                  status:
-                    child.val().reports[this.currentPeriodId].status ||
-                    "Não enviado",
+                  status: status,
                 });
               }
             });
@@ -119,9 +127,16 @@ export default {
     <MobileTopLogo />
     <div>
       <h2 class="title" style="color: var(--tertiary)">Colaboradores</h2>
-      <h4 class="subtitle" style="color: var(--tertiary)">
-        {{ currentDepartment }}
-      </h4>
+      <transition name="fadeup" mode="out-in">
+        <h4
+          class="subtitle fadeup"
+          style="color: var(--tertiary)"
+          v-if="currentDepartment"
+        >
+          {{ currentDepartment }}
+        </h4>
+        <h4 v-else style="width: 120px; height: 38px"></h4>
+      </transition>
       <!-- TODO: Fix subtitle according to department -->
       <p style="color: var(--on-surface); margin-top: 12px; max-width: 800px">
         Abaixo é possível encontrar a lista completa dos colaboradores para o
@@ -132,15 +147,27 @@ export default {
     <div class="info-summary">
       <div class="info-summary__item">
         <p class="info-summary__title">Colaboradores</p>
-        <p class="info-summary__value">{{ members.length }}</p>
+        <transition name="fadeup" mode="out-in">
+          <p :key="members.length" class="info-summary__value">
+            {{ members.length }}
+          </p>
+        </transition>
       </div>
       <div class="info-summary__item">
         <p class="info-summary__title">Período atual</p>
-        <p class="info-summary__value">{{ currentPeriod }}</p>
+        <transition name="fadeup" mode="out-in">
+          <p :key="currentPeriod" class="info-summary__value">
+            {{ currentPeriod }}
+          </p>
+        </transition>
       </div>
       <div class="info-summary__item">
         <p class="info-summary__title">Envio até</p>
-        <p class="info-summary__value">{{ sendLimit }}</p>
+        <transition name="fadeup" mode="out-in">
+          <p :key="sendLimit" class="info-summary__value">
+            {{ sendLimit }}
+          </p></transition
+        >
       </div>
     </div>
     <div id="colabList">
@@ -153,6 +180,7 @@ export default {
         :id="member.id"
         :status="member.status"
         @click="openMember(member.id)"
+        class="fadeup"
       />
     </div>
     <!-- Member edit summary -->
