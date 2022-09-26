@@ -23,6 +23,12 @@ import MobileTopLogo from "../components/MobileTopLogo.vue";
         icon="fact_check"
         link="/relatorio"
       />
+      <ActionCard
+        title="Configurações de envio"
+        subtitle="Definir o período de envio de relatórios e o limite de horas cumpridas por período."
+        icon="settings"
+        link="/configuracoes"
+      />
     </div>
     <h3 class="secondary-title">Controle de departamentos e pessoas</h3>
     <div class="action-cards">

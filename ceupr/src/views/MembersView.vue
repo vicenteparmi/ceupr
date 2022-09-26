@@ -12,6 +12,7 @@ export default {
   },
   data() {
     return {
+      currentPeriod: "...",
       currentUser: {},
       members: [],
       currentDepartment: "",
@@ -21,6 +22,7 @@ export default {
     this.getCurrentUser().then(() => {
       this.getMembers();
     });
+    this.getSettings();
   },
   methods: {
     async getCurrentUser() {
@@ -83,6 +85,18 @@ export default {
           console.error(error);
         });
     },
+    async getSettings() {
+      const db = getDatabase();
+      const settingsRef = ref(db, "settings");
+      get(settingsRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          const periods = snapshot.val().periods;
+          const current = snapshot.val().currentPeriod;
+          this.currentPeriod =
+            periods[current].name + " (" + periods[current].year + ")";
+        }
+      });
+    },
     openMember(id) {
       this.$router.push({ name: "member", params: { id: id } });
     },
@@ -111,7 +125,7 @@ export default {
       </div>
       <div class="info-summary__item">
         <p class="info-summary__title">Período atual</p>
-        <p class="info-summary__value">Outubro</p>
+        <p class="info-summary__value">{{ this.currentPeriod }}</p>
       </div>
       <div class="info-summary__item">
         <p class="info-summary__title">Envio até</p>
@@ -130,7 +144,6 @@ export default {
       />
     </div>
     <!-- Member edit summary -->
-
   </div>
 </template>
 

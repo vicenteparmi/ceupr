@@ -73,6 +73,14 @@ const router = createRouter({
         transition: "fade",
       },
     },
+    {
+      name: "settings",
+      path: "/configuracoes",
+      component: () => import("../views/SettingsView.vue"),
+      meta: {
+        transition: "fade",
+      },
+    },
   ],
   // eslint-disable-next-line no-unused-vars
   scrollBehavior(to, from, savedPosition) {
