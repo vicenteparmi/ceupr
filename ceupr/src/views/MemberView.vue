@@ -135,8 +135,11 @@ export default {
   <div>
     <transition name="fadeup" mode="out-in">
       <h2 class="title" style="color: var(--tertiary)" v-if="memberInfo.name">
-        <span class="material-symbols-rounded icon" v-on:click="$router.go(-1)"
-          >arrow_back_ios_new</span
+        <span
+          class="material-symbols-rounded icon"
+          v-on:click="$router.push({ name: 'colaboradores' })"
+        >
+          arrow_back_ios_new</span
         >
         {{ memberInfo.name }}
       </h2>

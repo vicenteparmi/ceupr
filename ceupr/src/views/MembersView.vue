@@ -77,7 +77,7 @@ export default {
                 try {
                   status = child.val().reports[this.currentPeriodId].status;
                 } catch (error) {
-                  console.log("No status found");
+                  console.log("No report sent");
                 }
 
                 this.members.push({
@@ -178,7 +178,7 @@ export default {
         :hours="member.hours"
         :changes="member.changes ? member.changes : 'Sem dados'"
         :id="member.id"
-        :status="member.status"
+        :status="member.status ? member.status : 'Em análise'"
         @click="openMember(member.id)"
         class="fadeup"
       />

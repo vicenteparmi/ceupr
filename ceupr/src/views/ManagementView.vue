@@ -21,7 +21,7 @@ import MobileTopLogo from "../components/MobileTopLogo.vue";
         title="Ver relatórios"
         subtitle="Ver, aprovar e rejeitar relatórios de horas e atividades enviados por colaboradores."
         icon="fact_check"
-        link="/relatorio"
+        link="/revisar"
       />
       <ActionCard
         title="Configurações de envio"

@@ -96,6 +96,15 @@ const router = createRouter({
         title: "Configurações - CEU",
       },
     },
+    {
+      name: "revisar",
+      path: "/revisar",
+      component: () => import("../views/ReviewView.vue"),
+      meta: {
+        transition: "fade",
+        title: "Revisar - CEU",
+      },
+    },
   ],
   // eslint-disable-next-line no-unused-vars
   scrollBehavior(to, from, savedPosition) {

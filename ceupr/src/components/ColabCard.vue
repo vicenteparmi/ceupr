@@ -15,7 +15,6 @@ export default {
       required: true,
     },
     status: {
-      type: String,
       required: true,
     },
     id: {
