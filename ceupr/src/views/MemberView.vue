@@ -13,6 +13,7 @@ export default {
       currentReport: {
         date: "",
       },
+      allowSend: false,
     };
   },
   mounted() {
@@ -55,6 +56,7 @@ export default {
               if (snapshot.exists()) {
                 this.periods = snapshot.val().periods;
                 this.currentReport = snapshot.val().currentPeriod;
+                this.allowSend = snapshot.val().allowSend;
 
                 // Get current report
                 const currentReportRef = ref(
@@ -207,7 +209,11 @@ export default {
             O relarório para o período atual não foi encontrado na base de
             dados.
           </p>
-          <button class="button button--primary" @click="gotoSend">
+          <button
+            class="button button--primary"
+            @click="gotoSend"
+            v-if="allowSend"
+          >
             Adicionar relarório
           </button>
         </div>
@@ -217,7 +223,11 @@ export default {
             O relarório deste morador está em análise. Caso deseje realizar
             alguma alteração, clique no botão abaixo.
           </p>
-          <button class="button button--primary" @click="gotoSend">
+          <button
+            class="button button--primary"
+            @click="gotoSend"
+            v-if="allowSend"
+          >
             Editar relarório
           </button>
         </div>
