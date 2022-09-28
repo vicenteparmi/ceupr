@@ -10,7 +10,7 @@ import MobileTopLogo from "../components/MobileTopLogo.vue";
       <div class="head-display-card">
         <div>
           <h1 class="title">Departamentos</h1>
-          <p class="subtitle">Gerencie as horas dos colaboradores.</p>
+          <p class="subtitle">Gerencie as horas dos colaboradores</p>
         </div>
       </div>
 

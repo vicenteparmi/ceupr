@@ -33,6 +33,7 @@
   /* Othes */
   --positive: #00b300;
   --negative: #ff0000;
+  --primary-container-shape: #cfe9d9;
 }
 
 @media (prefers-color-scheme: dark) {
