@@ -289,7 +289,7 @@ export default {
           <td>{{ report.status }}</td>
           <td>
             {{
-              report.activities.length > 30
+              report.activities && report.activities.length > 30
                 ? report.activities.substring(0, 30) + "..."
                 : report.activities
             }}

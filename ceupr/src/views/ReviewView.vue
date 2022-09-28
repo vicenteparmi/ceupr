@@ -1,5 +1,11 @@
 <script>
-import { getDatabase, ref, get, update } from "@firebase/database";
+import {
+  getDatabase,
+  ref,
+  get,
+  update,
+  runTransaction,
+} from "@firebase/database";
 import ReportReviewPopup from "../components/ReportReviewPopup.vue";
 
 export default {
@@ -11,6 +17,8 @@ export default {
       openReport: {},
       popupOpen: false,
       hoursPerPeriod: 0,
+      notSentOpen: false,
+      notSent: [],
     };
   },
   mounted() {
@@ -187,6 +195,179 @@ export default {
         });
       });
     },
+    async getNotSent() {
+      // Empty not sent list
+      this.notSent = [];
+
+      // Get missing reports for all residents from all periods
+      const db = getDatabase();
+      const periodsRef = ref(db, "settings/periods");
+
+      let periodsArray = [];
+      let residentsArray = [];
+
+      get(periodsRef)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            for (let period in snapshot.val()) {
+              periodsArray.push({
+                id: period,
+                name: snapshot.val()[period].name,
+                year: snapshot.val()[period].year,
+              });
+            }
+          }
+        })
+        .then(() => {
+          const residentsRef = ref(db, "residents");
+          get(residentsRef)
+            .then((snapshot) => {
+              if (snapshot.exists()) {
+                let residents = snapshot.val();
+                for (let resident in residents) {
+                  residentsArray.push({
+                    id: resident,
+                    name: residents[resident].name,
+                    department: residents[resident].department,
+                    reports: residents[resident].reports || {},
+                    exempt: residents[resident].exempt,
+                  });
+                }
+              }
+            })
+            .then(() => {
+              // Check if resident has report for each period
+              residentsArray.forEach((resident) => {
+                periodsArray.forEach((period) => {
+                  if (resident.reports[period.id] == undefined) {
+                    this.notSent.push({
+                      name: resident.name,
+                      department: resident.department,
+                      period: period.name + " " + period.year,
+                      periodId: period.id,
+                      residentId: resident.id,
+                      exempt: resident.exempt,
+                    });
+                  }
+                });
+              });
+            })
+            .then(() => {
+              // Add report to exempt residents
+              this.notSent.forEach((report) => {
+                if (report.exempt) {
+                  const reportRef = ref(
+                    db,
+                    "residents/" +
+                      report.residentId +
+                      "/reports/" +
+                      report.periodId
+                  );
+                  update(reportRef, {
+                    status: "Aprovado",
+                    activities: "Isento de horas",
+                    date: Date.now(),
+                    hours: 0,
+                  });
+                }
+              });
+
+              // Remove exempt residents
+              this.notSent = this.notSent.filter(
+                (resident) => resident.exempt == false
+              );
+            });
+        })
+        .then(() => {
+          // Open popup
+          this.notSentOpen = true;
+        });
+    },
+    updateNotSent(user, mode) {
+      // Confirm
+      if (
+        !confirm(
+          "Tem certeza que deseja realizar essa ação em todos os relatórios? \n Essa ação não pode ser desfeita."
+        )
+      ) {
+        return;
+      }
+
+      // Add report to user
+      const db = getDatabase();
+      const reportRef = ref(
+        db,
+        "residents/" + user.residentId + "/reports/" + user.periodId
+      );
+      update(reportRef, {
+        status: "Não enviado",
+        date: Date.now(),
+        obs: "Relatório não enviado pelo diretor",
+      });
+
+      // Update hours for user
+      if (!mode) {
+        const userRef = ref(db, "residents/" + user.residentId + "/hours");
+        runTransaction(userRef, (current_value) => {
+          return (current_value || 0) - this.hoursPerPeriod;
+        });
+      }
+
+      // Remove this report from not sent list
+      this.notSent = this.notSent.filter(
+        (item) =>
+          item.periodId !== user.periodId || item.residentId !== user.residentId
+      );
+
+      // Last change date
+      const lastChangeRef = ref(db, "residents/" + user.residentId);
+      update(lastChangeRef, {
+        change: Date.now(),
+      });
+    },
+    massUpdate(mode) {
+      // Confirm
+      if (
+        !confirm(
+          "Tem certeza que deseja realizar essa ação em todos os relatórios? \n Essa ação não pode ser desfeita."
+        )
+      ) {
+        return;
+      }
+
+      // Update all reports on firebase
+      const db = getDatabase();
+
+      this.notSent.forEach((report) => {
+        // Update report on firebase
+        const reportRef = ref(
+          db,
+          "residents/" + report.residentId + "/reports/" + report.periodId
+        );
+        update(reportRef, {
+          status: "Não enviado",
+          date: Date.now(),
+          obs: "Relatório não enviado pelo diretor",
+        });
+
+        // Update user on firebase
+        if (!mode) {
+          const userRef = ref(db, "residents/" + report.residentId + "/hours");
+          runTransaction(userRef, (current_value) => {
+            return (current_value || 0) - this.hoursPerPeriod;
+          });
+        }
+
+        // Last change date
+        const lastChangeRef = ref(db, "residents/" + report.residentId);
+        update(lastChangeRef, {
+          change: Date.now(),
+        });
+      });
+
+      // Remove all reports from not sent list
+      this.notSent = [];
+    },
   },
   components: { ReportReviewPopup },
 };
@@ -216,6 +397,17 @@ export default {
       <button class="button-popup error t" v-on:click="updateAll('Rejeitado')">
         <span class="material-symbols-rounded icon">delete_forever</span>
         Rejeitar todos
+      </button>
+      <button
+        class="button-popup t"
+        v-on:click="getNotSent"
+        style="
+          background-color: transparent;
+          color: var(--on-secondary-container);
+        "
+      >
+        <span class="material-symbols-rounded icon">assignment_late</span>
+        Contabilizar horas dos não enviados
       </button>
     </div>
 
@@ -260,6 +452,82 @@ export default {
         v-on:close="popupOpen = false"
         v-on:update="updateList"
     /></transition>
+    <transition name="fade">
+      <div class="popup-bg" v-if="notSentOpen">
+        <div class="popup-card">
+          <div class="popup-header">
+            <h2>Relatórios não enviados</h2>
+          </div>
+          <div class="popup-body">
+            <p>
+              Os relatórios para os moradores abaixo não foram enviados pelos
+              colaboradores. Moradores isentos serão marcados como não enviados
+              mas sem alteração de horas automaticamente.
+            </p>
+            <br />
+            <p>
+              Clique em contabilizar para <b>remover as horas mensais</b> desses
+              moradores ou clique no botão de cada um para marcar como não
+              enviado mas sem remover horas.
+            </p>
+            <br />
+            <p>
+              Clique em
+              <span class="material-symbols-rounded icon nsB">close</span> para
+              marcar como não enviado e remover horas ou em
+              <span class="material-symbols-rounded icon nsB">check</span> para
+              marcar como não enviado mas sem remover horas.
+            </p>
+            <div class="button-opt-h">
+              <button
+                class="button-popup t"
+                v-on:click="notSentOpen = false"
+                style="
+                  background-color: transparent;
+                  color: var(--on-secondary-container);
+                "
+              >
+                <span class="material-symbols-rounded icon">close</span>
+                Fechar
+              </button>
+              <button class="button-popup t" v-on:click="massUpdate(true)">
+                <span class="material-symbols-rounded icon">done</span>
+                Não alterar horas
+              </button>
+              <button
+                class="button-popup error t"
+                v-on:click="massUpdate(false)"
+              >
+                <span class="material-symbols-rounded icon">close</span>
+                Remover horas
+              </button>
+            </div>
+            <div class="notSentList">
+              <div
+                v-for="user in notSent"
+                :key="user.id"
+                class="notSentItem fadeup"
+              >
+                <div class="notSentItemName">{{ user.name }}</div>
+                <div class="notSentItemPeriod">{{ user.period }}</div>
+                <div class="notSentItemOptions">
+                  <span
+                    class="material-symbols-rounded icon nsB"
+                    v-on:click="updateNotSent(user, true)"
+                    >done</span
+                  >
+                  <span
+                    class="material-symbols-rounded icon nsB"
+                    v-on:click="updateNotSent(user, false)"
+                    >close</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -270,9 +538,10 @@ export default {
 
 .button-opt-h {
   display: flex;
-  justify-content: space-between;
+  justify-content: left;
   margin-top: 24px;
   width: fit-content;
+  flex-wrap: wrap;
 }
 
 .t {
@@ -282,6 +551,7 @@ export default {
   color: var(--on-primary-container);
   display: flex;
   align-items: center;
+  margin-bottom: 8px;
 }
 
 .t span {
@@ -291,5 +561,47 @@ export default {
 .error {
   background-color: var(--on-error);
   color: var(--error);
+}
+
+.notSentList {
+  margin-top: 16px;
+}
+
+.notSentItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  color: var(--on-secondary-container);
+  margin-bottom: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--secondary);
+}
+
+.nsB {
+  color: var(--secondary-container);
+  background-color: var(--on-secondary-container);
+  font-size: 16px;
+  padding: 4px;
+  border-radius: 50%;
+  margin-left: 8px;
+  cursor: pointer;
+  box-shadow: 0 0 0 1px var(--secondary);
+}
+
+@media screen and (max-width: 600px) {
+  .button-opt-h {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .button-popup {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    padding: 4px 8px;
+  }
 }
 </style>

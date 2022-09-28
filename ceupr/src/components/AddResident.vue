@@ -1,5 +1,5 @@
 <script setup>
-import { getDatabase, ref, push, set, remove } from "@firebase/database";
+import { getDatabase, ref, push, set, remove, get, update } from "@firebase/database";
 </script>
 
 <script>
@@ -56,13 +56,39 @@ export default {
         return;
       }
 
-      set(newResidentRef, {
+      update(newResidentRef, {
         name: this.name,
         department: this.currentDepartment,
         hours: this.hours,
         exempt: this.exempt,
       })
         .then(() => {
+          // Add past periods to new resident
+          if (this.fields.id == undefined) {
+            const periods = ref(db, "settings/periods");
+
+            get(periods).then((snapshot) => {
+              if (snapshot.exists()) {
+                const periodsArray = snapshot.val();
+                for (let period in periodsArray) {
+                  console.log(period);
+                  const newPeriodRef = ref(
+                    db,
+                    "residents/" + newResidentRef.key + "/reports/" + period
+                  );
+                  set(newPeriodRef, {
+                    hours: 0,
+                    status: "Não enviado",
+                    date: Date.now(),
+                    obs: "Registro adicionado com a criação do morador",
+                  });
+                }
+              } else {
+                console.log("No data available");
+              }
+            });
+          }
+
           if (this.fields == undefined) {
             alert("Morador adicionado com sucesso!");
           } else {
