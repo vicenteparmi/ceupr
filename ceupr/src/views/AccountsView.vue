@@ -8,6 +8,7 @@ export default {
   data() {
     return {
       accounts: [],
+      departments: [],
       editFields: {
         name: "",
         roles: {
@@ -20,9 +21,31 @@ export default {
     };
   },
   mounted() {
+    this.getDepartments();
     this.getAccounts();
+    console.log(this.departments);
   },
   methods: {
+    getDepartments() {
+      const db = getDatabase();
+      const departmentsRef = ref(db, "departments");
+      get(departmentsRef)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            snapshot.forEach((childSnapshot) => {
+              this.departments.push({
+                id: childSnapshot.key,
+                name: childSnapshot.val().name,
+              });
+            });
+          } else {
+            console.log("No data available");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
     getAccounts() {
       const db = getDatabase();
       const accountsRef = ref(db, "users");
@@ -36,6 +59,10 @@ export default {
               this.accounts.push({
                 id: childSnapshot.key,
                 name: childData.name,
+                department:
+                  this.departments.find(
+                    (department) => department.id === childData.department
+                  )?.name || "Sem departamento",
                 roles: {
                   adm: childData.adm,
                   director: childData.department,
@@ -56,6 +83,7 @@ export default {
       this.editFields.roles = {
         adm: account.roles.adm,
       };
+      this.editFields.department = account.roles.director;
 
       this.editFields.id = account.id;
       this.editFields.open = true;
@@ -69,6 +97,10 @@ export default {
       update(accountsRef, {
         name: this.editFields.name,
         adm: this.editFields.roles.adm,
+        department:
+          this.editFields.department == "-1"
+            ? null
+            : this.editFields.department,
       })
         .then(() => {
           console.log("Account updated successfully!");
@@ -110,8 +142,9 @@ export default {
     <table class="table" cellspacing="0" style="margin-top: 24px">
       <thead>
         <tr style="cursor: default">
-          <th style="width: 35%">Nome</th>
-          <th style="width: 35%">Email</th>
+          <th style="width: 30%">Nome</th>
+          <th style="width: 25%">Email</th>
+          <th style="width: 25%">Departamento</th>
           <th style="width: 10%">Permissões</th>
           <th style="width: 10%">Ações</th>
         </tr>
@@ -120,17 +153,23 @@ export default {
         <tr v-for="account in accounts" :key="account.id">
           <td>{{ account.name }}</td>
           <td>{{ account.email }}</td>
+          <td>{{ account.department }}</td>
           <td style="text-align: center">
             <span v-if="account.roles.adm" class="material-symbols-rounded icon"
               >admin_panel_settings</span
             >
             <span
-              v-if="account.roles.director != ''"
+              v-if="
+                account.roles.director != '' && account.roles.director != null
+              "
               class="material-symbols-rounded icon"
               >supervisor_account</span
             >
             <span
-              v-if="!account.adm && account.director == ''"
+              v-if="
+                account.roles.adm == false &&
+                (account.roles.director == null || account.roles.director == '')
+              "
               class="material-symbols-rounded icon"
               >spa</span
             >
@@ -217,10 +256,22 @@ export default {
             </div>
           </div>
           <div>
-            <span class="popup-warning"
-              >A alteração de departamento (e dessa permissão) deve ser
-              realizada na sessão "Departamentos".</span
+            <!-- Select department -->
+            <label for="department">Departamento</label>
+            <select
+              id="department"
+              v-model="editFields.department"
+              style="width: 100%"
             >
+              <option disabled value="">Selecione um departamento</option>
+              <option
+                v-for="department in departments"
+                :key="department.id"
+                :value="department.id"
+              >
+                {{ department.name }}
+              </option>
+            </select>
           </div>
           <div class="popup-button-holder">
             <button
