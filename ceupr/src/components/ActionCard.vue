@@ -37,11 +37,10 @@ export default {
 <style scoped>
 .action-card {
   display: flex;
-  width: 49%;
+  width: 100%;
   background-color: var(--surface-variant);
   color: var(--on-surface-variant);
   border-radius: 36px;
-  margin-bottom: 24px;
   padding: 36px;
   text-decoration: none;
   transition: 0.2s;
@@ -83,7 +82,6 @@ export default {
 @media only screen and (max-width: 600px) {
   .action-card {
     width: 100%;
-    margin-bottom: 24px;
     border-radius: 24px;
     padding: 24px;
   }

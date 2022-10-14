@@ -53,22 +53,3 @@ import MobileTopLogo from "../components/MobileTopLogo.vue";
     </div>
   </div>
 </template>
-
-<style scoped>
-.action-cards {
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  justify-content: space-between;
-  margin-top: 24px;
-}
-
-@media only screen and (max-width: 600px) {
-  .action-cards {
-    justify-content: center;
-    flex-wrap: nowrap;
-    flex-direction: column;
-  }
-}
-
-</style>
