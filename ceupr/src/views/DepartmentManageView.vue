@@ -6,7 +6,6 @@ import { getDatabase, ref, get, push, remove, update } from "firebase/database";
 export default {
   name: "DepartmentManageView",
   mounted() {
-    this.getDirectors();
     this.getDepartments();
   },
   data() {
@@ -18,12 +17,10 @@ export default {
       newDep: {
         name: "",
         description: "",
-        director: "",
       },
       editDep: {
         name: "",
         description: "",
-        director: "",
         id: "",
         allowDelete: true,
         disabled: false,
@@ -31,22 +28,6 @@ export default {
     };
   },
   methods: {
-    async getDirectors() {
-      const db = getDatabase();
-      const directorsRef = ref(db, "users");
-      const snapshot = await get(directorsRef);
-      if (snapshot.exists()) {
-        snapshot.forEach((user) => {
-          this.directors.push({
-            id: user.key,
-            name: user.val().name,
-            email: user.val().email,
-          });
-        });
-      } else {
-        console.log("No data available");
-      }
-    },
     async getDepartments() {
       const db = getDatabase();
       const departmentRef = ref(db, "departments");
@@ -59,7 +40,6 @@ export default {
               this.departments.push({
                 id: childKey,
                 name: childData.name,
-                director: childData.director ? childData.director : "",
                 description: childData.description,
                 allowDelete:
                   childData.allowDelete == undefined
@@ -83,25 +63,9 @@ export default {
       push(departmentRef, {
         name: this.newDep.name,
         description: this.newDep.description,
-        director: this.newDep.director,
       })
         .then(() => {
           console.log("Data saved successfully!");
-
-          console.log(
-            "Name: " +
-              this.newDep.name +
-              " Description: " +
-              this.newDep.description +
-              " Director: " +
-              this.newDep.director
-          );
-
-          // Set director department
-          const userRef = ref(db, "users/" + this.newDep.director);
-          update(userRef, {
-            department: this.newDep.id,
-          });
         })
         .catch((error) => {
           console.error("Failed to save data: ", error);
@@ -111,7 +75,6 @@ export default {
       // Clear screen
       this.newDep.name = "";
       this.newDep.description = "";
-      this.newDep.director = "";
 
       // Refresh departments
       this.departments = [];
@@ -134,7 +97,6 @@ export default {
         if (department.id == id) {
           this.editDep.name = department.name;
           this.editDep.description = department.description;
-          this.editDep.director = department.director;
           this.editDep.id = id;
           this.editDep.disabled = department.disabled;
         }
@@ -146,16 +108,10 @@ export default {
       update(departmentRef, {
         name: this.editDep.name,
         description: this.editDep.description,
-        director: this.editDep.director,
         disabled: this.editDep.disabled,
       })
         .then(() => {
           console.log("Data saved successfully!");
-          // Set director department
-          const userRef = ref(db, "users/" + this.editDep.director);
-          update(userRef, {
-            department: this.editDep.id,
-          });
 
           // Refresh departments
           this.departments = [];
@@ -234,20 +190,6 @@ export default {
                 v-model="newDep.description"
               ></textarea>
             </div>
-            <div class="departments__create__new__dialog__content__input">
-              <label for="director">Diretor</label>
-              <select name="director" id="director" v-model="newDep.director">
-                <option value="null">Nenhum</option>
-                <option
-                  v-for="director in directors"
-                  :key="director.id"
-                  :value="director.name"
-                  :select="director.id == newDep.director"
-                >
-                  {{ director.name }} ({{ director.email }})
-                </option>
-              </select>
-            </div>
           </div>
           <div class="departments__create__new__dialog__actions">
             <button
@@ -286,19 +228,6 @@ export default {
                 id="description"
                 v-model="editDep.description"
               ></textarea>
-            </div>
-            <div class="departments__create__new__dialog__content__input">
-              <label for="director">Diretor</label>
-              <select name="director" id="director" v-model="editDep.director">
-                <option value="null">Nenhum</option>
-                <option
-                  :value="director.id"
-                  v-for="director in directors"
-                  :key="director.id"
-                >
-                  {{ director.name }} ( {{ director.email }} )
-                </option>
-              </select>
             </div>
             <!-- Disabled -->
             <div class="departments__create__new__dialog__content__input">
@@ -370,8 +299,9 @@ export default {
 /* Department list cards */
 
 .departments__list {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 16px;
   width: 100%;
   justify-content: left;
   margin-top: 24px;
@@ -380,7 +310,6 @@ export default {
 .departments__list__item {
   display: flex;
   flex-direction: column;
-  width: 46%;
   height: 180px;
   background-color: var(--surface-variant);
   border-radius: 24px;
@@ -388,8 +317,6 @@ export default {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
   transition-duration: 200ms;
   user-select: none;
-  margin-bottom: 24px;
-  margin-right: 24px;
 }
 
 .departments__list__item:hover {
