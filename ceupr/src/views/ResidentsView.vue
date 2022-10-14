@@ -22,17 +22,11 @@ export default {
       residents_temp: [],
       departments: [],
       addResidentOpen: false,
-      search: "",
-      searchStorage: "",
+      searchBoxContent: "",
+      searchStorage: [],
       chips: [],
       selectedDepartment: "",
       editResidentFields: {},
-
-      // Add resident fields migration
-      name: "",
-      currentDepartment: "",
-      hours: 0,
-      exempt: false,
     };
   },
   methods: {
@@ -99,6 +93,7 @@ export default {
           if (this.searchStorage == []) {
             this.searchStorage = [...this.residents_temp];
           }
+          this.filterSearch();
         });
       }, 1000);
       setTimeout(() => {
@@ -112,10 +107,22 @@ export default {
         }
       }
     },
-    filterSearch() {
+    filterSearch(data, mode) {
+      // Define variables
+      switch (mode) {
+        case "department":
+          this.selectedDepartment = data;
+          break;
+        case "term":
+          this.searchBoxContent = data;
+          break;
+      }
+
       // Filter residents by search
       this.searchStorage = this.residents.filter((resident) => {
-        return resident.name.toLowerCase().includes(this.search.toLowerCase());
+        return resident.name
+          .toLowerCase()
+          .includes(this.searchBoxContent.toLowerCase());
       });
 
       // Filter residents by department
@@ -291,12 +298,12 @@ export default {
             <input
               type="text"
               placeholder="Digite o nome do morador para pesquisar"
-              v-model="search"
-              v-on:keyup="filterSearch"
+              :value="searchBoxContent"
+              v-on:input="filterSearch($event.target.value, 'term')"
             />
             <span
               class="material-symbols-rounded icon"
-              v-on:click="(search = ''), filterSearch()"
+              v-on:click="(searchBoxContent = ''), filterSearch()"
             >
               close</span
             >
@@ -304,8 +311,8 @@ export default {
           <div class="filter__chips">
             <!-- Select department -->
             <select
-              v-model="selectedDepartment"
-              v-on:change="filterSearch()"
+              :value="selectedDepartment"
+              v-on:change="filterSearch($event.target.value, 'department')"
               style="margin-right: 10px"
             >
               <option value="all">Todos os departamentos</option>
@@ -391,89 +398,81 @@ export default {
       </table>
     </div>
     <transition name="fade">
-      <!-- <AddResident
-        :departmentsArray="departments"
-        :fieldsArray="editResidentFields"
-      /> -->
-      <div>
-        <div
-          id="addResidentCard"
-          class="login__background"
-          v-if="addResidentOpen"
-        >
-          <div class="addResident__card">
-            <div class="addResident__card__content">
-              <div class="addResident__card__title">
-                Adicionar ou editar morador
-              </div>
-              <p style="color: var(--on-secondary-container)">
-                Adiciona um novo morador ao quadro de moradores.
-              </p>
-              <br />
-              <div class="addResident__card__input">
-                <div class="addResident__card__input__label">Nome completo</div>
-                <input
-                  type="text"
-                  v-model="editResidentFields.name"
-                  class="addResident__card__input__field"
-                />
-              </div>
-              <div class="addResident__card__input">
-                <div class="addResident__card__input__label">Departamento</div>
-                <select
-                  v-model="editResidentFields.department"
-                  class="addResident__card__input__field"
+      <div
+        id="addResidentCard"
+        class="login__background"
+        v-if="addResidentOpen"
+      >
+        <div class="addResident__card">
+          <div class="addResident__card__content">
+            <div class="addResident__card__title">
+              Adicionar ou editar morador
+            </div>
+            <p style="color: var(--on-secondary-container)">
+              Adiciona um novo morador ao quadro de moradores.
+            </p>
+            <br />
+            <div class="addResident__card__input">
+              <div class="addResident__card__input__label">Nome completo</div>
+              <input
+                type="text"
+                v-model="editResidentFields.name"
+                class="addResident__card__input__field"
+              />
+            </div>
+            <div class="addResident__card__input">
+              <div class="addResident__card__input__label">Departamento</div>
+              <select
+                v-model="editResidentFields.department"
+                class="addResident__card__input__field"
+              >
+                <option
+                  v-for="department in departments"
+                  :key="department.id"
+                  :value="department.id"
+                  :selected="
+                    department.id != ''
+                      ? department.id == editResidentFields.currentDepartment
+                      : '-1'
+                  "
                 >
-                  <option
-                    v-for="department in departments"
-                    :key="department.id"
-                    :value="department.id"
-                    :selected="
-                      department.id != ''
-                        ? department.id == editResidentFields.currentDepartment
-                        : '-1'
-                    "
-                  >
-                    {{ department.name }}
-                  </option>
-                </select>
+                  {{ department.name }}
+                </option>
+              </select>
+            </div>
+            <div class="addResident__card__input">
+              <div class="addResident__card__input__label">Saldo de horas</div>
+              <input
+                type="number"
+                v-model="editResidentFields.hours"
+                class="addResident__card__input__field"
+              />
+            </div>
+            <div class="addResident__card__input">
+              <div class="addResident__card__input__label">
+                É isento de cumprir horas?
               </div>
-              <div class="addResident__card__input">
-                <div class="addResident__card__input__label">
-                  Saldo de horas
-                </div>
-                <input
-                  type="number"
-                  v-model="editResidentFields.hours"
-                  class="addResident__card__input__field"
-                />
+              <input
+                type="checkbox"
+                v-model="editResidentFields.exempt"
+                class="addResident__card__input__field switch"
+              />
+            </div>
+            <div class="addResident__card__buttons">
+              <div class="addResident__card__button" @click="addResident">
+                Salvar
               </div>
-              <div class="addResident__card__input">
-                <div class="addResident__card__input__label">
-                  É isento de cumprir horas?
-                </div>
-                <input
-                  type="checkbox"
-                  v-model="editResidentFields.exempt"
-                  class="addResident__card__input__field switch"
-                />
+              <div
+                class="addResident__card__button secondary alert"
+                @click="removeResident"
+              >
+                Excluir
               </div>
-              <div class="addResident__card__buttons">
-                <div class="addResident__card__button" @click="addResident">
-                  Salvar
-                </div>
-                <div
-                  class="addResident__card__button secondary alert"
-                  @click="removeResident"
-                >
-                  Excluir
-                </div>
-                <div
-                  class="addResident__card__button secondary"
-                  @click="addResidentOpen = false"
-                >
-                  Cancelar
-                </div>
+              <div
+                class="addResident__card__button secondary"
+                @click="addResidentOpen = false"
+              >
+                Cancelar
               </div>
             </div>
           </div>
@@ -787,5 +786,4 @@ option {
     padding: 0;
   }
 }
-
 </style>
