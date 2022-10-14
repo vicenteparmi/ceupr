@@ -1,13 +1,5 @@
 <script setup>
-import {
-  getDatabase,
-  ref,
-  get,
-  push,
-  remove,
-  set,
-  update,
-} from "firebase/database";
+import { getDatabase, ref, get, push, remove, update } from "firebase/database";
 </script>
 
 <script>
@@ -96,9 +88,18 @@ export default {
         .then(() => {
           console.log("Data saved successfully!");
 
+          console.log(
+            "Name: " +
+              this.newDep.name +
+              " Description: " +
+              this.newDep.description +
+              " Director: " +
+              this.newDep.director
+          );
+
           // Set director department
           const userRef = ref(db, "users/" + this.newDep.director);
-          set(userRef, {
+          update(userRef, {
             department: this.newDep.id,
           });
         })
@@ -142,7 +143,6 @@ export default {
     saveEditDepartment(id) {
       const db = getDatabase();
       const departmentRef = ref(db, "departments/" + id);
-      console.log(this.editDep);
       update(departmentRef, {
         name: this.editDep.name,
         description: this.editDep.description,

@@ -1,5 +1,13 @@
 <script setup>
-import { getDatabase, ref, push, set, remove, get, update } from "@firebase/database";
+import {
+  getDatabase,
+  ref,
+  push,
+  set,
+  remove,
+  get,
+  update,
+} from "@firebase/database";
 </script>
 
 <script>

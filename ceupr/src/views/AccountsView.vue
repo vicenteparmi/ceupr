@@ -198,7 +198,7 @@ export default {
       </div>
     </div>
     <transition name="fade">
-      <div class="popup-bg" v-if="this.editFields.open">
+      <div class="popup-bg" v-if="editFields.open">
         <div class="popup-card">
           <h2 class="popup-header">Editar conta</h2>
           <div class="popup-body">
@@ -210,7 +210,7 @@ export default {
               <label for="permissions">Permissões</label>
               <div class="accounts__edit__body__item__permissions">
                 <label class="pure-material-checkbox">
-                  <input type="checkbox" v-model="this.editFields.roles.adm" />
+                  <input type="checkbox" v-model="editFields.roles.adm" />
                   <span>Administrador</span>
                 </label>
               </div>
