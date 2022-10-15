@@ -16,9 +16,11 @@ export default {
     return {
       posts: [],
       selected: 0,
-      title: "",
-      subtitle: "",
-      description: "",
+      create: {
+        title: "",
+        subtitle: "",
+        description: "",
+      },
       edit: {
         title: "",
         subtitle: "",
@@ -59,22 +61,19 @@ export default {
       const db = getDatabase();
       const postsRef = ref(db, "posts");
       push(postsRef, {
-        title: this.title,
-        subtitle: this.subtitle,
-        content: this.description,
+        title: this.create.title,
+        subtitle: this.create.subtitle,
+        content: this.create.description,
         date: Date.now(),
       }).then(() => {
-        this.posts.push({
-          title: this.title,
-          subtitle: this.subtitle,
-          content: this.description,
-          date: Date.now(),
-        });
-        this.title = "";
-        this.subtitle = "";
-        this.description = "";
+        this.posts = [];
+        this.getPosts();
         this.selected = 0;
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
+
+        this.create.title = "";
+        this.create.subtitle = "";
+        this.create.description = "";
       });
     },
     editPost(id) {
@@ -89,7 +88,7 @@ export default {
 
       // Set the selected tab
       this.selected = 2;
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
     },
     saveEditPost() {
       const db = getDatabase();
@@ -99,17 +98,12 @@ export default {
         subtitle: this.edit.subtitle,
         content: this.edit.description,
       }).then(() => {
-        // Find the post
-        const post = this.posts.find((post) => post.id === this.edit.id);
-
-        // Set the values
-        post.title = this.edit.title;
-        post.subtitle = this.edit.subtitle;
-        post.content = this.edit.description;
+        this.posts = [];
+        this.getPosts();
 
         // Set the selected tab
         this.selected = 0;
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
       });
     },
     deletePost() {
@@ -122,15 +116,12 @@ export default {
         const db = getDatabase();
         const postsRef = ref(db, "posts/" + this.edit.id);
         remove(postsRef).then(() => {
-          // Find the post
-          const post = this.posts.find((post) => post.id === this.edit.id);
-
-          // Remove the post
-          this.posts.splice(this.posts.indexOf(post), 1);
+          this.posts = [];
+          this.getPosts();
 
           // Set the selected tab
           this.selected = 0;
-          window.scrollTo(0,0);
+          window.scrollTo(0, 0);
         });
       }
     },
@@ -151,7 +142,7 @@ export default {
     </h4>
     <div class="grid">
       <div style="grid-area: left">
-        <div class="add_post" v-on:click="selected = 1">
+        <div class="add_post" v-on:click="(selected = 1), (edit = {})">
           <span class="material-symbols-rounded icon">add</span>
           Nova publicação
         </div>
@@ -167,6 +158,7 @@ export default {
               v-for="post in posts"
               :key="post.id"
               v-on:click="editPost(post.id)"
+              :class="{ selected: edit.id === post.id }"
             >
               <td>
                 {{
@@ -408,7 +400,7 @@ export default {
             <input
               type="text"
               id="title"
-              v-model="title"
+              v-model="create.title"
               placeholder="Título da publicação"
             />
           </div>
@@ -417,7 +409,7 @@ export default {
             <input
               type="text"
               id="subtitle"
-              v-model="subtitle"
+              v-model="create.subtitle"
               placeholder="Descrição breve da publicação"
             />
           </div>
@@ -425,7 +417,7 @@ export default {
             <label for="description">Conteúdo</label>
             <textarea
               id="description"
-              v-model="description"
+              v-model="create.description"
               placeholder="Conteúdo da publicação"
             ></textarea>
           </div>
@@ -596,6 +588,10 @@ td {
 
 .container {
   height: min-content;
+}
+
+.selected {
+  background-color: var(--secondary-container);
 }
 
 @media screen and (max-width: 1000px) {
