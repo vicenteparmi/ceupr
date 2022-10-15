@@ -146,37 +146,39 @@ export default {
           <span class="material-symbols-rounded icon">add</span>
           Nova publicação
         </div>
-        <table class="table" v-if="posts.length > 0" cellspacing="0">
-          <thead>
-            <tr>
-              <th width="40%">Título</th>
-              <th width="60%">Descrição</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="post in posts"
-              :key="post.id"
-              v-on:click="editPost(post.id)"
-              :class="{ selected: edit.id === post.id }"
-            >
-              <td>
-                {{
-                  post.title.length > 20
-                    ? post.title.substring(0, 20) + "..."
-                    : post.title
-                }}
-              </td>
-              <td>
-                {{
-                  post.subtitle.length > 72
-                    ? post.subtitle.substring(0, 72) + "..."
-                    : post.subtitle
-                }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <transition name="fade">
+          <table class="table" v-if="posts.length > 0" cellspacing="0">
+            <thead>
+              <tr>
+                <th width="40%">Título</th>
+                <th width="60%">Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="post in posts"
+                :key="post.id"
+                v-on:click="editPost(post.id)"
+                :class="{ selected: edit.id === post.id }"
+              >
+                <td>
+                  {{
+                    post.title.length > 20
+                      ? post.title.substring(0, 20) + "..."
+                      : post.title
+                  }}
+                </td>
+                <td>
+                  {{
+                    post.subtitle.length > 72
+                      ? post.subtitle.substring(0, 72) + "..."
+                      : post.subtitle
+                  }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </transition>
       </div>
       <!-- Side screen options -->
       <!-- Nothing selected -->
@@ -592,6 +594,7 @@ td {
 
 .container {
   height: min-content;
+  margin-bottom: 0;
 }
 
 .selected {
