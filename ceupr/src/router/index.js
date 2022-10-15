@@ -105,6 +105,15 @@ const router = createRouter({
         title: "Revisar - CEU",
       },
     },
+    {
+      name: "post",
+      path: "/postagens",
+      component: () => import("../views/PostView.vue"),
+      meta: {
+        transition: "fade",
+        title: "Postagens - CEU",
+      },
+    },
   ],
   // eslint-disable-next-line no-unused-vars
   scrollBehavior(to, from, savedPosition) {

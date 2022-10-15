@@ -316,4 +316,10 @@ export default {
   font-size: 12px;
   margin: 16px 0;
 }
+
+.button {
+  color: var(--on-primary);
+  background-color: var(--primary-container);
+  border: 1px solid var(--primary-container);
+}
 </style>

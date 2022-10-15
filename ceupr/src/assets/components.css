@@ -531,7 +531,6 @@ a:hover {
     border-radius: 48px;
     margin-bottom: 48px;
     padding: 48px;
-    background: url('./dark-bg.svg');
     background-color: var(--primary-container);
     background-size: cover;
 }
