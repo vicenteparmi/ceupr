@@ -381,7 +381,11 @@ export default {
           </svg>
           <br />
           <br />
-          <h1 style="color: var(--tertiary)">Nada foi selecionado</h1>
+          <h1
+            style="color: var(--tertiary); line-height: 1; margin-bottom: 12px"
+          >
+            Nada foi selecionado
+          </h1>
           <p style="opacity: 0.8">
             Selecione ou crie uma publicação para ver mais informações e opções
             de modificação.
@@ -478,6 +482,7 @@ export default {
   display: grid;
   grid-template: "left right" 1fr / 1fr 1fr;
   grid-gap: 24px;
+  margin-top: 24px;
 }
 
 .add_post {
@@ -486,7 +491,6 @@ export default {
   justify-content: center;
   width: 100%;
   height: 48px;
-  margin-top: 12px;
   background-color: var(--primary-container);
   border-radius: 16px;
   color: var(--on-primary-container);
@@ -597,11 +601,6 @@ td {
 @media screen and (max-width: 1000px) {
   .grid {
     grid-template: "right" "left";
-  }
-
-  .container {
-    margin-top: 24px;
-    margin-bottom: 0;
   }
 }
 </style>
