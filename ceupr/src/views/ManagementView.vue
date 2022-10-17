@@ -1,6 +1,37 @@
 <script setup>
 import ActionCard from "../components/ActionCard.vue";
 import MobileTopLogo from "../components/MobileTopLogo.vue";
+import { getAuth } from "firebase/auth";
+import { getDatabase, ref, get } from "firebase/database";
+</script>
+
+<script>
+export default {
+  name: "ManagementView",
+  mounted() {
+    // Check if user is logged in and has the adm role
+    const auth = getAuth();
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        const db = getDatabase();
+        const admRef = ref(db, "users/" + user.uid);
+        get(admRef)
+          .then((snapshot) => {
+            if (snapshot.exists() && snapshot.val().adm) {
+              this.isAdm = true;
+            } else {
+              this.$router.push({ name: "inicio" });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        this.$router.push({ name: "inicio" });
+      }
+    });
+  },
+}
 </script>
 
 <template>
