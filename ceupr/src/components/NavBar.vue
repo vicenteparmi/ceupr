@@ -139,7 +139,9 @@ export default {
         Início
       </router-link>
       <transition name="fadeup">
-        <router-link to="/colaboradores" v-if="!isAdm && userDepartment != '' && userDepartment != '-1'"
+        <router-link
+          to="/colaboradores"
+          v-if="!isAdm && userDepartment != '' && userDepartment != '-1'"
           ><span class="material-symbols-rounded icon">remember_me</span>
           Colaboradores
         </router-link></transition

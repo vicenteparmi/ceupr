@@ -115,6 +115,15 @@ const router = createRouter({
       },
     },
     {
+      name: "singlepost",
+      path: "/post/:id",
+      component: () => import("../views/SinglePostView.vue"),
+      meta: {
+        transition: "fade",
+        title: "Publicação - CEU",
+      },
+    },
+    {
       name: "resident",
       path: "/moradores/:id",
       component: () => import("../views/ResidentView.vue"),
