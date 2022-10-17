@@ -8,6 +8,7 @@ import {
   remove,
   push,
 } from "firebase/database";
+import router from "../router";
 </script>
 
 <script>
@@ -25,7 +26,7 @@ export default {
       searchBoxContent: "",
       searchStorage: [],
       chips: [],
-      selectedDepartment: "",
+      selectedDepartment: "all",
       editResidentFields: {},
     };
   },
@@ -175,19 +176,22 @@ export default {
       this.addResidentOpen = false;
     },
     openResident(residentId) {
-      const resident = this.residents.find((res) => {
-        return res.id == residentId;
-      });
 
-      this.editResidentFields = {
-        name: resident.name ? resident.name : "",
-        department: resident.department ? resident.department : "",
-        hours: resident.hours ? resident.hours : 0,
-        exempt: resident.exempt ? resident.exempt : false,
-        id: resident.id,
-      };
+      router.push({ name: "resident", params: { id: residentId } });
 
-      this.addResidentOpen = true;
+      // const resident = this.residents.find((res) => {
+      //   return res.id == residentId;
+      // });
+
+      // this.editResidentFields = {
+      //   name: resident.name ? resident.name : "",
+      //   department: resident.department ? resident.department : "",
+      //   hours: resident.hours ? resident.hours : 0,
+      //   exempt: resident.exempt ? resident.exempt : false,
+      //   id: resident.id,
+      // };
+
+      // this.addResidentOpen = true;
     },
     async addResident() {
       const db = getDatabase();

@@ -114,6 +114,15 @@ const router = createRouter({
         title: "Postagens - CEU",
       },
     },
+    {
+      name: "resident",
+      path: "/moradores/:id",
+      component: () => import("../views/ResidentView.vue"),
+      meta: {
+        transition: "fade",
+        title: ":id - CEU",
+      },
+    },
   ],
   // eslint-disable-next-line no-unused-vars
   scrollBehavior(to, from, savedPosition) {
