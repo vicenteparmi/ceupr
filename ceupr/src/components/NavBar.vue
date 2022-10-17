@@ -51,7 +51,7 @@ export default {
                   });
               } else {
                 // Add user to database
-                const userRef = ref(db, "users/" + user.uid);
+                const userRef = ref(db, "new_users/" + user.uid);
                 set(userRef, {
                   name: user.displayName,
                   email: user.email,

@@ -8,6 +8,7 @@ export default {
   data() {
     return {
       accounts: [],
+      newUsers: [],
       departments: [],
       editFields: {
         name: "",
@@ -23,6 +24,7 @@ export default {
   mounted() {
     this.getDepartments();
     this.getAccounts();
+    this.getNewUsers();
     console.log(this.departments);
   },
   methods: {
@@ -70,6 +72,71 @@ export default {
                 email: childData.email,
               });
             });
+          } else {
+            console.log("No data available");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    getNewUsers() {
+      const db = getDatabase();
+      const newUsersRef = ref(db, "new_users");
+      get(newUsersRef)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            snapshot.forEach((childSnapshot) => {
+              const childData = childSnapshot.val();
+              this.newUsers.push({
+                id: childSnapshot.key,
+                name: childData.name,
+                email: childData.email,
+              });
+            });
+          } else {
+            console.log("No data available");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    approveUser(wasApproved, id) {
+      // Confirm
+      if (wasApproved) {
+        if (!confirm("Tem certeza que deseja aprovar este usuário?")) {
+          return;
+        }
+      } else {
+        if (!confirm("Tem certeza que deseja recusar este usuário?")) {
+          return;
+        }
+      }
+
+      const db = getDatabase();
+      const newUsersRef = ref(db, "new_users/" + id);
+      get(newUsersRef)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            const childData = snapshot.val();
+            if (wasApproved) {
+              // Move record
+              const usersRef = ref(db, "users/" + id);
+              update(usersRef, {
+                name: childData.name,
+                email: childData.email,
+                department: childData.department,
+                adm: childData.adm,
+                photoURL: childData.photoURL,
+              });
+            }
+            // Remove user from new_users
+            remove(newUsersRef);
+            // Remove user from newUsers array
+            this.newUsers = this.newUsers.filter((user) => user.id !== id);
+            // Reload accounts
+            this.getAccounts();
           } else {
             console.log("No data available");
           }
@@ -139,7 +206,54 @@ export default {
     <h4 class="subtitle" style="color: var(--tertiary)">
       Controle de usuários da plataforma
     </h4>
-    <table class="table" cellspacing="0" style="margin-top: 24px">
+    <transition name="fadeup">
+      <div v-if="newUsers.length > 0">
+        <br />
+        <h4 class="subtitle" style="color: var(--tertiary)">
+          Aguardando aprovação
+        </h4>
+        <div class="card">
+          <div class="card-content">
+            <div class="content">
+              <table class="table" cellspacing="0" style="margin-top: 12px">
+                <thead>
+                  <tr>
+                    <th width="40%">Nome</th>
+                    <th width="40%">Email</th>
+                    <th width="20%">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="user in newUsers" :key="user.id">
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td class="newUserActionHolder">
+                      <button
+                        class="newUserAction"
+                        @click="approveUser(true, user.id)"
+                      >
+                        <span class="material-symbols-rounded icon">check</span>
+                      </button>
+                      <button
+                        class="newUserAction errorButton"
+                        @click="approveUser(false, user.id)"
+                      >
+                        <span class="material-symbols-rounded icon">close</span>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <br />
+        <h4 class="subtitle" style="color: var(--tertiary)">
+          Usuários cadastrados
+        </h4>
+      </div>
+    </transition>
+    <table class="table" cellspacing="0" style="margin-top: 12px">
       <thead>
         <tr style="cursor: default">
           <th style="width: 30%">Nome</th>
@@ -321,5 +435,28 @@ export default {
   color: var(--on-primary);
   background-color: var(--primary-container);
   border: 1px solid var(--primary-container);
+}
+
+.newUserAction {
+  background-color: var(--primary-container);
+  color: var(--on-primary-container);
+  border: none;
+  padding: 2px 4px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.newUserActionHolder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.errorButton {
+  color: var(--error);
+  background-color: var(--on-error);
+  margin-left: 8px;
 }
 </style>
