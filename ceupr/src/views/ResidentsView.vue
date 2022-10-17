@@ -176,7 +176,6 @@ export default {
       this.addResidentOpen = false;
     },
     openResident(residentId) {
-
       router.push({ name: "resident", params: { id: residentId } });
 
       // const resident = this.residents.find((res) => {
@@ -287,8 +286,11 @@ export default {
 <template>
   <div>
     <h2 class="title" style="color: var(--tertiary)">
-      <span class="material-symbols-rounded icon" v-on:click="$router.go(-1)"
-        >arrow_back_ios_new</span
+      <span
+        class="material-symbols-rounded icon"
+        v-on:click="$router.push('gerenciamento')"
+      >
+        arrow_back_ios_new</span
       >
       Moradores
     </h2>
