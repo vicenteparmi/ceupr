@@ -303,7 +303,7 @@ a.router-link-exact-active {
   height: 48px;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 768px) {
   .nav-bar {
     display: flex;
     flex-direction: row;
