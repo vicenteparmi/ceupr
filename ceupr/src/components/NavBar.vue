@@ -45,6 +45,8 @@ export default {
                     if (snapshot.exists() && snapshot.val().adm) {
                       this.isAdm = true;
                     }
+                    // Get user's department
+                    this.userDepartment = snapshot.val().department;
                   })
                   .catch((error) => {
                     console.error(error);
@@ -72,6 +74,7 @@ export default {
           this.userName = "Login";
           this.userEmail = "Entre com suas credenciais para acessar o sistema";
           this.userImage = "account_circle";
+          this.userDepartment = "";
           this.isAdm = false;
 
           document.getElementById("account__name").innerHTML = "Login";
@@ -86,6 +89,7 @@ export default {
       userName: "Login",
       userEmail: "Entre com suas credenciais para acessar o sistema",
       userImage: "account_circle",
+      userDepartment: "",
       loggedIn: false,
       alerts: [],
       isAdm: false,
@@ -134,14 +138,17 @@ export default {
         ><span class="material-symbols-rounded icon">home</span>
         Início
       </router-link>
-      <router-link to="/colaboradores" v-if="!isAdm"
-        ><span class="material-symbols-rounded icon">remember_me</span>
-        Colaboradores
-      </router-link>
-      <router-link class="adm" to="/gerenciamento" v-if="isAdm"
-        ><span class="material-symbols-rounded icon">settings</span>
-        Gerenciamento
-      </router-link>
+      <transition name="fadeup">
+        <router-link to="/colaboradores" v-if="!isAdm && userDepartment != ''"
+          ><span class="material-symbols-rounded icon">remember_me</span>
+          Colaboradores
+        </router-link></transition
+      ><transition name="fadeup">
+        <router-link class="adm" to="/gerenciamento" v-if="isAdm"
+          ><span class="material-symbols-rounded icon">settings</span>
+          Gerenciamento
+        </router-link></transition
+      >
     </div>
     <div class="nav-bar__options">
       <div class="account" @click="showLogin()">
