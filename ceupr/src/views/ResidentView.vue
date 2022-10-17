@@ -1,5 +1,5 @@
 <script>
-import { getDatabase, ref, get } from "@firebase/database";
+import { getDatabase, ref, get, update } from "@firebase/database";
 
 export default {
   name: "MemberView",
@@ -10,10 +10,11 @@ export default {
       },
       reports: [],
       periods: "",
-      allowSend: false,
+      departments: [],
     };
   },
   mounted() {
+    this.getDepartmentsList();
     this.getMemberInfo();
   },
   methods: {
@@ -31,6 +32,15 @@ export default {
               changes: snapshot.val().change
                 ? new Date(snapshot.val().change).toLocaleString()
                 : "Sem dados",
+              exemptReason: snapshot.val().exemptData
+                ? snapshot.val().exemptData.reason
+                : "",
+              exemptStartDate: snapshot.val().exemptData
+                ? snapshot.val().exemptData.start
+                : "",
+              exemptEndDate: snapshot.val().exemptData
+                ? snapshot.val().exemptData.end
+                : "",
             };
 
             // Create array with reports
@@ -75,23 +85,80 @@ export default {
           });
         });
     },
-    gotoSend() {
-      this.$router.push({
-        name: "report",
-        params: { id: this.$route.params.id },
-      });
+    getDepartmentsList() {
+      const db = getDatabase();
+      const departmentsRef = ref(db, "departments");
+      get(departmentsRef)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            snapshot.forEach((childSnapshot) => {
+              this.departments.push({
+                id: childSnapshot.key,
+                name: childSnapshot.val().name,
+              });
+            });
+          } else {
+            console.log("No data available");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
-    switchColor(status) {
-      switch (status) {
-        case "Em análise":
-          return "#FFC107";
-        case "Aprovado":
-          return "#4CAF50";
-        case "Rejeitado":
-          return "var(--error)";
-        default:
-          return "var(--on-surface)";
+    saveData() {
+      // Confirm save
+      if (!confirm("Deseja salvar esta alteração?")) {
+        this.getMemberInfo();
+        return;
       }
+
+      // Disable all inputs for 1000ms
+      document.querySelectorAll("input").forEach((input) => {
+        input.disabled = true;
+      });
+      setTimeout(() => {
+        document.querySelectorAll("input").forEach((input) => {
+          input.disabled = false;
+        });
+      }, 500);
+
+      const db = getDatabase();
+      const memberRef = ref(db, "residents/" + this.$route.params.id);
+      get(memberRef)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            const data = {
+              name: this.memberInfo.name,
+              department: this.memberInfo.department,
+              hours: this.memberInfo.hours,
+              exempt: this.memberInfo.exempt,
+              change: Date.now(),
+              exemptData: {
+                start: this.memberInfo.exemptStartDate,
+                end: this.memberInfo.exemptEndDate,
+                reason: this.memberInfo.exemptReason,
+              },
+            };
+            update(memberRef, data);
+          } else {
+            console.log("No data available");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    toggleExempt() {
+
+      // Clear if exempt is true
+      if (this.memberInfo.exempt) {
+        this.memberInfo.exemptStartDate = "";
+        this.memberInfo.exemptEndDate = "";
+        this.memberInfo.exemptReason = "";
+      }
+
+      this.memberInfo.exempt = !this.memberInfo.exempt;
+      this.saveData();
     },
   },
 };
@@ -139,19 +206,39 @@ export default {
       <div class="container resident_data" v-if="memberInfo">
         <div class="input">
           <label for="name">Nome</label>
-          <input type="text" id="name" :value="memberInfo.name" />
+          <input
+            type="text"
+            id="name"
+            v-model="memberInfo.name"
+            @change="saveData"
+            autocomplete="off"
+          />
         </div>
         <div class="input">
           <label for="department">Departamento</label>
-          <select id="department" :value="memberInfo.departmentName">
+          <select
+            id="department"
+            v-model="memberInfo.department"
+            @change="saveData"
+          >
             <option
               v-for="department in departments"
-              :value="department.name"
+              :value="department.id"
               :key="department.id"
             >
               {{ department.name }}
             </option>
           </select>
+        </div>
+        <div class="input">
+          <label for="exempt_hrs">Horas</label>
+          <input
+            type="number"
+            id="exempt_hrs"
+            v-model="memberInfo.hours"
+            @focusout="saveData"
+            style="width: 100px"
+          />
         </div>
       </div>
       <div
@@ -166,26 +253,87 @@ export default {
     <br />
     <transition name="fadeup" mode="out-in">
       <div v-if="memberInfo" class="exempt_section">
-        <div class="container exempt_container">
-          <div class="exempt_icon">
-            <span class="material-symbols-rounded icon" v-if="memberInfo.exempt"
-              >history_toggle_off</span
-            >
-            <span class="material-symbols-rounded icon" v-else>schedule</span>
+        <div
+          class="container"
+          style="
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+          "
+        >
+          <div class="exempt_container">
+            <div class="exempt_icon">
+              <span
+                class="material-symbols-rounded icon"
+                v-if="memberInfo.exempt"
+                >history_toggle_off</span
+              >
+              <span class="material-symbols-rounded icon" v-else>schedule</span>
+            </div>
+            <div class="exempt_text">
+              <h4 v-if="memberInfo.exempt">Isento</h4>
+              <h4 v-else>Não isento</h4>
+            </div>
           </div>
-          <div class="exempt_text">
-            <h4 v-if="memberInfo.exempt">Isento</h4>
-            <h4 v-else>Não isento</h4>
-            <span v-if="memberInfo.exempt">
-              O morador está isento de cumprir horas
-            </span>
-            <span v-else> O morador deve cumprir horas </span>
-          </div>
+          <span v-if="memberInfo.exempt" style="width: 100%">
+            O morador está isento de cumprir horas
+          </span>
+          <span v-else style="width: 100%"> O morador deve cumprir horas </span>
+          <button
+            class="button"
+            v-if="!memberInfo.exempt"
+            @click="toggleExempt"
+            style="
+              color: var(--on-primary-container);
+              width: 100%;
+              border-radius: 8px;
+            "
+          >
+            Marcar como isento
+          </button>
+          <button
+            class="button"
+            @click="toggleExempt"
+            v-else
+            style="
+              color: var(--on-primary-container);
+              width: 100%;
+              border-radius: 8px;
+            "
+          >
+            Retomar cumprimento de horas
+          </button>
         </div>
-        <div class="container" style="padding: 24px;">
+        <div class="container" style="padding: 24px">
           <div class="input">
             <label for="reason">Motivo da isenção</label>
-            <input type="text" id="reason" :value="memberInfo.exemptReason" />
+            <input
+              type="text"
+              id="reason"
+              v-model="memberInfo.exemptReason"
+              @change="saveData"
+            />
+          </div>
+          <div class="exempt_dates">
+            <div class="input">
+              <label for="startDate">Data de deliberação</label>
+              <input
+                type="date"
+                id="startDate"
+                v-model="memberInfo.exemptStartDate"
+                @focusout="saveData"
+              />
+            </div>
+            <div class="input">
+              <label for="endDate">Expiração</label>
+              <input
+                type="date"
+                id="endDate"
+                v-model="memberInfo.exemptEndDate"
+                @focusout="saveData"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -210,7 +358,11 @@ export default {
           <td>
             {{ periods[report.id].name + " (" + periods[report.id].year + ")" }}
           </td>
-          <td>{{ new Date(report.date).toLocaleDateString() }}</td>
+          <td>
+            {{
+              new Date(report.date).toLocaleDateString() || "Data não informada"
+            }}
+          </td>
           <td>{{ report.hours }}</td>
           <td>{{ report.status }}</td>
           <td>
@@ -230,8 +382,12 @@ export default {
 <style scoped>
 .resident_data {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 3fr 3fr 1fr;
   grid-gap: 24px;
+  padding: 24px;
+}
+
+.container {
   padding: 24px;
 }
 
@@ -245,6 +401,10 @@ input,
 select {
   background-color: transparent;
   color: var(--on-surface);
+}
+
+select option {
+  color: var(--surface);
 }
 
 label {
@@ -264,23 +424,21 @@ h3 {
 
 .exempt_container {
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  flex-direction: column;
-  padding: 24px;
+  flex-direction: row;
+  width: 100%;
 }
 
 .exempt_text {
   display: flex;
   flex-direction: column;
-  max-width: 200px;
-  text-align: center;
 }
 
 .exempt_text h4 {
   margin-bottom: 0;
   font-size: 24px;
+  margin-left: 12px;
 }
 
 .exempt_text span {
@@ -292,6 +450,18 @@ h3 {
   display: grid;
   grid-template-columns: 1fr 2fr;
   grid-gap: 24px;
+}
+
+.exempt_dates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 12px;
+  margin-top: 12px;
+}
+
+.exempt_dates input {
+  width: 100%;
+  font-family: inherit;
 }
 
 .member__summary {
@@ -348,6 +518,7 @@ h3 {
 .button {
   width: fit-content;
   margin-top: 12px;
+  margin-right: 0%;
 }
 
 .table {
@@ -404,17 +575,16 @@ h3 {
     grid-template-columns: 1fr;
   }
 
-  .exempt_container {
-    padding: 12px;
-    flex-direction: column;
-  }
-
   .exempt_text {
     max-width: none;
   }
 
   .container {
     margin-bottom: 0;
+  }
+
+  .exempt_dates {
+    grid-template-columns: 1fr;
   }
 }
 </style>
