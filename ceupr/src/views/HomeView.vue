@@ -1522,7 +1522,7 @@ export default {
           </g>
         </svg>
         <div>
-          <h2>Novo por aqui, né?</h2>
+          <h2>Novo por aqui, né? Agora é só aguardar!</h2>
           <p>
             Suas informações já foram submetidas aos administradores e em breve
             a situação será analisada. Agora é só aguardar.
@@ -4972,8 +4972,8 @@ export default {
             gerenciar a plataforma!
           </p>
           <p>
-            Demais moradores não precisam realizar cadastro, afinal, seu diretor
-            é responsável por suas horas.
+            <b>Demais moradores não devem realizar cadastro</b>, afinal, seu
+            diretor é responsável por suas horas.
           </p>
         </div>
       </div>
@@ -6746,7 +6746,7 @@ footer {
 
   footer {
     flex-direction: column;
-    align-items: flex-start
+    align-items: flex-start;
   }
 
   .footer_img {

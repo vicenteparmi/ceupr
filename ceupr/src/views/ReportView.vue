@@ -154,7 +154,7 @@ export default {
           <label for="atividades">
             <span class="form-item-number">2.</span> Atividades realizadas
             <p>
-              Liste Abaixoas atividades realizadas pelo morador no período de
+              Liste abaixo as atividades realizadas pelo morador no período de
               forma detalhada.
             </p>
           </label>

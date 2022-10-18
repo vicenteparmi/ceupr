@@ -543,6 +543,7 @@ input {
   font-size: 16px;
   font-weight: 600;
   transition-duration: 100ms;
+  width: 100%;
 }
 
 textarea {

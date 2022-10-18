@@ -62,6 +62,11 @@ export default {
                   adm: false,
                 }).then(() => {
                   console.log("User added to database");
+                  alert(
+                    "Olá " +
+                      user.displayName +
+                      "! Seja bem-vindo(a)!\nIremos atualizar a página para enviar seus dados para análise."
+                  );
                 });
               }
             })

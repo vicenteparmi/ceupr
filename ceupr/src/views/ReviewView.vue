@@ -423,7 +423,9 @@ export default {
       </thead>
       <tbody>
         <tr v-if="review.length == 0">
-          <td colspan="6">Nenhum relatório para revisar</td>
+          <td colspan="6" style="text-align: center">
+            Nenhum relatório para revisar
+          </td>
         </tr>
         <tr
           v-for="report in review"
@@ -522,6 +524,9 @@ export default {
                     >close</span
                   >
                 </div>
+              </div>
+              <div v-if="notSent.length == 0" class="notSentItem fadeup">
+                Sem caso para analisar, aperte fechar para voltar
               </div>
             </div>
           </div>

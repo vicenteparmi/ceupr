@@ -206,7 +206,7 @@ export default {
         <div v-if="currentReport.status == 'Não enviado'">
           <h2>Envio não realizado</h2>
           <p>
-            O relarório para o período atual não foi encontrado na base de
+            O relatório para o período atual não foi encontrado na base de
             dados.
           </p>
           <button
@@ -214,13 +214,13 @@ export default {
             @click="gotoSend"
             v-if="allowSend"
           >
-            Adicionar relarório
+            Adicionar relatório
           </button>
         </div>
         <div v-if="currentReport.status == 'Em análise'">
           <h2>Em análise</h2>
           <p>
-            O relarório deste morador está em análise. Caso deseje realizar
+            O relatório deste morador está em análise. Caso deseje realizar
             alguma alteração, clique no botão abaixo.
           </p>
           <button
@@ -228,13 +228,13 @@ export default {
             @click="gotoSend"
             v-if="allowSend"
           >
-            Editar relarório
+            Editar relatório
           </button>
         </div>
         <div v-if="currentReport.status == 'Aprovado'">
           <h2>Aprovado!</h2>
           <p>
-            O relarório deste morador foi aprovado. Um novo envio será possível
+            O relatório deste morador foi aprovado. Um novo envio será possível
             em um novo período.
           </p>
           <div class="chips__holder">
@@ -254,7 +254,7 @@ export default {
         <div v-if="currentReport.status == 'Rejeitado'">
           <h2>Rejeitado</h2>
           <p>
-            O relarório deste morador foi rejeitado. Mais informações podem ser
+            O relatório deste morador foi rejeitado. Mais informações podem ser
             encontradas no campo de observações.
           </p>
           <div class="chips__holder">

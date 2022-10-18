@@ -55,10 +55,11 @@ export default {
         link="/revisar"
       />
       <ActionCard
+        class="disabled"
         title="Alteração em grupo"
         subtitle="Modificar horas e atividades de diversos colaboradores de uma só vez."
         icon="component_exchange"
-        link="/revisar"
+        link=""
       />
       <ActionCard
         title="Configurações de envio"
@@ -99,3 +100,10 @@ export default {
     </div>
   </div>
 </template>
+
+<style>
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+</style>

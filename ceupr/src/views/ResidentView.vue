@@ -1,5 +1,5 @@
 <script>
-import { getDatabase, ref, get, update } from "@firebase/database";
+import { getDatabase, ref, get, update, remove } from "@firebase/database";
 
 export default {
   name: "MemberView",
@@ -149,7 +149,6 @@ export default {
         });
     },
     toggleExempt() {
-
       // Clear if exempt is true
       if (this.memberInfo.exempt) {
         this.memberInfo.exemptStartDate = "";
@@ -159,6 +158,30 @@ export default {
 
       this.memberInfo.exempt = !this.memberInfo.exempt;
       this.saveData();
+    },
+    deleteResident() {
+      if (
+        prompt(
+          'Para confirmar a exclusão, digite "confirmo" e clique em OK. Os dados não poderão ser recuperados.'
+        ) != "confirmo"
+      ) {
+        return;
+      }
+
+      const db = getDatabase();
+      const memberRef = ref(db, "residents/" + this.$route.params.id);
+      get(memberRef)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            remove(memberRef);
+            this.$router.push("/moradores");
+          } else {
+            console.log("No data available");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
 };
@@ -196,6 +219,10 @@ export default {
             memberInfo.changes || ""
           }}</span></transition
         >
+      </div>
+      <div class="member__summary__chip bad_chip" @click="deleteResident">
+        <h4><span class="material-symbols-rounded icon">delete</span></h4>
+        <span>Remover morador</span>
       </div>
     </div>
 
@@ -403,6 +430,10 @@ select {
   color: var(--on-surface);
 }
 
+input {
+  width: auto;
+}
+
 select option {
   color: var(--surface);
 }
@@ -547,6 +578,12 @@ h3 {
 
 .chip span {
   margin-right: 4px;
+}
+
+.bad_chip {
+  border: 1px solid var(--error);
+  color: var(--error);
+  cursor: pointer;
 }
 
 .bad {

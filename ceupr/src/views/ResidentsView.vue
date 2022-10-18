@@ -1,13 +1,6 @@
 <script setup>
-import {
-  getDatabase,
-  ref,
-  get,
-  update,
-  set,
-  remove,
-  push,
-} from "firebase/database";
+import { getAuth, onAuthStateChanged } from "@firebase/auth";
+import { getDatabase, ref, get, update, set, push } from "firebase/database";
 import router from "../router";
 </script>
 
@@ -15,7 +8,15 @@ import router from "../router";
 export default {
   name: "ResidentsView",
   mounted() {
-    this.updateList();
+    // Update list when auth state changes
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.updateList();
+      } else {
+        router.push("inicio");
+      }
+    });
   },
   data() {
     return {
@@ -27,7 +28,12 @@ export default {
       searchStorage: [],
       chips: [],
       selectedDepartment: "all",
-      editResidentFields: {},
+      editResidentFields: {
+        name: "",
+        department: "",
+        hours: 0,
+        exempt: false,
+      },
     };
   },
   methods: {
@@ -220,7 +226,7 @@ export default {
         name: this.editResidentFields.name,
         department: this.editResidentFields.department,
         hours: this.editResidentFields.hours,
-        exempt: this.editResidentFields.exempt,
+        exempt: this.editResidentFields.exempt || false,
       })
         .then(() => {
           // Add past periods to new resident
@@ -259,25 +265,6 @@ export default {
         .catch((error) => {
           alert("Erro ao adicionar morador: " + error);
         });
-    },
-    removeResident() {
-      const db = getDatabase();
-      const residentRef = ref(db, "residents/" + this.editResidentFields.id);
-      const confirmDel = confirm(
-        "Tem certeza que deseja remover o morador " +
-          this.editResidentFields.name +
-          "?\nTodos os registros de horas e atividades realizadas serão perdidos."
-      );
-      if (confirmDel) {
-        remove(residentRef)
-          .then(() => {
-            alert("Morador removido com sucesso!");
-            this.$router.go();
-          })
-          .catch((error) => {
-            alert("Erro ao remover morador: " + error);
-          });
-      }
     },
   },
 };
@@ -400,6 +387,11 @@ export default {
               >
             </td>
           </tr>
+          <tr v-if="searchStorage.length == 0">
+            <td colspan="4" style="text-align: center">
+              Nenhum morador encontrado
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -422,14 +414,16 @@ export default {
               <div class="addResident__card__input__label">Nome completo</div>
               <input
                 type="text"
-                v-model="editResidentFields.name"
+                :value="editResidentFields.name"
+                @change="editResidentFields.name = $event.target.value"
                 class="addResident__card__input__field"
               />
             </div>
             <div class="addResident__card__input">
               <div class="addResident__card__input__label">Departamento</div>
               <select
-                v-model="editResidentFields.department"
+                :value="editResidentFields.department"
+                @change="editResidentFields.department = $event.target.value"
                 class="addResident__card__input__field"
               >
                 <option
@@ -450,7 +444,8 @@ export default {
               <div class="addResident__card__input__label">Saldo de horas</div>
               <input
                 type="number"
-                v-model="editResidentFields.hours"
+                :value="editResidentFields.hours"
+                @change="editResidentFields.hours = $event.target.value"
                 class="addResident__card__input__field"
               />
             </div>
@@ -460,19 +455,14 @@ export default {
               </div>
               <input
                 type="checkbox"
-                v-model="editResidentFields.exempt"
+                :checked="editResidentFields.exempt"
+                @change="editResidentFields.exempt = $event.target.checked"
                 class="addResident__card__input__field switch"
               />
             </div>
             <div class="addResident__card__buttons">
               <div class="addResident__card__button" @click="addResident">
                 Salvar
-              </div>
-              <div
-                class="addResident__card__button secondary alert"
-                @click="removeResident"
-              >
-                Excluir
               </div>
               <div
                 class="addResident__card__button secondary"

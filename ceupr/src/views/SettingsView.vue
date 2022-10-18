@@ -146,7 +146,7 @@ export default {
     <h3 class="secondary-title">Gerenciar períodos de envio</h3>
     <p style="max-width: 800px">
       Abaixo estão os períodos criados para envio. Todos acompanham o ano e mês
-      (ou ocasião) e após a criação os períodos não podem ser excluidos. Antes
+      (ou ocasião) e após a criação os períodos não podem ser excluídos. Antes
       de liberar o relatório do período atual não esqueça de selecionar o
       período correto!
     </p>
