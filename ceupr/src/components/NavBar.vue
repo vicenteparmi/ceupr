@@ -156,6 +156,10 @@ export default {
           Gerenciamento
         </router-link></transition
       >
+      <a @click="showLogin" class="mobile_account">
+        <span class="material-symbols-rounded icon">person</span>
+        Conta
+      </a>
     </div>
     <div class="nav-bar__options">
       <div class="account" @click="showLogin()">
@@ -227,9 +231,9 @@ export default {
 
 .nav-bar__links > a {
   margin-bottom: 8px;
-  color: var(--on-secondary-container);
+  color: var(--secondary);
   text-decoration: none;
-  padding: 8px 16px;
+  padding: 4px 8px;
   width: 100%;
   font-size: 16px;
   border-radius: 24px;
@@ -317,6 +321,10 @@ a.router-link-exact-active {
   height: 48px;
 }
 
+a.mobile_account  {
+  display: none;
+}
+
 @media only screen and (max-width: 768px) {
   .nav-bar {
     display: flex;
@@ -328,7 +336,7 @@ a.router-link-exact-active {
     bottom: 0;
     width: 100%;
     max-width: none;
-    border-radius: 8px 8px 0 0;
+    border-radius: 0px 0px 0 0;
     align-items: center;
     justify-content: center;
     box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.2);
@@ -343,11 +351,11 @@ a.router-link-exact-active {
     justify-content: space-evenly;
     margin: 0;
     position: absolute;
-    width: auto;
+    width: 100%;
     position: relative;
   }
   .nav-bar__links > a {
-    font-size: 14px;
+    font-size: 12px;
     display: flex;
     flex-direction: column;
     width: auto;
@@ -364,10 +372,44 @@ a.router-link-exact-active {
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition-duration: 0.2s;
   }
+
   a.router-link-exact-active > .icon {
-    color: var(--on-secondary);
-    background-color: var(--on-secondary-container);
+    color: var(--on-secondary-container);
+    
+  }
+
+  a.router-link-exact-active > .icon::after {
+    background-color: var(--on-secondary);
+    width: 100%;
+    height: 100%;
+    border-radius: 100px;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: ripple 0.2s cubic-bezier(0.65, 0.05, 0.36, 1);
+    z-index: -1;
+  }
+
+  /* Background ripple effect */
+
+  @keyframes ripple {
+    0% {
+      width: 0;
+      height: 90%;
+      opacity: 0.5;
+      left: 50%;
+      top: 5%;
+    }
+    100% {
+      width: 100%;
+      height: 100%;
+      opacity: 1;
+      left: 0;
+      top: 0;
+    }
   }
 
   .selected {
@@ -380,10 +422,10 @@ a.router-link-exact-active {
     border-radius: 500px;
     margin: 0;
     margin-bottom: 2px;
-    min-width: 50px;
+    min-width: 64px;
     text-align: center;
     transition-duration: 0.1s;
-    font-size: 32px;
+    font-size: 28px;
   }
 
   .nav-bar__options {
@@ -391,11 +433,7 @@ a.router-link-exact-active {
     margin: 0;
   }
   .account {
-    display: flex;
-    width: auto;
-    padding: 0;
-    border: none;
-    margin: 0;
+    display: none;
   }
 
   #pif {
@@ -416,6 +454,10 @@ a.router-link-exact-active {
   .account:hover {
     background-color: transparent;
     color: var(--on-secondary-container);
+  }
+
+  a.mobile_account {
+    display: flex;
   }
 }
 </style>
