@@ -5,7 +5,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div style="user-select: none">
     <svg
       fill="var(--secondary)"
       xmlns="http://www.w3.org/2000/svg"

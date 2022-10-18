@@ -321,7 +321,7 @@ a.router-link-exact-active {
   height: 48px;
 }
 
-a.mobile_account  {
+a.mobile_account {
   display: none;
 }
 
@@ -339,7 +339,6 @@ a.mobile_account  {
     border-radius: 0px 0px 0 0;
     align-items: center;
     justify-content: center;
-    box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.2);
   }
 
   .nav-bar__logo {
@@ -377,7 +376,6 @@ a.mobile_account  {
 
   a.router-link-exact-active > .icon {
     color: var(--on-secondary-container);
-    
   }
 
   a.router-link-exact-active > .icon::after {
