@@ -19,6 +19,7 @@ export default {
       members: [],
       currentDepartment: "",
       sendLimit: "",
+      allowSend: false,
     };
   },
   mounted() {
@@ -112,6 +113,7 @@ export default {
           this.sendLimit = new Date(
             snapshot.val().sendLimit + "T00:00:00"
           ).toLocaleDateString();
+          this.allowSend = snapshot.val().allowSend;
         }
       });
     },
@@ -158,6 +160,14 @@ export default {
         <transition name="fadeup" mode="out-in">
           <p :key="currentPeriod" class="info-summary__value">
             {{ currentPeriod }}
+          </p>
+        </transition>
+      </div>
+      <div class="info-summary__item">
+        <p class="info-summary__title">Envio</p>
+        <transition name="fadeup" mode="out-in">
+          <p :key="allowSend" class="info-summary__value">
+            {{ allowSend ? "Disponível" : "Não liberado" }}
           </p>
         </transition>
       </div>

@@ -216,6 +216,13 @@ export default {
           >
             Adicionar relatório
           </button>
+          <button
+            class="button button--primary disabled-button"
+            disabled
+            v-else
+          >
+            Envio não liberado
+          </button>
         </div>
         <div v-if="currentReport.status == 'Em análise'">
           <h2>Em análise</h2>
@@ -403,6 +410,12 @@ export default {
 .bad {
   border-color: var(--error);
   color: var(--error);
+}
+
+.disabled-button {
+  background-color: var(--transparent);
+  color: var(--error);
+  border: 1px solid var(--error);
 }
 
 @media screen and (max-width: 600px) {
