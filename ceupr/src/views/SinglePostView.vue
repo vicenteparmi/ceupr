@@ -51,16 +51,15 @@ export default {
 <template>
   <div>
     <transition name="fadeup" mode="out-in">
-      <h2 class="title" style="color: var(--tertiary)" v-if="post != {}">
+      <h2 class="title" style="color: var(--tertiary)">
         <span class="material-symbols-rounded icon" v-on:click="$router.go(-1)">
           arrow_back_ios_new</span
         >
         {{ post.title }}
       </h2>
-      <div v-else style="width: 80%; height: 65px; margin-bottom: 12px"></div>
     </transition>
     <transition name="fadeup" mode="out-in">
-      <div class="post" v-if="post != {}">
+      <div class="post">
         <p class="post__date">
           Publicado em {{ new Date(post.date).toLocaleDateString() }} às
           {{ new Date(post.date).toLocaleTimeString() }}
@@ -69,7 +68,6 @@ export default {
         <hr />
         <p class="post__content" v-html="post.content"></p>
       </div>
-      <div v-else style="width: 80%; height: 65px; margin-bottom: 12px"></div>
     </transition>
   </div>
 </template>

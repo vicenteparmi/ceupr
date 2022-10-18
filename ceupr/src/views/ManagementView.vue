@@ -55,7 +55,7 @@ export default {
         link="/revisar"
       />
       <ActionCard
-        class="disabled"
+        class="disabledCard"
         title="Alteração em grupo"
         subtitle="Modificar horas e atividades de diversos colaboradores de uma só vez."
         icon="component_exchange"
@@ -102,7 +102,7 @@ export default {
 </template>
 
 <style>
-.disabled {
+.disabledCard {
   opacity: 0.5;
   pointer-events: none;
 }
