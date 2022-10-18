@@ -22,6 +22,7 @@ const router = createRouter({
       component: HomeView,
       meta: {
         transition: "fade",
+        title: "Casa do Estudante Universitário",
       },
     },
     {
@@ -30,7 +31,7 @@ const router = createRouter({
       component: ReportView,
       meta: {
         transition: "fade",
-        title: "Relatório - CEU",
+        title: "Relatório (CEU)",
       },
     },
     {
@@ -39,7 +40,7 @@ const router = createRouter({
       component: () => import("../views/MembersView.vue"),
       meta: {
         transition: "fade",
-        title: "Colaboradores - CEU",
+        title: "Colaboradores (CEU)",
       },
     },
     {
@@ -48,7 +49,7 @@ const router = createRouter({
       component: ManagementView,
       meta: {
         transition: "fade",
-        title: "Gerenciamento - CEU",
+        title: "Gerenciamento (CEU)",
       },
     },
     {
@@ -57,7 +58,7 @@ const router = createRouter({
       component: ResidentsView,
       meta: {
         transition: "fade",
-        title: "Moradores - CEU",
+        title: "Moradores (CEU)",
       },
     },
     {
@@ -66,7 +67,7 @@ const router = createRouter({
       component: DepartmentManageView,
       meta: {
         transition: "fade",
-        title: "Departamentos - CEU",
+        title: "Departamentos (CEU)",
       },
     },
     {
@@ -75,7 +76,7 @@ const router = createRouter({
       component: AccountsView,
       meta: {
         transition: "fade",
-        title: "Contas - CEU",
+        title: "Contas (CEU)",
       },
     },
     {
@@ -84,7 +85,7 @@ const router = createRouter({
       component: () => import("../views/MemberView.vue"),
       meta: {
         transition: "fade",
-        title: ":id - CEU",
+        title: "Colaborador (CEU)",
       },
     },
     {
@@ -93,7 +94,7 @@ const router = createRouter({
       component: () => import("../views/SettingsView.vue"),
       meta: {
         transition: "fade",
-        title: "Configurações - CEU",
+        title: "Configurações (CEU)",
       },
     },
     {
@@ -102,7 +103,7 @@ const router = createRouter({
       component: () => import("../views/ReviewView.vue"),
       meta: {
         transition: "fade",
-        title: "Revisar - CEU",
+        title: "Relatórios (CEU)",
       },
     },
     {
@@ -111,7 +112,7 @@ const router = createRouter({
       component: () => import("../views/PostView.vue"),
       meta: {
         transition: "fade",
-        title: "Postagens - CEU",
+        title: "Postagens (CEU)",
       },
     },
     {
@@ -120,7 +121,7 @@ const router = createRouter({
       component: () => import("../views/SinglePostView.vue"),
       meta: {
         transition: "fade",
-        title: "Publicação - CEU",
+        title: "Publicação (CEU)",
       },
     },
     {
@@ -129,7 +130,7 @@ const router = createRouter({
       component: () => import("../views/ResidentView.vue"),
       meta: {
         transition: "fade",
-        title: ":id - CEU",
+        title: "Morador (CEU)",
       },
     },
   ],
@@ -137,6 +138,12 @@ const router = createRouter({
   scrollBehavior(to, from, savedPosition) {
     return { top: 0 };
   },
+});
+
+router.afterEach((to) => {
+  if (to.meta && to.meta.title) {
+    window.document.title = to.meta.title;
+  }
 });
 
 export default router;
