@@ -103,9 +103,617 @@ export default {
     <main>
       <MobileTopLogo />
       <div class="head-display-card">
-        <div>
-          <h1 class="title">Departamentos</h1>
-          <p class="subtitle">Gerencie as horas dos colaboradores</p>
+        <div class="svg">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1839.74 1633.71">
+            <polyline
+              points="1212 1627.71 1212 186.19 1569.35 186.19 1839.74 186.19"
+              style="
+                fill: none;
+                stroke: var(--primary);
+                stroke-miterlimit: 10;
+                stroke-width: 24px;
+              "
+            />
+            <polyline
+              points="1212 1627.71 1212 1620.76 1212 1531.79 1212 1442.83 1212 1309.56 1212 1220.6 1212 1131.63 1212 970.64 1212 881.68 1212 792.71 1212 631.72 1212 542.75 1212 453.79 1212 302.32 12 302.32 12 1627.71"
+              style="
+                fill: none;
+                stroke: var(--primary);
+                stroke-miterlimit: 10;
+                stroke-width: 24px;
+              "
+            />
+            <polyline
+              points="1676.51 1628.35 1676.51 328.12 1839.74 328.12"
+              style="
+                fill: none;
+                stroke: var(--primary);
+                stroke-miterlimit: 10;
+                stroke-width: 20px;
+              "
+            />
+            <path
+              d="M1811.61,1919.36"
+              transform="translate(-80.26 -291.65)"
+              style="
+                fill: none;
+                stroke: var(--primary);
+                stroke-miterlimit: 10;
+                stroke-width: 20px;
+              "
+            />
+            <rect
+              x="1316.22"
+              y="416.19"
+              width="253.13"
+              height="253.13"
+              style="
+                fill: none;
+                stroke: var(--primary);
+                stroke-miterlimit: 10;
+                stroke-width: 12px;
+              "
+            />
+            <line
+              x1="1442.79"
+              y1="416.19"
+              x2="1442.79"
+              y2="669.32"
+              style="
+                fill: none;
+                stroke: var(--primary);
+                stroke-miterlimit: 10;
+                stroke-width: 12px;
+              "
+            />
+            <rect
+              x="1316.22"
+              y="755.11"
+              width="253.13"
+              height="253.13"
+              style="
+                fill: none;
+                stroke: var(--primary);
+                stroke-miterlimit: 10;
+                stroke-width: 12px;
+              "
+            />
+            <line
+              x1="1442.79"
+              y1="755.11"
+              x2="1442.79"
+              y2="1008.24"
+              style="
+                fill: none;
+                stroke: var(--primary);
+                stroke-miterlimit: 10;
+                stroke-width: 12px;
+              "
+            />
+            <rect
+              x="1316.22"
+              y="1094.03"
+              width="253.13"
+              height="253.13"
+              style="
+                fill: none;
+                stroke: var(--primary);
+                stroke-miterlimit: 10;
+                stroke-width: 12px;
+              "
+            />
+            <line
+              x1="1442.79"
+              y1="1094.03"
+              x2="1442.79"
+              y2="1347.16"
+              style="
+                fill: none;
+                stroke: var(--primary);
+                stroke-miterlimit: 10;
+                stroke-width: 12px;
+              "
+            />
+            <polyline
+              points="1569.35 1627.71 1569.35 1405.22 1442.79 1405.22 1316.22 1405.22 1316.22 1627.71"
+              style="
+                fill: none;
+                stroke: var(--primary);
+                stroke-miterlimit: 10;
+                stroke-width: 12px;
+              "
+            />
+            <line
+              x1="1442.79"
+              y1="1627.71"
+              x2="1442.79"
+              y2="1405.22"
+              style="
+                fill: none;
+                stroke: var(--primary);
+                stroke-miterlimit: 10;
+                stroke-width: 12px;
+              "
+            />
+            <g>
+              <rect
+                x="91.89"
+                y="416.19"
+                width="253.13"
+                height="253.13"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="218.45"
+                y1="416.19"
+                x2="218.45"
+                y2="669.32"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <rect
+                x="91.89"
+                y="755.11"
+                width="253.13"
+                height="253.13"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="218.45"
+                y1="755.11"
+                x2="218.45"
+                y2="1008.24"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <rect
+                x="91.89"
+                y="1094.03"
+                width="253.13"
+                height="253.13"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="218.45"
+                y1="1094.03"
+                x2="218.45"
+                y2="1347.16"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <polyline
+                points="91.89 1627.71 91.89 1405.22 218.45 1405.22 345.01 1405.22 345.01 1627.71"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="218.45"
+                y1="1627.71"
+                x2="218.45"
+                y2="1405.22"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+            </g>
+            <g>
+              <rect
+                x="422.53"
+                y="416.19"
+                width="253.13"
+                height="253.13"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="549.09"
+                y1="416.19"
+                x2="549.09"
+                y2="669.32"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <rect
+                x="422.53"
+                y="755.11"
+                width="253.13"
+                height="253.13"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="549.09"
+                y1="755.11"
+                x2="549.09"
+                y2="1008.24"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <rect
+                x="422.53"
+                y="1094.03"
+                width="253.13"
+                height="253.13"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="549.09"
+                y1="1094.03"
+                x2="549.09"
+                y2="1347.16"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <polyline
+                points="675.66 1627.71 675.66 1405.22 549.09 1405.22 422.53 1405.22 422.53 1627.71"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="549.09"
+                y1="1627.71"
+                x2="549.09"
+                y2="1405.22"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+            </g>
+            <g>
+              <rect
+                x="753.18"
+                y="416.19"
+                width="253.13"
+                height="253.13"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="879.74"
+                y1="416.19"
+                x2="879.74"
+                y2="669.32"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <rect
+                x="753.18"
+                y="755.11"
+                width="253.13"
+                height="253.13"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="879.74"
+                y1="755.11"
+                x2="879.74"
+                y2="1008.24"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <rect
+                x="753.18"
+                y="1094.03"
+                width="253.13"
+                height="253.13"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="879.74"
+                y1="1094.03"
+                x2="879.74"
+                y2="1347.16"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <polyline
+                points="1006.3 1627.71 1006.3 1405.22 879.74 1405.22 753.18 1405.22 753.18 1627.71"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="879.74"
+                y1="1627.71"
+                x2="879.74"
+                y2="1405.22"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+            </g>
+            <polyline
+              points="1839.74 669.32 1731.35 669.32 1731.35 416.19 1839.74 416.19"
+              style="
+                fill: none;
+                stroke: var(--primary);
+                stroke-miterlimit: 10;
+                stroke-width: 12px;
+              "
+            />
+            <polyline
+              points="1839.74 1008.24 1731.35 1008.24 1731.35 755.11 1839.74 755.11"
+              style="
+                fill: none;
+                stroke: var(--primary);
+                stroke-miterlimit: 10;
+                stroke-width: 12px;
+              "
+            />
+            <polyline
+              points="1839.74 1347.16 1731.35 1347.16 1731.35 1094.03 1839.74 1094.03"
+              style="
+                fill: none;
+                stroke: var(--primary);
+                stroke-miterlimit: 10;
+                stroke-width: 12px;
+              "
+            />
+            <polyline
+              points="1731.35 1627.71 1731.35 1405.22 1839.74 1405.22"
+              style="
+                fill: none;
+                stroke: var(--primary);
+                stroke-miterlimit: 10;
+                stroke-width: 12px;
+              "
+            />
+            <polyline
+              points="1839.74 12 1569.35 12 1569.35 186.19 1839.74 186.19"
+              style="
+                fill: none;
+                stroke: var(--primary);
+                stroke-miterlimit: 10;
+                stroke-width: 24px;
+              "
+            />
+            <g>
+              <path
+                d="M1292.26,923.37a95.93,95.93,0,1,1,0-177.93"
+                transform="translate(-80.26 -291.65)"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="1212"
+                y1="542.75"
+                x2="1080.17"
+                y2="542.75"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="1176.09"
+                y1="446.83"
+                x2="1176.09"
+                y2="638.67"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+            </g>
+            <g>
+              <path
+                d="M1292.26,1262.29a95.93,95.93,0,1,1,0-177.93"
+                transform="translate(-80.26 -291.65)"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="1212"
+                y1="881.68"
+                x2="1080.17"
+                y2="881.68"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="1176.09"
+                y1="785.75"
+                x2="1176.09"
+                y2="977.59"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+            </g>
+            <g>
+              <path
+                d="M1292.26,1601.21a95.93,95.93,0,1,1,0-177.93"
+                transform="translate(-80.26 -291.65)"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="1212"
+                y1="1220.6"
+                x2="1080.17"
+                y2="1220.6"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="1176.09"
+                y1="1124.67"
+                x2="1176.09"
+                y2="1316.51"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+            </g>
+            <g>
+              <path
+                d="M1292.26,1734.48a95.93,95.93,0,1,0-35.91,184.88"
+                transform="translate(-80.26 -291.65)"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="1212"
+                y1="1531.79"
+                x2="1080.17"
+                y2="1531.79"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+              <line
+                x1="1176.09"
+                y1="1435.87"
+                x2="1176.09"
+                y2="1627.71"
+                style="
+                  fill: none;
+                  stroke: var(--primary);
+                  stroke-miterlimit: 10;
+                  stroke-width: 12px;
+                "
+              />
+            </g>
+          </svg>
+        </div>
+        <div class="head-display-card-text">
+          <h1 class="title">Sistema de Departamentos CEU/PR</h1>
+          <p class="subtitle">Controle de relatórios e horas dos moradores</p>
         </div>
       </div>
 
@@ -6014,10 +6622,10 @@ export default {
             line-height: 1.2;
           "
         >
-          Fundação Casa do Estudante<br />Universitário do Paraná (FCEU)
+          Fundação Casa do Estudante Universitário do Paraná (FCEU)
         </p>
         <p>
-          © 2022 - Criado por
+          © 2022 - Sistema desenvolvido por
           <a href="mailto:vicenteparmigiani@gmail.com">Vicente K. Parmigiani</a>
         </p>
         <p>Versão: 1.0.0</p>
@@ -6027,11 +6635,26 @@ export default {
 </template>
 
 <style>
+.svg {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 290px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  opacity: 0.8;
+}
+
+.head-display-card {
+  overflow: hidden;
+}
+
 footer {
   width: 100%;
   padding: 24px;
   border-top: 1px solid var(--secondary-container);
-  margin-top: 24px;
+  margin-top: 64px;
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -6110,6 +6733,25 @@ footer {
   .account_type svg {
     width: 50vw;
     height: 50vw;
+  }
+
+  .svg {
+    width: auto;
+    opacity: 0.5;
+  }
+
+  .svg svg {
+    width: 32vh;
+  }
+
+  footer {
+    flex-direction: column;
+    align-items: flex-start
+  }
+
+  .footer_img {
+    margin-bottom: 24px;
+    margin-right: 0;
   }
 }
 </style>

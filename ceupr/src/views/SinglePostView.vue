@@ -118,4 +118,12 @@ hr {
 p {
   margin-bottom: 8px;
 }
+
+@media screen and (max-width: 600px) {
+  .post {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 24px;
+  }
+}
 </style>

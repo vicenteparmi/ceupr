@@ -49,12 +49,13 @@ export default {
   text-decoration: none;
   transition: 0.2s;
   flex-direction: column;
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.2);
   cursor: pointer;
 }
 
 .card:hover {
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 2px 16px 0px rgba(0, 0, 0, 0.28);
+  border-radius: 12px;
 }
 
 .card__title {
