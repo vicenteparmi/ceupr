@@ -8,7 +8,7 @@
 
     .main {
         padding: 24px;
-        padding-bottom: 108px;
+        height: calc(100vh - 80px);
     }
 
     .container {

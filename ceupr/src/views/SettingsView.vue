@@ -115,7 +115,7 @@ export default {
         <h4>Horas mensais</h4>
         <span
           ><input
-            class="input"
+            style="width: 100px"
             type="number"
             v-model="settings.monthHours"
             @change="saveInfo"
@@ -237,7 +237,7 @@ export default {
   box-shadow: 0px 0px 0px 1px var(--secondary);
 }
 
-.input {
+input {
   border: 1px solid var(--primary);
   background-color: transparent;
   color: var(--on-primary-container);
@@ -245,7 +245,6 @@ export default {
   font-weight: 800;
   text-align: left;
   outline: none;
-  width: 100px;
 }
 
 select {

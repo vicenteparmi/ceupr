@@ -526,7 +526,7 @@ export default {
                 </div>
               </div>
               <div v-if="notSent.length == 0" class="notSentItem fadeup">
-                Sem caso para analisar, aperte fechar para voltar
+                Sem casos para analisar, aperte fechar para voltar
               </div>
             </div>
           </div>

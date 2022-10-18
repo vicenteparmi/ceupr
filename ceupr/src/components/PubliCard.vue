@@ -51,6 +51,7 @@ export default {
   flex-direction: column;
   box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.2);
   cursor: pointer;
+  user-select: none;
 }
 
 .card:hover {

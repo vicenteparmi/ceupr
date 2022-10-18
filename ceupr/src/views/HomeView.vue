@@ -18,6 +18,7 @@ export default {
     return {
       posts: [],
       mode: 0,
+      version: "1.0.1",
     };
   },
   mounted() {
@@ -6626,9 +6627,9 @@ export default {
         </p>
         <p>
           © 2022 - Sistema desenvolvido por
-          <a href="mailto:vicenteparmigiani@gmail.com">Vicente K. Parmigiani</a>
+          <a href="https://vicenteparmi.github.io/cv" target="_blank">Vicente K. Parmigiani</a>
         </p>
-        <p>Versão: 1.0.0</p>
+        <p>Versão: {{ version }}</p>
       </div>
     </footer>
   </div>
@@ -6695,6 +6696,7 @@ footer {
   grid-template-columns: 1fr 3fr;
   grid-gap: 24px;
   padding: 24px;
+  user-select: none;
 }
 
 .account_type svg {
