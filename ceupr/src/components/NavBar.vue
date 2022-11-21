@@ -38,14 +38,14 @@ export default {
           get(userRef)
             .then((snapshot) => {
               if (snapshot.exists()) {
+                const admRef = ref(db, "users/" + user.uid);
+
                 // Update user data
-                const newUserRef = ref(db, "users/" + user.uid);
-                update(newUserRef, {
+                update(admRef, {
                   photoURL: user.photoURL,
                 });
 
                 // Check if user has the adm role
-                const admRef = ref(db, "users/" + user.uid);
                 get(admRef)
                   .then((snapshot) => {
                     if (snapshot.exists() && snapshot.val().adm) {
