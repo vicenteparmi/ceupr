@@ -39,7 +39,7 @@ export default {
             .then((snapshot) => {
               if (snapshot.exists()) {
                 // Update user data
-                const newUserRef = ref(db, "new_users/" + user.uid);
+                const newUserRef = ref(db, "users/" + user.uid);
                 update(newUserRef, {
                   photoURL: user.photoURL,
                 });
