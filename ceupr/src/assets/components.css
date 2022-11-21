@@ -93,7 +93,7 @@ textarea:focus {
     font-size: 16px;
     padding: 8px 16px;
     border-radius: 24px;
-    color: var(--on-primary);
+    color: var(--primary);
     border: none;
     cursor: pointer;
     margin-right: 8px;

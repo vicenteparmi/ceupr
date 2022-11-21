@@ -1,6 +1,6 @@
 <script setup>
 import { getAuth } from "firebase/auth";
-import { getDatabase, ref, get, set } from "firebase/database";
+import { getDatabase, ref, get, set, update } from "firebase/database";
 import LoginPopup from "./LoginPopup.vue";
 </script>
 
@@ -38,6 +38,12 @@ export default {
           get(userRef)
             .then((snapshot) => {
               if (snapshot.exists()) {
+                // Update user data
+                const newUserRef = ref(db, "new_users/" + user.uid);
+                update(newUserRef, {
+                  photoURL: user.photoURL,
+                });
+
                 // Check if user has the adm role
                 const admRef = ref(db, "users/" + user.uid);
                 get(admRef)

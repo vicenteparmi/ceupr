@@ -199,10 +199,11 @@ export default {
 
 <style scoped>
 #colabList {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 16px;
   margin-top: 24px;
+  grid-column: span 2;
 }
 
 .info-summary {

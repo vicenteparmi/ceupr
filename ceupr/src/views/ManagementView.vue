@@ -71,6 +71,12 @@ export default {
     <h3 class="secondary-title">Controle de departamentos e pessoas</h3>
     <div class="action-cards">
       <ActionCard
+        title="Contas"
+        subtitle="Definir cargos e permissões de acesso para usuários da plataforma."
+        icon="manage_accounts"
+        link="/contas"
+      />
+      <ActionCard
         title="Moradores"
         subtitle="Modificar departamentos dos moradores da Fundação e acompanhar situação com atividades realizadas."
         icon="location_away"
@@ -81,12 +87,6 @@ export default {
         subtitle="Adicionar ou remover departamentos, bem como alterar o nome e a descrição de cada um."
         icon="atr"
         link="/departamentos"
-      />
-      <ActionCard
-        title="Contas"
-        subtitle="Definir cargos e permissões de acesso para usuários da plataforma."
-        icon="manage_accounts"
-        link="/contas"
       />
     </div>
     <h3 class="secondary-title">Apresentação e postagens</h3>

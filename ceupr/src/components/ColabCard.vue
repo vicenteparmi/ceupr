@@ -67,13 +67,11 @@ export default {
   background-color: var(--surface-variant);
   color: var(--on-surface-variant);
   border-radius: 24px;
-  margin-bottom: 12px;
   padding: 24px;
   text-decoration: none;
   transition: 0.2s;
   flex-direction: row;
-  margin-right: 12px;
-  align-items: center;
+  align-items: flex-start;
   cursor: pointer;
 }
 
@@ -85,7 +83,9 @@ export default {
 .colab-card__name {
   font-size: 24px;
   font-weight: 500;
+  line-height: normal;
   margin: 0;
+  margin-bottom: 8px;
   padding: 0;
 }
 

@@ -83,12 +83,62 @@ export default {
     removeDepartment(id) {
       const db = getDatabase();
       const departmentRef = ref(db, "departments/" + id);
-      if (confirm("Tem certeza que deseja remover este departamento?")) {
-        remove(departmentRef).then(() => {
-          console.log("Data removed successfully!");
-          this.departments = [];
-          this.getDepartments();
-        });
+      if (
+        confirm(
+          "Tem certeza que deseja remover este departamento? \n Os diretores serão desvinculados e todos os moradores pertencentes à ele ficarão sem departamento."
+        )
+      ) {
+        remove(departmentRef)
+          .then(() => {
+            console.log("Data removed successfully!");
+            this.departments = [];
+            this.getDepartments();
+          })
+          .then(() => {
+            // Remove all users from this department
+            const userRef = ref(db, "users");
+            get(userRef)
+              .then((snapshot) => {
+                if (snapshot.exists()) {
+                  snapshot.forEach((childSnapshot) => {
+                    const childKey = childSnapshot.key;
+                    const childData = childSnapshot.val();
+                    if (childData.department == id) {
+                      update(ref(db, "users/" + childKey), {
+                        department: "",
+                      });
+                    }
+                  });
+                } else {
+                  console.log("No data available");
+                }
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+
+            // Remove all residents from this department
+            const residentRef = ref(db, "residents");
+            get(residentRef)
+              .then((snapshot) => {
+                if (snapshot.exists()) {
+                  snapshot.forEach((childSnapshot) => {
+                    const childKey = childSnapshot.key;
+                    const childData = childSnapshot.val();
+                    if (childData.department == id) {
+                      update(ref(db, "residents/" + childKey), {
+                        department: "-1",
+                      });
+                    }
+                  });
+                } else {
+                  console.log("No data available");
+                }
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          });
       }
     },
     showEditDialog(id) {
