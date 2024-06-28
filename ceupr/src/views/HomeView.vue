@@ -18,7 +18,8 @@ export default {
     return {
       posts: [],
       mode: 0,
-      version: "1.0.2",
+      version: "1.0.3",
+      date: "28 de Junho de 2024",
     };
   },
   mounted() {
@@ -6626,10 +6627,12 @@ export default {
           Fundação Casa do Estudante Universitário do Paraná (FCEU)
         </p>
         <p>
-          © 2022 - Sistema desenvolvido por
-          <a href="https://vicenteparmi.github.io/cv" target="_blank">Vicente K. Parmigiani</a>
+          © 2024 - Sistema desenvolvido por
+          <a href="https://linktr.ee/vicenteparmi" target="_blank"
+            >Vicente K. Parmigiani</a
+          >
         </p>
-        <p>Versão: {{ version }}</p>
+        <p>Versão: {{ version }} ({{ date }})</p>
       </div>
     </footer>
   </div>

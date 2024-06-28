@@ -1,5 +1,6 @@
 <script>
 import { getDatabase, ref, get } from "@firebase/database";
+import ModalDialog from "@/components/ModalDialog.vue";
 
 export default {
   name: "MemberView",
@@ -14,10 +15,15 @@ export default {
         date: "",
       },
       allowSend: false,
+      showModal: false,
+      selectedActivities: "",
     };
   },
   mounted() {
     this.getMemberInfo();
+  },
+  components: {
+    ModalDialog,
   },
   methods: {
     async getMemberInfo() {
@@ -128,6 +134,10 @@ export default {
         default:
           return "var(--on-surface)";
       }
+    },
+    openModal(activities) {
+      this.selectedActivities = activities;
+      this.showModal = true;
     },
   },
 };
@@ -310,12 +320,27 @@ export default {
                 ? report.activities.substring(0, 30) + "..."
                 : report.activities
             }}
+            <br v-if="report.activities && report.activities.length > 30" />
+            <span
+              v-if="report.activities && report.activities.length > 30"
+              @click="openModal(report.activities)"
+              class="hover-text"
+            >
+              Ver tudo
+            </span>
           </td>
           <td>{{ report.obs ? report.obs : "-" }}</td>
         </tr>
       </tbody>
     </table>
   </div>
+
+  <ModalDialog
+    v-if="showModal"
+    title="Atividades"
+    :content="selectedActivities"
+    @close="showModal = false"
+  />
 </template>
 
 <style scoped>
@@ -416,6 +441,19 @@ export default {
   background-color: var(--transparent);
   color: var(--error);
   border: 1px solid var(--error);
+}
+
+.hover-text {
+  color: var(--primary);
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.2s;
+  shape-outside: none;
+}
+
+.hover-text:hover {
+  color: var(--primary-dark);
+  background-color: var(--primary-light);
 }
 
 @media screen and (max-width: 600px) {

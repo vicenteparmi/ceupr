@@ -31,7 +31,7 @@ export default {
       }
     });
   },
-}
+};
 </script>
 
 <template>
@@ -54,13 +54,14 @@ export default {
         icon="fact_check"
         link="/revisar"
       />
-      <ActionCard
+      <!-- TODO: Implementar funcionalidade -->
+      <!-- <ActionCard
         class="disabledCard"
         title="Alteração em grupo"
         subtitle="Modificar horas e atividades de diversos colaboradores de uma só vez."
         icon="component_exchange"
         link=""
-      />
+      /> -->
       <ActionCard
         title="Configurações de envio"
         subtitle="Definir o período de envio de relatórios e o limite de horas cumpridas por período."
