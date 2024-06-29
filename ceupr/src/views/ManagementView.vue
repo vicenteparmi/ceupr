@@ -84,6 +84,12 @@ export default {
         link="/moradores"
       />
       <ActionCard
+        title="Arquivo"
+        subtitle="Veja os moradores que já passaram pela Fundação e suas atividades realizadas."
+        icon="archive"
+        link="/arquivo"
+      />
+      <ActionCard
         title="Departamentos"
         subtitle="Adicionar ou remover departamentos, bem como alterar o nome e a descrição de cada um."
         icon="atr"

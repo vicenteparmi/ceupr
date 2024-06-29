@@ -133,6 +133,25 @@ const router = createRouter({
         title: "Morador (CEU)",
       },
     },
+    // Archived residents
+    {
+      name: "arquivo",
+      path: "/arquivo",
+      component: () => import("../views/ArchivedView.vue"),
+      meta: {
+        transition: "fade",
+        title: "Arquivo (CEU)",
+      },
+    },
+    {
+      name: "archived_resident",
+      path: "/arquivo/:id",
+      component: () => import("../views/ArchivedResidentView.vue"),
+      meta: {
+        transition: "fade",
+        title: "Arquivo (CEU)",
+      },
+    },
   ],
   // eslint-disable-next-line no-unused-vars
   scrollBehavior(to, from, savedPosition) {

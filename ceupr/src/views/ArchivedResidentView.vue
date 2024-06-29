@@ -3,7 +3,7 @@ import { getDatabase, ref, get, update, remove } from "@firebase/database";
 import ModalDialog from "@/components/ModalDialog.vue";
 
 export default {
-  name: "MemberView",
+  name: "ArchivedMemberView",
   data() {
     return {
       memberInfo: {
@@ -30,7 +30,7 @@ export default {
     },
     async getMemberInfo() {
       const db = getDatabase();
-      const memberRef = ref(db, "residents/" + this.$route.params.id);
+      const memberRef = ref(db, "archived_residents/" + this.$route.params.id);
       get(memberRef)
         .then((snapshot) => {
           if (snapshot.exists()) {
@@ -133,7 +133,7 @@ export default {
       }, 500);
 
       const db = getDatabase();
-      const memberRef = ref(db, "residents/" + this.$route.params.id);
+      const memberRef = ref(db, "archived_residents/" + this.$route.params.id);
       get(memberRef)
         .then((snapshot) => {
           if (snapshot.exists()) {
@@ -179,12 +179,12 @@ export default {
       }
 
       const db = getDatabase();
-      const memberRef = ref(db, "residents/" + this.$route.params.id);
+      const memberRef = ref(db, "archived_residents/" + this.$route.params.id);
       get(memberRef)
         .then((snapshot) => {
           if (snapshot.exists()) {
             remove(memberRef);
-            this.$router.push("/moradores");
+            this.$router.push("/arquivo");
           } else {
             console.log("No data available");
           }
@@ -197,26 +197,23 @@ export default {
     archiveResident() {
       if (
         !confirm(
-          'Para confirmar a arquivamento, clique em "OK". Você poderá conferir os dados desse morador na aba "Arquivados".'
+          'Para desarquivar o morador, clique em "OK". Os dados serão movidos para a aba "Moradores" e ele voltará a aparecer para os diretores de departamentos.'
         )
       ) {
         return;
       }
 
-      // Transaction from 'residents' to 'archived_residents'
+      // Transaction from 'archived_residents' to 'residents'
       const db = getDatabase();
-      const memberRef = ref(db, "residents/" + this.$route.params.id);
+      const memberRef = ref(db, "archived_residents/" + this.$route.params.id);
       get(memberRef)
         .then((snapshot) => {
           if (snapshot.exists()) {
             const data = snapshot.val();
-            const archivedRef = ref(
-              db,
-              "archived_residents/" + this.$route.params.id
-            );
+            const archivedRef = ref(db, "residents/" + this.$route.params.id);
             update(archivedRef, data);
             remove(memberRef);
-            this.$router.replace("/moradores");
+            this.$router.replace("/arquivo");
           } else {
             console.log("No data available");
           }
@@ -235,7 +232,7 @@ export default {
       <h2 class="title" style="color: var(--tertiary)" v-if="memberInfo.name">
         <span
           class="material-symbols-rounded icon"
-          v-on:click="$router.push({ name: 'moradores' })"
+          v-on:click="$router.push({ name: 'arquivo' })"
         >
           arrow_back_ios_new</span
         >
@@ -267,8 +264,8 @@ export default {
         class="member__summary__chip bad_but_not_so_chip"
         @click="archiveResident"
       >
-        <h4><span class="material-symbols-rounded icon">archive</span></h4>
-        <span>Arquivar</span>
+        <h4><span class="material-symbols-rounded icon">unarchive</span></h4>
+        <span>Desarquivar</span>
       </div>
       <!-- Delete resident button -->
       <div class="member__summary__chip bad_chip" @click="deleteResident">
