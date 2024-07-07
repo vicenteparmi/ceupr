@@ -333,14 +333,13 @@ export default {
         </tr>
       </tbody>
     </table>
+    <ModalDialog
+      v-if="showModal"
+      title="Atividades"
+      :content="selectedActivities"
+      @close="showModal = false"
+    />
   </div>
-
-  <ModalDialog
-    v-if="showModal"
-    title="Atividades"
-    :content="selectedActivities"
-    @close="showModal = false"
-  />
 </template>
 
 <style scoped>

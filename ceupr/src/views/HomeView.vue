@@ -18,8 +18,8 @@ export default {
     return {
       posts: [],
       mode: 0,
-      version: "1.0.3",
-      date: "28 de Junho de 2024",
+      version: "1.0.4",
+      date: "7 de Julho de 2024",
     };
   },
   mounted() {

@@ -10,17 +10,14 @@ export default {
         monthHours: 8,
         newPeriodName: "",
         newPeriodYear: "",
-        periods: [],
+        periods: {},
       },
       sendLimit: "",
-      currentPeriod: {
-        name: "",
-        year: "",
-        id: "",
-      },
+      currentPeriodId: "",
       toggles: {
         newPeriod: false,
       },
+      groupedPeriods: {},
     };
   },
   mounted() {
@@ -47,15 +44,15 @@ export default {
       get(settingsRef)
         .then((snapshot) => {
           if (snapshot.exists()) {
+            const data = snapshot.val();
             this.settings = {
-              allowSend: snapshot.val().allowSend,
-              monthHours: snapshot.val().monthHours,
-              periods: snapshot.val().periods,
+              allowSend: data.allowSend || false,
+              monthHours: data.monthHours || 8,
+              periods: data.periods || {},
             };
-            this.sendLimit = snapshot.val().sendLimit;
-            this.currentPeriod = {
-              id: snapshot.val().currentPeriod,
-            };
+            this.sendLimit = data.sendLimit || "";
+            this.currentPeriodId = data.currentPeriod || "";
+            this.groupPeriods();
           } else {
             console.log("No data available");
           }
@@ -64,6 +61,20 @@ export default {
           console.error(error);
         });
     },
+    groupPeriods() {
+      this.groupedPeriods = Object.entries(this.settings.periods).reduce(
+        (acc, [id, period]) => {
+          if (!acc[period.year]) {
+            acc[period.year] = [];
+          }
+          acc[period.year].push({ id, ...period });
+          return acc;
+        },
+        {}
+      );
+
+      console.log(Object.entries(this.groupedPeriods).reverse());
+    },
     createPeriod() {
       const db = getDatabase();
       const settingsRef = ref(db, "settings/periods");
@@ -71,6 +82,33 @@ export default {
         name: this.settings.newPeriodName,
         year: this.settings.newPeriodYear,
       };
+
+      // Data validation
+      if (!newPeriod.name || !newPeriod.year) {
+        return;
+      } else if (newPeriod.year.length !== 4) {
+        alert("O ano deve ter 4 dígitos.");
+        return;
+      } else if (isNaN(newPeriod.year)) {
+        alert("O ano deve ser um número.");
+        return;
+      } else if (newPeriod.year < 2000) {
+        alert("O ano deve ser maior que 2000.");
+        return;
+      }
+
+      // Check if the period already exists with the same name and year
+      const periodExists = Object.values(this.settings.periods).some(
+        (period) =>
+          period.name === newPeriod.name && period.year === newPeriod.year
+      );
+      if (periodExists) {
+        alert(
+          "Um período com o mesmo nome e ano já foi criado na plataforma. Utilize um nome diferente."
+        );
+        return;
+      }
+
       push(settingsRef, newPeriod).then(() => {
         this.toggleNewPeriod(false);
         this.getSettings();
@@ -82,10 +120,14 @@ export default {
       const newSettings = {
         allowSend: this.settings.allowSend,
         monthHours: this.settings.monthHours,
-        currentPeriod: this.currentPeriod.id,
+        currentPeriod: this.currentPeriodId,
         sendLimit: this.sendLimit,
       };
       update(settingsRef, newSettings);
+    },
+    selectPeriod(periodId) {
+      this.currentPeriodId = periodId;
+      this.saveInfo();
     },
   },
 };
@@ -122,21 +164,6 @@ export default {
         /></span>
       </div>
       <div class="setting__toggle">
-        <h4>Período atual</h4>
-        <span>
-          <select v-model="currentPeriod.id" @change="saveInfo">
-            <option
-              v-for="(period, index) in settings.periods"
-              :value="index"
-              :key="index"
-              :select="currentPeriod.id == index.toString()"
-            >
-              {{ period.name }} ({{ period.year }})
-            </option>
-          </select>
-        </span>
-      </div>
-      <div class="setting__toggle">
         <h4>Envio até</h4>
         <span>
           <input type="date" style="width: 200px" v-model="sendLimit" />
@@ -147,9 +174,8 @@ export default {
     <h3 class="secondary-title">Gerenciar períodos de envio</h3>
     <p style="max-width: 800px">
       Abaixo estão os períodos criados para envio. Todos acompanham o ano e mês
-      (ou ocasião) e após a criação os períodos não podem ser excluídos. Antes
-      de liberar o relatório do período atual não esqueça de selecionar o
-      período correto!
+      (ou ocasião) e após a criação os períodos não podem ser excluídos. Clique
+      em um período para selecioná-lo como o período atual.
     </p>
     <div class="settings__toggle__holder">
       <div class="setting__toggle" @click="toggleNewPeriod(true)">
@@ -174,15 +200,50 @@ export default {
           </div>
         </transition>
       </div>
-      <div
-        class="setting__toggle off fade"
-        v-for="period in settings.periods"
-        :key="period"
-      >
-        <h4>{{ period.year }}</h4>
-        <span>{{ period.name }}</span>
+    </div>
+    <!-- Divide by year, showing the most recent first -->
+    <div
+      v-for="(periods, year) in Object.entries(groupedPeriods).reverse()"
+      :key="year"
+      class="year-group"
+    >
+      <h3>
+        <!-- Get the first element of the map -->
+        {{ periods[0] }}
+      </h3>
+      <div class="settings__toggle__holder">
+        <div
+          class="setting__toggle off fade"
+          :class="{ selected: period.id === currentPeriodId }"
+          v-for="period in periods[1]"
+          :key="period.id"
+          @click="selectPeriod(period.id)"
+        >
+          <h4>{{ period.name }}</h4>
+          <span>{{ period.year }}</span>
+        </div>
       </div>
     </div>
+
+    <!-- <div
+      v-for="(periods, year) in groupedPeriods"
+      :key="year"
+      class="year-group"
+    >
+      <h3>{{ year }}</h3>
+      <div class="settings__toggle__holder">
+        <div
+          class="setting__toggle off fade"
+          :class="{ selected: period.id === currentPeriodId }"
+          v-for="period in periods"
+          :key="period.id"
+          @click="selectPeriod(period.id)"
+        >
+          <h4>{{ period.name }}</h4>
+          <span>{{ period.year }}</span>
+        </div>
+      </div>
+    </div> -->
   </div>
 </template>
 
@@ -208,6 +269,7 @@ export default {
   user-select: none;
   margin: 0 12px 12px 0;
   border: 1px solid var(--primary);
+  cursor: pointer;
 }
 
 .setting__toggle > h4 {
@@ -222,7 +284,6 @@ export default {
 
 .setting__toggle:hover {
   background-color: var(--on-primary);
-  cursor: pointer;
 }
 
 .off {
@@ -237,6 +298,16 @@ export default {
   box-shadow: 0px 0px 0px 1px var(--secondary);
 }
 
+.selected {
+  background-color: var(--secondary);
+  color: var(--on-secondary);
+  border: 1px solid var(--secondary);
+}
+
+.selected:hover {
+  background-color: var(--secondary);
+}
+
 input {
   border: 1px solid var(--primary);
   background-color: transparent;
@@ -245,21 +316,6 @@ input {
   font-weight: 800;
   text-align: left;
   outline: none;
-}
-
-select {
-  border: 1px solid var(--primary);
-  background-color: transparent;
-  color: var(--on-primary-container);
-  font-size: 24px;
-  font-weight: 800;
-  text-align: left;
-  outline: none;
-}
-
-select option {
-  background-color: var(--primary-container);
-  color: var(--on-primary-container);
 }
 
 .new__period__form {
@@ -309,6 +365,15 @@ select option {
   to {
     opacity: 1;
   }
+}
+
+.year-group {
+  margin-top: 24px;
+}
+
+.year-group > h3 {
+  color: var(--secondary);
+  margin-bottom: 12px;
 }
 
 @media screen and (max-width: 600px) {
